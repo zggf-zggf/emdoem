@@ -15,8 +15,8 @@ def problem_page(request, pk):
     problem = Problem.objects.get(pk=pk)
 
     if problem is not None:
-        context = {'name': problem.name, 'content': problem.content}
+        context = {'name': problem.name, 'content': problem.content, 'pk': pk}
     else:
         raise Http404("Problem does not exist!")
 
-    return render(request, "problemBase/problem.html", context)
+    return render(request, "problemBase/problemStatement.html", context)
