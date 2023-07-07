@@ -7,8 +7,8 @@
     </head>
 
     <body>
-        {% for problem in problems %}
-            <a href="{% url 'problem' problem.id  %}">{{ problem.name }}</a>
-        {% endfor %}
+            <h1>{{ name }}</h1>
+            <h4>{{ content.content }}</h4>
+            <img style="max-width: 400px" src="{{ content.image.url }}"/>
     </body>
 </html>

@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import render
 from base.models import Problem
 
@@ -8,3 +9,14 @@ def problem_base(request):
     problems = Problem.objects.all()
     context = {'problems': problems}
     return render(request, "problemBase.html", context)
+
+
+def problem_page(request, pk):
+    problem = Problem.objects.get(pk=pk)
+
+    if problem is not None:
+        context = {'name': problem.name, 'content': problem.content}
+    else:
+        raise Http404("Problem does not exist!")
+
+    return render(request, "problem.html", context)

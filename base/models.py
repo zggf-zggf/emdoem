@@ -29,9 +29,6 @@ class Problem(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     watchers = models.JSONField("Watchers", default={"watcher": "task"})
 
-    def __str__(self):
-        return str(self.name)
-
 
 class Solution(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)

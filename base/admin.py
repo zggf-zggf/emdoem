@@ -3,7 +3,12 @@ from .models import Problem, Category, Content, Solution, Comment, UserToProblem
 
 # Register your models here.
 
-admin.site.register(Problem)
+
+class ProblemAdmin(admin.ModelAdmin):
+    readonly_fields = ('id',)
+
+
+admin.site.register(Problem, ProblemAdmin)
 admin.site.register(Category)
 admin.site.register(Content)
 admin.site.register(Solution)
