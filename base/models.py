@@ -6,10 +6,10 @@ from django.contrib.auth.models import User
 
 class Content(models.Model):
     content = models.CharField(max_length=1000, null=True)
-    image = models.ImageField(upload_to='files/contents', null=True)
+    image = models.ImageField(upload_to='base/iles/contents', null=True)
 
     def __str__(self):
-        return str(self)
+        return str(self.id)
 
 
 class Category(models.Model):
@@ -40,7 +40,7 @@ class Solution(models.Model):
     upvote_counter = models.IntegerField()
 
     def __str__(self):
-        return str(self)
+        return str(self.id)
 
 
 class UserToProblem(models.Model):

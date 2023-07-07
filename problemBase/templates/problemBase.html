@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Problem Base</title>
+        <meta name="description" content="Our first page">
+        <meta name="keywords" content="html tutorial template">
+    </head>
+
+    <body>
+        {% for problem in problems %}
+            <h1>{{ problem.name }}</h1>
+            <h4>{{ problem.content.content }}</h4>
+            <img style="max-width: 400px" src="{{ problem.content.image.url }}"/>
+        {% endfor %}
+    </body>
+</html>
