@@ -1,0 +1,19 @@
+{% extends "base/base.html" %}
+{% block content %}
+    <div class="flex-column align-items-center">
+        <h1 style="font-size: 56px;">Witaj na <b>NAZWA STRONY</b>!</h1>
+        <div class="px-4 d-flex justify-content-center">
+            <div class="m-4">
+                <a class="btn btn-outline-warning" href="{% url 'problem_base' %}">Dodaj zadanie</a>
+            </div>
+            <div class="m-4">
+                <a class="btn btn-outline-secondary" href="{% url 'problem_base' %}">Zobacz zadania</a>
+            </div>
+        </div>
+    </div>
+    <style>
+    .btn {
+        font-size: 26px;
+    }
+    </style>
+{% endblock %}

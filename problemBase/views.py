@@ -8,7 +8,7 @@ from base.models import Problem
 def problem_base(request):
     problems = Problem.objects.all()
     context = {'problems': problems}
-    return render(request, "problemBase.html", context)
+    return render(request, "problemBase/problemBase.html", context)
 
 
 def problem_page(request, pk):
@@ -19,4 +19,4 @@ def problem_page(request, pk):
     else:
         raise Http404("Problem does not exist!")
 
-    return render(request, "problem.html", context)
+    return render(request, "problemBase/problem.html", context)
