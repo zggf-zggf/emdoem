@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 
 class Content(models.Model):
     content = models.CharField(max_length=1000, null=True)
-    image = models.ImageField(upload_to='base/iles/contents', null=True)
+    image = models.ImageField(upload_to='base/files/contents', null=True)
 
     def __str__(self):
         return str(self.id)

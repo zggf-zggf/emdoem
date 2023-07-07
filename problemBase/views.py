@@ -1,6 +1,8 @@
 from django.http import Http404
 from django.shortcuts import render
-from base.models import Problem
+from base.models import Problem, Content
+from .forms import UploadForm
+from django.forms import inlineformset_factory
 
 # Create your views here.
 
@@ -20,3 +22,10 @@ def problem_page(request, pk):
         raise Http404("Problem does not exist!")
 
     return render(request, "problemBase/problemStatement.html", context)
+
+
+def upload_problem_page(request):
+    ProblemFormSet = inlineformset_factory(Content, Problem, fields=["name", "category"])
+    content = Content.objects.get(id=3)
+    form = ProblemFormSet(instance=content)
+    return render(request, "problemBase/uploadProblem.html", {'form': form})
