@@ -7,6 +7,12 @@
     </head>
 
     <body>
-    {{form}}
+    <h2>Upload Problem</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {{ upload_form.as_p }}
+            <button type="submit">Submit</button>
+        </form>
+
     </body>
 </html>

@@ -1,8 +1,7 @@
 from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from base.models import Problem, Content
-from .forms import UploadForm
-from django.forms import inlineformset_factory
+from .forms import UploadForm, ContentForm
 
 # Create your views here.
 
@@ -24,8 +23,28 @@ def problem_page(request, pk):
     return render(request, "problemBase/problemStatement.html", context)
 
 
+# To do: uploadowanie zdjęcia z poziomu strony, a nie przez panel admina.
 def upload_problem_page(request):
-    ProblemFormSet = inlineformset_factory(Content, Problem, fields=["name", "category"])
-    content = Content.objects.get(id=3)
-    form = ProblemFormSet(instance=content)
-    return render(request, "problemBase/uploadProblem.html", {'form': form})
+    upload_form = UploadForm()
+
+    if request.method == 'POST':
+        upload_form = UploadForm(request.POST)
+
+        if upload_form.is_valid() and \
+                (upload_form['content_text'].value() is not None or upload_form['image'].value() is not None):
+
+            print(upload_form['content_text'].value())
+            problem = upload_form.save(commit=False)
+            content = Content()
+            content.content = upload_form['content_text'].value()
+            content.image = upload_form['image'].value()
+            content.save()
+
+            problem.content = content
+
+            problem.save()
+            return redirect('problems:problem_base')
+
+    context = {'upload_form': upload_form}
+
+    return render(request, "problemBase/problemUpload.html", context)
