@@ -2,8 +2,7 @@ from django.http import Http404
 from django.shortcuts import render, redirect
 from base.models import Problem
 from .forms import UploadForm
-
-# Create your views here.
+from django.shortcuts import get_object_or_404
 
 
 def problem_base(request):
@@ -13,29 +12,23 @@ def problem_base(request):
 
 
 def problem_page(request, pk):
-    problem = Problem.objects.get(pk=pk)
+    problem = get_object_or_404(Problem, pk=pk)
 
-    if problem is not None:
-        context = {'name': problem.name,
-                   'problem_statement': problem.problem_statement,
-                   'pk': pk}
-    else:
-        raise Http404("Problem does not exist!")
+    context = {'name': problem.name,
+                'problem_statement': problem.problem_statement,
+                'pk': pk}
 
     return render(request, "problemBase/problemStatement.html", context)
 
 def problem_page_info(request, pk):
-    problem = Problem.objects.get(pk=pk)
+    problem = get_object_or_404(Problem, pk=pk)
 
-    if problem is not None:
-        context = {'name': problem.name,
-                   'pk': pk,
-                   'problem_statement': problem.problem_statement,
-                   'added_by': problem.added_by,
-                   'creation_date': problem.creation_date,
-                   'category': problem.category}
-    else:
-        raise Http404("Problem does not exist!");
+    context = {'name': problem.name,
+               'pk': pk,
+               'problem_statement': problem.problem_statement,
+               'added_by': problem.added_by,
+               'creation_date': problem.creation_date,
+                'category': problem.category}
 
     return render(request, "problemBase/problemInfo.html", context);
 
