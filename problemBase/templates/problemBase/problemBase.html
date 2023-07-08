@@ -1,14 +1,12 @@
-<!doctype html>
-<html>
-    <head>
-        <title>Problem Base</title>
-        <meta name="description" content="Our first page">
-        <meta name="keywords" content="html tutorial template">
-    </head>
-
-    <body>
+{% extends 'base/base.html' %}
+{% block content %}
+    <div class="table-responsive">
+    <table class="table table-borderless table-hover">
+    <tbody>
         {% for problem in problems %}
-            <a href="{% url 'problems:statement' problem.id  %}">{{ problem.name }}</a>
+            {% include 'problemBase/problemDBEntry.html' with problem=problem %}
         {% endfor %}
-    </body>
-</html>
+    </tbody>
+    </table>
+    </div>
+{% endblock %}

@@ -4,6 +4,14 @@
         <div class="d-flex">
             <h1>{{ name }}</h1>
         </div>
-        <h4 class="d-flex">{{ content.content }}</h4>
-        <img style="max-width: 400px" src="{{ content.image.url }}"/>
+
+        <div class="d-flex">
+            <p>{{ problem_statement.html|safe }}</p>
+        </div>
+
+    {% if content.image %}
+        <div class="d-flex justify-content-center mt-4">
+            <img style="max-width: 400px" src="{{ content.image.url }}"/>
+        </div>
+    {% endif %}
 {% endblock %}

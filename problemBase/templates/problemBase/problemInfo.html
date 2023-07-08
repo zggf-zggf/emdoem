@@ -1,0 +1,8 @@
+{% extends "problemBase/problem.html" %}
+
+{% block innerContent %}
+    <p>Nazwa zadania: {{ name }}</p>
+    <p>Kategoria: {{ category }}</p>
+    <p>Dodane przez {{ added_by }} w dniu {{ creation_date }}</p>
+    <a href="#" class="btn btn-danger">Zgłoś</a>
+{% endblock %}

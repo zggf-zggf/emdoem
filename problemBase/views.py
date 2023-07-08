@@ -16,11 +16,28 @@ def problem_page(request, pk):
     problem = Problem.objects.get(pk=pk)
 
     if problem is not None:
-        context = {'name': problem.name, 'content': problem.content, 'pk': pk}
+        context = {'name': problem.name,
+                   'problem_statement': problem.problem_statement,
+                   'pk': pk}
     else:
         raise Http404("Problem does not exist!")
 
     return render(request, "problemBase/problemStatement.html", context)
+
+def problem_page_info(request, pk):
+    problem = Problem.objects.get(pk=pk)
+
+    if problem is not None:
+        context = {'name': problem.name,
+                   'pk': pk,
+                   'problem_statement': problem.problem_statement,
+                   'added_by': problem.added_by,
+                   'creation_date': problem.creation_date,
+                   'category': problem.category}
+    else:
+        raise Http404("Problem does not exist!");
+
+    return render(request, "problemBase/problemInfo.html", context);
 
 
 # To do: uploadowanie zdjęcia z poziomu strony, a nie przez panel admina.
