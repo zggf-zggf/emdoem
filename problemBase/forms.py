@@ -1,18 +1,11 @@
 from django.forms import ModelForm
 from django import forms
-from base.models import Problem, Content
+from base.models import Problem
+from django_quill.forms import QuillFormField
 
 
 class UploadForm(ModelForm):
+    problem_statement = QuillFormField()
     class Meta:
         model = Problem
         fields = ['name', 'category']
-
-    image = forms.ImageField(required=False)
-    content_text = forms.CharField(required=False)
-
-
-class ContentForm(ModelForm):
-    class Meta:
-        model = Content
-        fields = ['content', 'image']

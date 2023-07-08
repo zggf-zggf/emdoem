@@ -1,7 +1,7 @@
 from django.http import Http404
 from django.shortcuts import render, redirect
-from base.models import Problem, Content
-from .forms import UploadForm, ContentForm
+from base.models import Problem
+from .forms import UploadForm
 
 # Create your views here.
 
@@ -52,12 +52,6 @@ def upload_problem_page(request):
 
             print(upload_form['content_text'].value())
             problem = upload_form.save(commit=False)
-            content = Content()
-            content.content = upload_form['content_text'].value()
-            content.image = upload_form['image'].value()
-            content.save()
-
-            problem.content = content
 
             problem.save()
             return redirect('problems:problem_base')

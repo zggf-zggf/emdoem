@@ -10,6 +10,7 @@
     <h2>Upload Problem</h2>
         <form method="POST">
             {% csrf_token %}
+            {{ upload_form.media }}
             {{ upload_form.as_p }}
             <button type="submit">Submit</button>
         </form>
