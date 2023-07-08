@@ -1,19 +1,13 @@
-<!doctype html>
-<html>
-    <head>
-        <title>Add Problem</title>
-        <meta name="description" content="Our first page">
-        <meta name="keywords" content="html tutorial template">
-    </head>
-
-    <body>
-    <h2>Upload Problem</h2>
+{% extends "base/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="d-flex flex-column p-4 bg-light">
+    <h2>Dodaj zadanie</h2>
         <form method="POST">
             {% csrf_token %}
             {{ upload_form.media }}
-            {{ upload_form.as_p }}
-            <button type="submit">Submit</button>
+            {{ upload_form|crispy }}
+            <button class="btn btn-primary" type="submit">Submit</button>
         </form>
-
-    </body>
-</html>
+    </div>
+{% endblock %}
