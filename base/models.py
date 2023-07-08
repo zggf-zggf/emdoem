@@ -17,7 +17,7 @@ class Problem(models.Model):
     name = models.CharField(max_length=100)
     creation_date = models.DateTimeField(auto_now_add=True)
     added_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    problem_statement = QuillField(default='ici')
+    problem_statement = QuillField(default='')
     # SET_NULL := when deleted, this field will be null, therefore we will not lose the object.
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     watchers = models.JSONField("Watchers", default={"watcher": "task"})
