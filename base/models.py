@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django_quill.fields import QuillField
+from datetime import datetime
 
 # Create your models here.
 
@@ -36,6 +37,12 @@ class UserToProblem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
     surrendered = models.BooleanField(default=False)
+    is_watching = models.BooleanField(default=False)
+    last_visit = models.DateTimeField(null=True)
+
+    def timestamp(self):
+        self.last_visit = datetime.now()
+        self.save()
 
     def __str__(self):
         return str(self.user)

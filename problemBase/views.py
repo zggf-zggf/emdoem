@@ -2,17 +2,28 @@ from django.http import Http404
 from django.shortcuts import render, redirect
 from base.models import Problem
 from .forms import UploadForm
+from base.models import UserToProblem
 from django.shortcuts import get_object_or_404
-
+from base.utils import get_watchers_of_problem, get_problem_stats
+from django.contrib.auth.decorators import login_required
 
 def problem_base(request):
     problems = Problem.objects.all()
+    for problem in problems:
+        stats = get_problem_stats(problem)
+        setattr(problem, "watchers_count", stats["watching"])
+        setattr(problem, "solved", stats["solved"])
+        print(stats)
+
     context = {'problems': problems}
     return render(request, "problemBase/problemBase.html", context)
 
 
+@login_required
 def problem_page(request, pk):
     problem = get_object_or_404(Problem, pk=pk)
+    utp, _ = UserToProblem.objects.get_or_create(problem=problem, user=request.user)
+    utp.timestamp()
 
     context = {'name': problem.name,
                 'problem_statement': problem.problem_statement,
@@ -20,6 +31,7 @@ def problem_page(request, pk):
 
     return render(request, "problemBase/problemStatement.html", context)
 
+@login_required
 def problem_page_info(request, pk):
     problem = get_object_or_404(Problem, pk=pk)
 
@@ -34,6 +46,7 @@ def problem_page_info(request, pk):
 
 
 # To do: uploadowanie zdjęcia z poziomu strony, a nie przez panel admina.
+@login_required
 def upload_problem_page(request):
     upload_form = UploadForm()
 
