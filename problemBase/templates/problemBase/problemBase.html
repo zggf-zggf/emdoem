@@ -1,12 +1,37 @@
 {% extends 'base/base.html' %}
 {% block content %}
-    <div class="table-responsive">
-    <table class="table table-borderless table-hover">
-    <tbody>
-        {% for problem in problems %}
-            {% include 'problemBase/problemDBEntry.html' with problem=problem %}
-        {% endfor %}
-    </tbody>
-    </table>
+
+    <div class="home-container">
+        <div>
+
+            <form method="GET" action="{% url 'problems:problem_base' %}">
+                <input type="text" name="q" placeholder="Szukaj zadania...">
+            </form>
+
+            <h3>Kategorie:</h3>
+            <hr>
+
+            <div>
+               <a href="{% url 'problems:problem_base' %}">Wszystkie kategorie</a>
+            </div>
+
+            {% for category in categories %}
+                <div>
+                    <a href="{% url 'problems:problem_base' %}?q={{ category }}">{{ category }}</a>
+                </div>
+            {% endfor %}
+
+        </div>
+
+        <div class="table-responsive">
+        <table class="table table-borderless table-hover">
+        <tbody>
+            {% for problem in problems %}
+                {% include 'problemBase/problemDBEntry.html' with problem=problem %}
+            {% endfor %}
+        </tbody>
+        </table>
+        </div>
+
     </div>
 {% endblock %}

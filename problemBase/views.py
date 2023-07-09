@@ -1,6 +1,6 @@
-from django.http import Http404
+from django.db.models import Q
 from django.shortcuts import render, redirect
-from base.models import Problem
+from base.models import Problem, Category
 from .forms import UploadForm, SolutionForm
 from base.models import UserToProblem
 from django.shortcuts import get_object_or_404
@@ -9,14 +9,22 @@ from django.contrib.auth.decorators import login_required
 
 
 def problem_base(request):
-    problems = Problem.objects.all()
+    q = request.GET.get('q') if request.GET.get('q') is not None else ''
+
+    problems = Problem.objects.filter(
+        Q(category__name__icontains=q) |
+        Q(name__icontains=q)
+    )
+    categories = Category.objects.all()
+
+
     for problem in problems:
         stats = get_problem_stats(problem)
         setattr(problem, "watchers_count", stats["watching"])
         setattr(problem, "solved", stats["solved"])
         print(stats)
 
-    context = {'problems': problems}
+    context = {'problems': problems, 'categories': categories}
     return render(request, "problemBase/problemBase.html", context)
 
 
@@ -65,6 +73,7 @@ def problem_page_info(request, pk):
     }
 
     return render(request, "problemBase/problemInfo.html", context);
+
 
 @login_required
 def upload_problem_page(request):
