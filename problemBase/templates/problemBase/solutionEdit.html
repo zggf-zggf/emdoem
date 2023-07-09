@@ -1,9 +1,14 @@
+{% extends "problemBase/problem.html" %}
+
 {% load crispy_forms_tags %}
 
+{% block innerContent %}
 
-<form method="POST">
-    {% csrf_token %}
-    {{ solution_form.media }}
-    {{ solution_form|crispy }}
-    <button class="btn btn-primary" type="submit">Submit</button>
-</form>
+    <form method="POST">
+        {% csrf_token %}
+        {{ solution_form.media }}
+        {{ solution_form|crispy }}
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+
+{% endblock %}

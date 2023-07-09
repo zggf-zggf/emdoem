@@ -22,6 +22,10 @@
                     </div>
 
                     <div>
+                        <a href="{% url 'problems:edit_solution'  pk=solution %}">Edit</a>
+                    </div>
+
+                    <div>
                         <p>Upvotes: {{ solution.upvote_counter }}</p>
                     </div>
 

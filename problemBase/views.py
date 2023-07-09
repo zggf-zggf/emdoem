@@ -129,10 +129,11 @@ def problem_solution_page(request, pk):
 
 def solution_edit_page(request, pk):
     solution = get_object_or_404(Solution, pk=pk)
+    problem = solution.problem
 
     if request.user != solution.user:
         #Tutaj trzeba coś zmienić
-        return redirect('problems:solutions')
+        return redirect('problems:solutions', pk=problem.id)
 
     solution_form = SolutionForm(request.POST or None, instance=solution)
 
@@ -140,8 +141,13 @@ def solution_edit_page(request, pk):
         solution = solution_form.save(commit=False)
 
         solution.save()
-        return redirect('problems:solutions')
+        return redirect('problems:solutions', pk=problem.id)
 
-    context = {'solution_form': solution_form}
+    context = {
+        'solution_form': solution_form,
+        'name': problem.name,
+        'pk': pk,
+        'problem_statement': problem.problem_statement,
+    }
 
     return render(request, "problemBase/solutionEdit.html", context)
