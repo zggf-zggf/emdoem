@@ -45,8 +45,8 @@ def problem_page(request, pk):
             setattr(solution, 'problem', problem)
 
             solution.save()
-            #TODO przekierowac do czegoś sensownego
-            return redirect('problems:problem_base')
+
+            return redirect('problems:solutions', pk=problem.id)
 
     context = {
         'name': problem.name,
@@ -91,7 +91,7 @@ def upload_problem_page(request):
             created_problem.save()
 
             # Tutaj dodajemy userToProblem, automatycznie obserwujemy dodany problem.
-            utp = UserToProblem();
+            utp = UserToProblem()
             setattr(utp, 'user', request.user)
             setattr(utp, 'problem', created_problem)
             setattr(utp, 'is_watching', True)
@@ -127,12 +127,12 @@ def problem_solution_page(request, pk):
     return render(request, "problemBase/problemSolution.html", context)
 
 
+@login_required
 def solution_edit_page(request, pk):
     solution = get_object_or_404(Solution, pk=pk)
     problem = solution.problem
 
     if request.user != solution.user:
-        #Tutaj trzeba coś zmienić
         return redirect('problems:solutions', pk=problem.id)
 
     solution_form = SolutionForm(request.POST or None, instance=solution)
