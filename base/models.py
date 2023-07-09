@@ -26,7 +26,10 @@ class Problem(models.Model):
 class Solution(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
-    upvote_counter = models.IntegerField()
+    upvote_counter = models.IntegerField(default=0)
+    creation_date = models.DateTimeField(auto_now_add=True)
+    #content = QuillField(default='')
+    content = RichTextField(blank=True, null=True)
 
     def __str__(self):
         return str(self.id)
