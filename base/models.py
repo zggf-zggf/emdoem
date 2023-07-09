@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django_quill.fields import QuillField
 from datetime import datetime
+from ckeditor.fields import RichTextField
 
 # Create your models here.
 
@@ -17,7 +18,8 @@ class Problem(models.Model):
     name = models.CharField(max_length=100)
     creation_date = models.DateTimeField(auto_now_add=True)
     added_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    problem_statement = QuillField(default='')
+    #problem_statement = QuillField(default='')
+    problem_statement = RichTextField(blank=True, null=True)
     # SET_NULL := when deleted, this field will be null, therefore we will not lose the object.
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     watchers = models.JSONField("Watchers", default={"watcher": "task"})

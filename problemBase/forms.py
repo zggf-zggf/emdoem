@@ -5,7 +5,7 @@ from django_quill.forms import QuillFormField
 
 
 class UploadForm(ModelForm):
-    problem_statement = QuillFormField()
+    #problem_statement = QuillFormField()
     class Meta:
         model = Problem
         fields = ['name', 'category', 'problem_statement']
