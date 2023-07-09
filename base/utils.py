@@ -15,22 +15,20 @@ def get_problem_stats (problem):
     return stats
 
 
-def process_vote(solution, user, vote):
-    if user == solution.user:
-        solution.save()
+def process_vote(solution, voter, vote):
+    if voter == solution.user.username:
         return
 
     voters = solution.voters
-
-    user_vote = solution.voters.get(user) if user in solution.voters else 0
+    user_vote = solution.voters.get(voter) if voter in solution.voters else 0
 
     if user_vote == 0:
         setattr(solution, 'upvote_counter', solution.upvote_counter + vote)
-        voters.update({user: vote})
+        voters.update({voter: vote})
 
     elif vote == user_vote:
         setattr(solution, 'upvote_counter', solution.upvote_counter - vote)
-        voters.pop(user)
+        voters.pop(voter)
 
     setattr(solution, "voters", voters)
     solution.save()

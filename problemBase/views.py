@@ -111,11 +111,11 @@ def problem_solution_page(request, pk):
 
     if request.GET.get('upvote'):
         solution = Solution.objects.get(pk=request.GET.get('upvote'))
-        process_vote(solution, request.user, 1)
+        process_vote(solution, request.user.username, 1)
 
     elif request.GET.get('downvote'):
         solution = Solution.objects.get(pk=request.GET.get('downvote'))
-        process_vote(solution, request.user, -1)
+        process_vote(solution, request.user.username, -1)
 
     context = {
         'name': problem.name,
