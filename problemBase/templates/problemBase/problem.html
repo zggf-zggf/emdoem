@@ -8,7 +8,7 @@
             <h1 class="m-auto navbar-brand ">Zadanie</h1>
             <div style="width: 15px;"></div>
             <a class="ml-4 nav-item nav-link {% if request.resolver_match.view_name == 'problems:statement' %}active{% endif %}" href="{% url 'problems:statement' pk=pk %}">Treść</a>
-            <a class="ml-4 nav-item nav-link {% if request.resolver_match.view_name == 'problems:statement' %}active{% endif %}" href="{% url 'problems:statement' pk=pk %}">Rozwiązania</a>
+            <a class="ml-4 nav-item nav-link {% if request.resolver_match.view_name == 'problems:solutions' %}active{% endif %}" href="{% url 'problems:solutions' pk=pk %}">Rozwiązania</a>
             <a class="ml-4 nav-item nav-link {% if request.resolver_match.view_name == 'problems:info' %}active{% endif %}" href="{% url 'problems:info' pk=pk %}">Info</a>
         </div>
     </nav>

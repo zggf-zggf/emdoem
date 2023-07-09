@@ -1,0 +1,64 @@
+{% extends "problemBase/problem.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block innerContent %}
+    <div class="justify-content-center d-flex flex-column" style="padding-bottom: 200px;">
+        <div class="d-flex">
+            <h1>{{ name }}</h1>
+        </div>
+        <div>
+            {% for solution in solutions %}
+
+            <hr>
+            <div class="home-container">
+                <div>
+                    <div>
+                        @{{ solution.user }}
+                    </div>
+
+                    <div>
+                        {{ solution.creation_date }}
+                    </div>
+
+                    <div>
+                        <p>Upvotes: {{ solution.upvote_counter }}</p>
+                    </div>
+
+                    <div>
+                        <div>
+                            <form action="#" method="get">
+                                <input type="submit" class="btn" value={{ solution }} name="upvote">
+                            </form>
+
+                        </div>
+                        <div>
+                            <form action="#" method="get">
+                                <input type="submit" class="btn" value={{ solution }} name="downvote">
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="flex-column justify-content-center" style="word-wrap: break-word;">
+                    <p>{{ solution.content|safe }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <button class="btn btn-outline-secondary mb-4" data-bs-toggle="collapse" href="#solutionForm" role="button"
+           aria-expanded="false" aria-controls="solutionForm" data-bs-target="#solutionForm" style="width: 200px;">
+            Dodaj rozwiązanie
+        </button>
+        <div class="collapse" id="solutionForm">
+            <form method="POST">
+                {% csrf_token %}
+                {{ solution_form.media }}
+                {{ solution_form|crispy }}
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

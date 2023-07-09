@@ -18,7 +18,6 @@ class Problem(models.Model):
     name = models.CharField(max_length=100)
     creation_date = models.DateTimeField(auto_now_add=True)
     added_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    #problem_statement = QuillField(default='')
     problem_statement = RichTextField(blank=True, null=True)
     # SET_NULL := when deleted, this field will be null, therefore we will not lose the object.
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
@@ -30,8 +29,8 @@ class Solution(models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
     upvote_counter = models.IntegerField(default=0)
     creation_date = models.DateTimeField(auto_now_add=True)
-    #content = QuillField(default='')
     content = RichTextField(blank=True, null=True)
+    voters = models.JSONField("Voters", default={"voters": 1})
 
     def __str__(self):
         return str(self.id)

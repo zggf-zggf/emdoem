@@ -1,10 +1,10 @@
 from django.db.models import Q
 from django.shortcuts import render, redirect
-from base.models import Problem, Category
+from base.models import Problem, Category, Solution
 from .forms import UploadForm, SolutionForm
 from base.models import UserToProblem
 from django.shortcuts import get_object_or_404
-from base.utils import get_watchers_of_problem, get_problem_stats
+from base.utils import get_watchers_of_problem, get_problem_stats, process_vote
 from django.contrib.auth.decorators import login_required
 
 
@@ -16,7 +16,6 @@ def problem_base(request):
         Q(name__icontains=q)
     )
     categories = Category.objects.all()
-
 
     for problem in problems:
         stats = get_problem_stats(problem)
@@ -34,7 +33,7 @@ def problem_page(request, pk):
     utp, _ = UserToProblem.objects.get_or_create(problem=problem, user=request.user)
     utp.timestamp()
 
-    solution_form = SolutionForm();
+    solution_form = SolutionForm()
 
     if request.method == 'POST':
         solution_form = SolutionForm(request.POST)
@@ -103,3 +102,26 @@ def upload_problem_page(request):
     context = {'upload_form': upload_form}
 
     return render(request, "problemBase/problemUpload.html", context)
+
+
+@login_required
+def problem_solution_page(request, pk):
+    problem = get_object_or_404(Problem, pk=pk)
+    solutions = Solution.objects.filter(problem=problem)
+
+    if request.GET.get('upvote'):
+        solution = Solution.objects.get(pk=request.GET.get('upvote'))
+        process_vote(solution, request.user, 1)
+
+    elif request.GET.get('downvote'):
+        solution = Solution.objects.get(pk=request.GET.get('downvote'))
+        process_vote(solution, request.user, -1)
+
+    context = {
+        'name': problem.name,
+        'pk': pk,
+        'problem_statement': problem.problem_statement,
+        'solutions': solutions
+    }
+
+    return render(request, "problemBase/problemSolution.html", context)
