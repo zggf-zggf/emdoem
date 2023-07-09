@@ -125,3 +125,23 @@ def problem_solution_page(request, pk):
     }
 
     return render(request, "problemBase/problemSolution.html", context)
+
+
+def solution_edit_page(request, pk):
+    solution = get_object_or_404(Solution, pk=pk)
+
+    if request.user != solution.user:
+        #Tutaj trzeba coś zmienić
+        return redirect('problems:solutions')
+
+    solution_form = SolutionForm(request.POST or None, instance=solution)
+
+    if solution_form.is_valid():
+        solution = solution_form.save(commit=False)
+
+        solution.save()
+        return redirect('problems:solutions')
+
+    context = {'solution_form': solution_form}
+
+    return render(request, "problemBase/solutionEdit.html", context)
