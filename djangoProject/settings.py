@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'account',
 ]
 
+AUTH_USER_MODEL = 'base.User'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -88,9 +90,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'railway',
         'USER': 'postgres',
-        'PASSWORD': 'g3t98IMkYdkEooARqL9U',
-        'HOST': 'containers-us-west-67.railway.app',
-        'PORT': '5988',
+        'PASSWORD': 'EUhCPTNHtfMniM94HStU',
+        'HOST': 'containers-us-west-8.railway.app',
+        'PORT': '6869',
     }
 }
 
