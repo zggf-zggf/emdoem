@@ -1,0 +1,16 @@
+<div class="d-flex flex-column lh-sm">
+    {% for comment in comments %}
+        <div class="d-flex d-row border-top border-2 pt-2" mb-0>
+            <p>@{{ comment.user }}</p>&nbsp;
+            <p class="text-secondary">{{ comment.creation_date }}</p>
+        </div>
+        <div class="d-flex d-row mt-0">
+            <p>{{ comment.content }}</p>
+        </div>
+        <div class="d-flex d-row justify-content-end">
+            <h5>7</h5>
+            <a class="text-success h5">+</a>
+            <a class="text-danger h5">-</a>
+        </div>
+    {% endfor %}
+</div>

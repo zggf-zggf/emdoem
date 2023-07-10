@@ -54,8 +54,8 @@ class UserToProblem(models.Model):
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
-    content = models.CharField(max_length=300)
+    solution = models.ForeignKey(Solution, on_delete=models.CASCADE)
+    content = models.CharField(max_length=300, default="")
     creation_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
 

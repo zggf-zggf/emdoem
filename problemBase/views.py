@@ -1,6 +1,6 @@
 from django.db.models import Q
 from django.shortcuts import render, redirect
-from base.models import Problem, Category, Solution, SolutionVote
+from base.models import Problem, Category, Solution, SolutionVote, Comment
 from .forms import UploadForm, SolutionForm
 from base.models import UserToProblem
 from django.shortcuts import get_object_or_404
@@ -115,6 +115,7 @@ def problem_solution_page(request, pk):
     for solution in solutions:
         setattr(solution, 'upvoted', SolutionVote.objects.filter(user=request.user, solution=solution, value=1).exists())
         setattr(solution, 'downvoted', SolutionVote.objects.filter(user=request.user, solution=solution, value=-1).exists())
+        setattr(solution, 'comments', Comment.objects.filter(solution=solution).order_by('creation_date'))
 
     context = {
         'name': problem.name,
