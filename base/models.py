@@ -29,6 +29,7 @@ class Solution(models.Model):
     upvote_counter = models.IntegerField(default=0)
     creation_date = models.DateTimeField(auto_now_add=True)
     content = RichTextField(blank=True, null=True)
+    #do usuniecia
     voters = models.JSONField("Voters", default={"voters": 1})
 
     def __str__(self):
@@ -60,3 +61,11 @@ class Comment(models.Model):
 
     def __str__(self):
         return str(self.content)
+
+class SolutionVote(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    solution = models.ForeignKey(Solution, on_delete=models.CASCADE)
+    value = models.IntegerField(default=0)
+
+    def __str__(self):
+        return str(self.user) + " " + str(self.solution) + " " + str(self.value)

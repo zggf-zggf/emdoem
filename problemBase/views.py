@@ -1,11 +1,14 @@
 from django.db.models import Q
 from django.shortcuts import render, redirect
-from base.models import Problem, Category, Solution
+from base.models import Problem, Category, Solution, SolutionVote
 from .forms import UploadForm, SolutionForm
 from base.models import UserToProblem
 from django.shortcuts import get_object_or_404
-from base.utils import get_watchers_of_problem, get_problem_stats, process_vote
+from base.utils import get_watchers_of_problem, get_problem_stats, process_vote, update_upvote_counter
 from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 
 def problem_base(request):
@@ -107,15 +110,11 @@ def upload_problem_page(request):
 @login_required
 def problem_solution_page(request, pk):
     problem = get_object_or_404(Problem, pk=pk)
-    solutions = Solution.objects.filter(problem=problem)
+    solutions = Solution.objects.filter(problem=problem).order_by('-upvote_counter')
 
-    if request.GET.get('upvote'):
-        solution = Solution.objects.get(pk=request.GET.get('upvote'))
-        process_vote(solution, request.user.username, 1)
-
-    elif request.GET.get('downvote'):
-        solution = Solution.objects.get(pk=request.GET.get('downvote'))
-        process_vote(solution, request.user.username, -1)
+    for solution in solutions:
+        setattr(solution, 'upvoted', SolutionVote.objects.filter(user=request.user, solution=solution, value=1).exists())
+        setattr(solution, 'downvoted', SolutionVote.objects.filter(user=request.user, solution=solution, value=-1).exists())
 
     context = {
         'name': problem.name,
@@ -125,6 +124,30 @@ def problem_solution_page(request, pk):
     }
 
     return render(request, "problemBase/problemSolution.html", context)
+
+def vote_page(request, pk, vote):
+    solution = get_object_or_404(Solution, pk=pk)
+    if vote == 'upvote':
+        if request.user != solution.user:
+            vote, _ = SolutionVote.objects.get_or_create(solution=solution, user=request.user)
+            if vote.value == 1:
+                vote.value = 0
+            else:
+                vote.value = 1
+            vote.save()
+            update_upvote_counter(solution)
+
+    elif vote == 'downvote':
+        if request.user != solution.user:
+            vote, _ = SolutionVote.objects.get_or_create(solution=solution, user=request.user)
+            if vote.value == -1:
+                vote.value = 0
+            else:
+                vote.value = -1
+            vote.save()
+            update_upvote_counter(solution)
+
+    return HttpResponseRedirect(reverse('problems:solutions', kwargs={'pk': solution.problem.id}))
 
 
 @login_required
@@ -146,7 +169,8 @@ def solution_edit_page(request, pk):
     context = {
         'solution_form': solution_form,
         'name': problem.name,
-        'pk': pk,
+        'solution_id': pk,
+        'pk': problem.id,
         'problem_statement': problem.problem_statement,
     }
 

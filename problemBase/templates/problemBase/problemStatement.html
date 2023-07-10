@@ -9,17 +9,14 @@
         <div class="flex-column justify-content-center" style="word-wrap: break-word;">
             <p>{{ problem_statement|safe }}</p>
         </div>
-        <button class="btn btn-outline-secondary mb-4" data-bs-toggle="collapse" href="#solutionForm" role="button"
-           aria-expanded="false" aria-controls="solutionForm" data-bs-target="#solutionForm" style="width: 200px;">
-            Dodaj rozwiązanie
-        </button>
-        <div class="collapse" id="solutionForm">
-            <form method="POST">
-                {% csrf_token %}
-                {{ solution_form.media }}
-                {{ solution_form|crispy }}
-                <button class="btn btn-primary" type="submit">Submit</button>
-            </form>
+        <div class="ml-4">
+            <button class="btn btn-outline-secondary mb-4 mt-5" data-bs-toggle="collapse" href="#solutionForm" role="button"
+               aria-expanded="false" aria-controls="solutionForm" data-bs-target="#solutionForm" style="width: 200px;">
+                Dodaj rozwiązanie
+            </button>
+            <div class="collapse" id="solutionForm">
+                    {% crispy solution_form %}
+            </div>
         </div>
     </div>
 {% endblock %}

@@ -1,5 +1,6 @@
-from base.models import Problem, UserToProblem, Solution
+from base.models import Problem, UserToProblem, Solution, SolutionVote
 from django.shortcuts import get_object_or_404
+from django.db.models import Sum
 
 
 def get_watchers_of_problem (problem):
@@ -9,7 +10,7 @@ def get_watchers_of_problem (problem):
 
 def get_problem_stats (problem):
     # Counts solutions with positive number of upvotes, potentially to be changed in the future
-    solved= Solution.objects.filter(problem=problem, upvote_counter__gt=0).count()
+    solved = Solution.objects.filter(problem=problem, upvote_counter__gt=0).count()
     watching = UserToProblem.objects.filter(problem=problem, is_watching=True).count()
     stats = {"solved": solved, "watching": watching}
     return stats
@@ -31,4 +32,8 @@ def process_vote(solution, voter, vote):
         voters.pop(voter)
 
     setattr(solution, "voters", voters)
+    solution.save()
+
+def update_upvote_counter(solution):
+    solution.upvote_counter = SolutionVote.objects.filter(solution=solution).aggregate(Sum('value'))['value__sum']
     solution.save()
