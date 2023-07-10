@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 from base.models import User
 
 
@@ -13,7 +15,15 @@ def login_page(request):
         try:
             user = User.objects.get(username=username)
         except:
-            print('error')
+            # Trzeba zrobić obsługę tego błędu.
+            messages.error(request, 'Nie ma takiego użytkownika.')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('home:home')
+
 
     context = {}
     return render(request, 'account/login_register.html', context)
