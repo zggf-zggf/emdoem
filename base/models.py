@@ -61,6 +61,7 @@ class Comment(models.Model):
     content = models.CharField(max_length=300, default="")
     creation_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
+    upvote_counter = models.IntegerField(default=0)
 
     def __str__(self):
         return str(self.content)
@@ -73,3 +74,11 @@ class SolutionVote(models.Model):
 
     def __str__(self):
         return str(self.user) + " " + str(self.solution) + " " + str(self.value)
+
+class CommentVote(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    value = models.IntegerField(default=0)
+
+    def __str__(self):
+        return str(self.user) + " " + str(self.comment) + " " + str(self.value)

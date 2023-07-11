@@ -1,10 +1,10 @@
 from django.db.models import Q
 from django.shortcuts import render, redirect
-from base.models import Problem, Category, Solution, SolutionVote, Comment
+from base.models import Problem, Category, Solution, SolutionVote, Comment, CommentVote
 from .forms import UploadForm, SolutionForm
 from base.models import UserToProblem
 from django.shortcuts import get_object_or_404
-from base.utils import get_watchers_of_problem, get_problem_stats, process_vote, update_upvote_counter
+from base.utils import get_watchers_of_problem, get_problem_stats, process_vote, update_solution_upvote_counter, update_comment_upvote_counter
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from django.http import HttpResponseRedirect
@@ -116,6 +116,9 @@ def problem_solution_page(request, pk):
         setattr(solution, 'upvoted', SolutionVote.objects.filter(user=request.user, solution=solution, value=1).exists())
         setattr(solution, 'downvoted', SolutionVote.objects.filter(user=request.user, solution=solution, value=-1).exists())
         setattr(solution, 'comments', Comment.objects.filter(solution=solution).order_by('creation_date'))
+        for comment in solution.comments:
+            setattr(comment, 'upvoted', CommentVote.objects.filter(user=request.user, comment=comment, value=1).exists())
+            setattr(comment, 'downvoted', CommentVote.objects.filter(user=request.user, comment=comment, value=-1).exists())
 
     context = {
         'name': problem.name,
@@ -126,7 +129,7 @@ def problem_solution_page(request, pk):
 
     return render(request, "problemBase/problemSolution.html", context)
 
-def vote_page(request, pk, vote):
+def solution_vote_page(request, pk, vote):
     solution = get_object_or_404(Solution, pk=pk)
     if vote == 'upvote':
         if request.user != solution.user:
@@ -136,7 +139,7 @@ def vote_page(request, pk, vote):
             else:
                 vote.value = 1
             vote.save()
-            update_upvote_counter(solution)
+            update_solution_upvote_counter(solution)
 
     elif vote == 'downvote':
         if request.user != solution.user:
@@ -146,9 +149,33 @@ def vote_page(request, pk, vote):
             else:
                 vote.value = -1
             vote.save()
-            update_upvote_counter(solution)
+            update_solution_upvote_counter(solution)
 
     return HttpResponseRedirect(reverse('problems:solutions', kwargs={'pk': solution.problem.id}))
+
+def comment_vote_page(request, pk, vote):
+    comment = get_object_or_404(Comment, pk=pk)
+    if vote == 'upvote':
+        if request.user != comment.user:
+            vote, _ = CommentVote.objects.get_or_create(comment=comment, user=request.user)
+            if vote.value == 1:
+                vote.value = 0
+            else:
+                vote.value = 1
+            vote.save()
+            update_comment_upvote_counter(comment)
+
+    elif vote == 'downvote':
+        if request.user != comment.user:
+            vote, _ = CommentVote.objects.get_or_create(comment=comment, user=request.user)
+            if vote.value == -1:
+                vote.value = 0
+            else:
+                vote.value = -1
+            vote.save()
+            update_comment_upvote_counter(comment)
+
+    return HttpResponseRedirect(reverse('problems:solutions', kwargs={'pk': comment.solution.problem.id}))
 
 
 @login_required

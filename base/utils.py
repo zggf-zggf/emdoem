@@ -1,4 +1,4 @@
-from base.models import Problem, UserToProblem, Solution, SolutionVote
+from base.models import Problem, UserToProblem, Solution, SolutionVote, Comment, CommentVote
 from django.shortcuts import get_object_or_404
 from django.db.models import Sum
 
@@ -34,6 +34,10 @@ def process_vote(solution, voter, vote):
     setattr(solution, "voters", voters)
     solution.save()
 
-def update_upvote_counter(solution):
+def update_solution_upvote_counter(solution):
     solution.upvote_counter = SolutionVote.objects.filter(solution=solution).aggregate(Sum('value'))['value__sum']
     solution.save()
+
+def update_comment_upvote_counter(comment):
+    comment.upvote_counter = CommentVote.objects.filter(comment=comment).aggregate(Sum('value'))['value__sum']
+    comment.save()
