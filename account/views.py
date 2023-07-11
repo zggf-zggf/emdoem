@@ -58,3 +58,9 @@ def register_page(request):
 def logout_user(request):
     logout(request)
     return redirect('home:home')
+
+
+def profile_page(request, pk):
+    user = get_user_model().objects.get(id=pk)
+    context = {'user': user}
+    return render(request, 'account/userProfile.html', context)

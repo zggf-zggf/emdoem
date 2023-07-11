@@ -14,7 +14,7 @@
             <div class="home-container d-flex flex-row w-100">
                 <div class="d-flex flex-column">
                     <div class="d-flex mt-1">
-                        @{{ solution.user }}
+                        <a href="{% url 'account:profile_page' solution.user.id %}">@{{ solution.user.username }}</a>
                     </div>
 
                     <div class="d-flex text-secondary">

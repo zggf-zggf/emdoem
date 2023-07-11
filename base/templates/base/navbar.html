@@ -1,6 +1,6 @@
 <div>
     {% if request.user.is_authenticated %}
-        <p>@{{ request.user.username }}</p>
+        <a href="{% url 'account:profile_page' request.user.id %}">@{{ request.user.username }}</a>
         <a href="{% url 'account:logout' %}">Wyloguj</a>
     {% else %}
         <a href="{% url 'account:login' %}">Zaloguj</a>
