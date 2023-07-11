@@ -9,13 +9,12 @@ from base.models import User
 
 def login_page(request):
     if request.method == 'POST':
-        username = request.GET.get('username')
-        password = request.GET.get('password')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
         try:
             user = User.objects.get(username=username)
         except:
-            # Trzeba zrobić obsługę tego błędu.
             messages.error(request, 'Nie ma takiego użytkownika.')
 
         user = authenticate(request, username=username, password=password)
@@ -23,7 +22,13 @@ def login_page(request):
         if user is not None:
             login(request, user)
             return redirect('home:home')
-
+        else:
+            messages.error(request, 'Nazwa użytkownika lub hasło się nie zgadza.')
 
     context = {}
     return render(request, 'account/login_register.html', context)
+
+
+def logout_user(request):
+    logout(request)
+    return redirect('home:home')

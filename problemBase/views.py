@@ -30,7 +30,7 @@ def problem_base(request):
     return render(request, "problemBase/problemBase.html", context)
 
 
-@login_required
+
 def problem_page(request, pk):
     problem = get_object_or_404(Problem, pk=pk)
     utp, _ = UserToProblem.objects.get_or_create(problem=problem, user=request.user)
@@ -61,7 +61,6 @@ def problem_page(request, pk):
     return render(request, "problemBase/problemStatement.html", context)
 
 
-@login_required
 def problem_page_info(request, pk):
     problem = get_object_or_404(Problem, pk=pk)
 
@@ -77,7 +76,7 @@ def problem_page_info(request, pk):
     return render(request, "problemBase/problemInfo.html", context);
 
 
-@login_required
+@login_required(login_url='account:login')
 def upload_problem_page(request):
     upload_form = UploadForm()
 
@@ -107,7 +106,6 @@ def upload_problem_page(request):
     return render(request, "problemBase/problemUpload.html", context)
 
 
-@login_required
 def problem_solution_page(request, pk):
     problem = get_object_or_404(Problem, pk=pk)
     solutions = Solution.objects.filter(problem=problem).order_by('-upvote_counter')
@@ -129,6 +127,8 @@ def problem_solution_page(request, pk):
 
     return render(request, "problemBase/problemSolution.html", context)
 
+
+@login_required(login_url='account:login')
 def solution_vote_page(request, pk, vote):
     solution = get_object_or_404(Solution, pk=pk)
     if vote == 'upvote':
@@ -153,6 +153,8 @@ def solution_vote_page(request, pk, vote):
 
     return HttpResponseRedirect(reverse('problems:solutions', kwargs={'pk': solution.problem.id}))
 
+
+@login_required(login_url='account:login')
 def comment_vote_page(request, pk, vote):
     comment = get_object_or_404(Comment, pk=pk)
     if vote == 'upvote':
@@ -178,7 +180,7 @@ def comment_vote_page(request, pk, vote):
     return HttpResponseRedirect(reverse('problems:solutions', kwargs={'pk': comment.solution.problem.id}))
 
 
-@login_required
+@login_required(login_url='account:login')
 def solution_edit_page(request, pk):
     solution = get_object_or_404(Solution, pk=pk)
     problem = solution.problem
