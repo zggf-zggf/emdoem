@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from .forms import CreateUser
-from django.contrib.auth import get_user_model
+from base.utils import get_user_stats
 
 # Create your views here.
 
@@ -61,6 +61,18 @@ def logout_user(request):
 
 
 def profile_page(request, pk):
-    user = get_user_model().objects.get(id=pk)
-    context = {'user': user}
+    user = get_object_or_404(get_user_model(), id=pk)
+    user_stats = get_user_stats(user)
+
+    problems_solved = user_stats.get('problems_solved').order_by('-creation_date')
+    problems_added = user_stats.get('problems_added').order_by('-creation_date')
+
+    context = {
+        'user': user,
+        'problems_solved': problems_solved,
+        'problems_solved_count': problems_solved.count(),
+        'problems_added': problems_added,
+        'problems_added_count': problems_added.count()
+    }
+
     return render(request, 'account/userProfile.html', context)

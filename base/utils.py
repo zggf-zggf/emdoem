@@ -34,10 +34,25 @@ def process_vote(solution, voter, vote):
     setattr(solution, "voters", voters)
     solution.save()
 
+
 def update_solution_upvote_counter(solution):
     solution.upvote_counter = SolutionVote.objects.filter(solution=solution).aggregate(Sum('value'))['value__sum']
     solution.save()
 
+
 def update_comment_upvote_counter(comment):
     comment.upvote_counter = CommentVote.objects.filter(comment=comment).aggregate(Sum('value'))['value__sum']
     comment.save()
+
+
+def get_user_stats(user):
+    problems_solved = Solution.objects.filter(user=user, upvote_counter__gt=0)
+    problems_added = Problem.objects.filter(added_by=user)
+
+    stats = {
+        'problems_solved': problems_solved,
+        'problems_added': problems_added,
+    }
+
+    return stats
+

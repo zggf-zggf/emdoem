@@ -2,6 +2,20 @@
 
 {% block content %}
 
-<h1>{{ user.username }}</h1>
+    <h1>{{ user.username }}</h1>
+    <p>Problems solved: {{ problems_solved_count }}</p>
+    <p>Problems added: {{ problems_added_count }}</p>
+
+    <h2>Problems solved:</h2>
+    {% for solution in problems_solved %}
+        <p>Problem: {{ solution.problem.name }}</p>
+        <p>Solution added: {{ solution.creation_date }}, upvote: {{ solution.upvote_counter }}</p>
+    {% endfor %}
+
+    <h2>Problems added:</h2>
+    {% for problem in problems_added %}
+        <p>Problem: {{ problem.name }}</p>
+        <p>Problem added: {{ problem.creation_date }}</p>
+    {% endfor %}
 
 {% endblock %}

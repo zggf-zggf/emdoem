@@ -30,7 +30,6 @@ def problem_base(request):
     return render(request, "problemBase/problemBase.html", context)
 
 
-
 def problem_page(request, pk):
     problem = get_object_or_404(Problem, pk=pk)
     utp, _ = UserToProblem.objects.get_or_create(problem=problem, user=request.user)
