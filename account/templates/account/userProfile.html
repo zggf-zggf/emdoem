@@ -19,4 +19,10 @@
         <p>Problem added: {{ problem.creation_date }}</p>
     {% endfor %}
 
+
+    <a href="{% url 'account:user_problems' pk=user.id %}">Utworzone zadania</a>
+    <a href="{% url 'account:user_problems' pk=user.id %}">Utworzone rozwiązania</a>
+    <a href="{% url 'account:user_problems' pk=user.id %}">Utworzone komentarze</a>
+
+
 {% endblock %}

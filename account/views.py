@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from .forms import CreateUser
 from base.utils import get_user_stats
+from base.models import Comment
 
 # Create your views here.
 
@@ -78,3 +79,41 @@ def profile_page(request, pk):
     }
 
     return render(request, 'account/userProfile.html', context)
+
+
+def user_problems_added_page(request, pk):
+    user = get_object_or_404(get_user_model(), id=pk)
+    user_stats = get_user_stats(user)
+
+    problems_added = user_stats.get('problems_added').order_by('-creation_date')
+
+    context = {
+        'problems_added': problems_added,
+    }
+    return render(request, 'account/user_problems_added.html', context)
+
+def user_solutions_added_page(request, pk):
+    user = get_object_or_404(get_user_model(), id=pk)
+    user_stats = get_user_stats(user)
+
+    solutions_added = user_stats.get('solutions_added').order_by('-creation_date')
+
+    context = {
+        'solutions_added': solutions_added,
+    }
+
+    return render(request, 'account/user_solutions_added.html', context)
+
+
+def user_comments_added_page(request, pk):
+    user = get_object_or_404(get_user_model(), id=pk)
+    #user_stats = get_user_stats(user)
+
+    #solutions_added = user_stats.get('solutions_added').order_by('-creation_date')
+    comments_added = Comment.user_set.all()
+
+    context = {
+        'comments_added': comments_added,
+    }
+
+    return render(request, 'account/user_comments_added.html', context)
