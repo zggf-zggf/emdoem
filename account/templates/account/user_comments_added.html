@@ -1,0 +1,11 @@
+{% extends 'base/base.html' %}
+
+
+{% block content %}
+
+    {% for comment in comments_added %}
+        <p>{{ comment.content }}</p>
+        <p>{{ comment.creation_date }}</p>
+    {% endfor %}
+
+{% endblock %}

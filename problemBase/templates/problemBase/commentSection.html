@@ -1,6 +1,5 @@
 {% load crispy_forms_tags %}
 <div class="d-flex flex-column lh-sm w-100" style="font-size: 14px;">
-    {% if comments %}
     {% for comment in comments %}
         <div class="d-flex d-row border-top border-2 pt-2" mb-0>
             <a href="{% url 'account:profile_page' comment.user.id %}">@{{ comment.user.username }}</a>
@@ -20,9 +19,7 @@
             <div class="px-3"></div>
         </div>
     {% endfor %}
-    {% else %}
-        <div class="d-flex flex-row justify-content-end">
-            <a href="#" class="pl-3 mb-4 text-decoration-none">Dodaj komentarz</a>
-        </div>
-    {% endif %}
+    <div class="d-flex flex-row justify-content-end add-comment">
+        <a class="pl-3 mb-4 text-decoration-none link-primary" style="cursor: pointer;">Dodaj komentarz</a>
+    </div>
 </div>

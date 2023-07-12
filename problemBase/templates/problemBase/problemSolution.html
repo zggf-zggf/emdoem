@@ -1,6 +1,8 @@
 {% extends "problemBase/problem.html" %}
 
 {% load crispy_forms_tags %}
+{% load static %}
+{% static 'static_jquery/js/jquery.js' %}
 
 {% block innerContent %}
     <div class="justify-content-center d-flex flex-column" style="padding-bottom: 200px;">
@@ -53,4 +55,19 @@
             {% endfor %}
         </div>
     </div>
+
+<div id="commentForm">
+    tutaj będzie formularz
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+    $(document).ready(function(){
+        $(".add-comment").click(function(){
+           $("#commentForm").detach().appendTo($(this).parent());
+        });
+    });
+</script>
 {% endblock %}
