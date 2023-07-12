@@ -30,6 +30,7 @@ def problem_base(request):
     return render(request, "problemBase/problemBase.html", context)
 
 
+@login_required(login_url='account:login')
 def problem_page(request, pk):
     problem = get_object_or_404(Problem, pk=pk)
     utp, _ = UserToProblem.objects.get_or_create(problem=problem, user=request.user)
@@ -105,6 +106,7 @@ def upload_problem_page(request):
     return render(request, "problemBase/problemUpload.html", context)
 
 
+@login_required(login_url='account:login')
 def problem_solution_page(request, pk):
     problem = get_object_or_404(Problem, pk=pk)
     solutions = Solution.objects.filter(problem=problem).order_by('-upvote_counter')
