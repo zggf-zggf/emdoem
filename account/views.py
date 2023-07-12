@@ -64,15 +64,17 @@ def profile_page(request, pk):
     user = get_object_or_404(get_user_model(), id=pk)
     user_stats = get_user_stats(user)
 
-    problems_solved = user_stats.get('problems_solved').order_by('-creation_date')
+    problems_solved = user_stats.get('problems_solved')
     problems_added = user_stats.get('problems_added').order_by('-creation_date')
+    solutions_added = user_stats.get('solutions_added').order_by('-creation_date')
 
     context = {
         'user': user,
-        'problems_solved': problems_solved,
-        'problems_solved_count': problems_solved.count(),
+        'problems_solved_count': problems_solved.count,
         'problems_added': problems_added,
-        'problems_added_count': problems_added.count()
+        'problems_added_count': problems_added.count(),
+        'solutions_added': solutions_added,
+        'solutions_added_count': solutions_added.count()
     }
 
     return render(request, 'account/userProfile.html', context)

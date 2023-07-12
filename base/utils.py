@@ -46,12 +46,23 @@ def update_comment_upvote_counter(comment):
 
 
 def get_user_stats(user):
-    problems_solved = Solution.objects.filter(user=user, upvote_counter__gt=0)
+    solutions_added = Solution.objects.filter(user=user, upvote_counter__gt=0)
     problems_added = Problem.objects.filter(added_by=user)
+
+    # Wybieramy rozwiązania, które mają dodatnią liczbę upvotów.
+    problems_solved = Solution.objects.filter(user=user, upvote_counter__gt=0)
+
+    # Zamieniamy rozwiązania na zadania, których dotyczą.
+    for solution in problems_solved:
+        solution = solution.problem
+
+    # Usuwamy duplikaty.
+    problems_solved = problems_solved.distinct()
 
     stats = {
         'problems_solved': problems_solved,
         'problems_added': problems_added,
+        'solutions_added': solutions_added,
     }
 
     return stats
