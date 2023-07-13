@@ -1,4 +1,3 @@
-{% load crispy_forms_tags %}
 <div class="d-flex flex-column lh-sm w-100" style="font-size: 14px;">
     {% for comment in comments %}
         <div class="d-flex d-row border-top border-2 pt-2" mb-0>
@@ -19,7 +18,8 @@
             <div class="px-3"></div>
         </div>
     {% endfor %}
-    <div class="d-flex flex-row justify-content-end add-comment">
-        <a class="pl-3 mb-4 text-decoration-none link-primary" style="cursor: pointer;">Dodaj komentarz</a>
+    <div class="d-flex flex-row justify-content-end">
+        <input type="hidden" name="solution_id" value="{{ solution_id }}">
+        <a class="pl-3 mb-4 text-decoration-none link-primary add-comment" style="cursor: pointer;">Dodaj komentarz</a>
     </div>
 </div>

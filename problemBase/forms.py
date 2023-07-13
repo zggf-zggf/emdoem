@@ -26,6 +26,17 @@ class SolutionForm(ModelForm):
         fields = ['content']
 
 class CommentForm(ModelForm):
+    content = forms.CharField(widget=forms.Textarea(attrs={"rows": "2", "cols": "80", "id": "comment-content"}))
+    solution_id = forms.IntegerField(widget=forms.HiddenInput(attrs={"value": "-1", "id": "comment-form-solution-id"}))
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            'solution_id',
+            Div('content', css_class='d-flex w-100'),
+            Div(Submit('submit', 'Zapisz', css_class=''), css_class='d-flex flex-row justify-content-end px-2')
+        )
+        self.fields["content"].label = ""
 
     class Meta:
         model = Comment

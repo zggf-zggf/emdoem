@@ -1,7 +1,7 @@
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from base.models import Problem, Category, Solution, SolutionVote, Comment, CommentVote
-from .forms import UploadForm, SolutionForm
+from .forms import UploadForm, SolutionForm, CommentForm
 from base.models import UserToProblem
 from django.shortcuts import get_object_or_404
 from base.utils import get_watchers_of_problem, get_problem_stats, process_vote, update_solution_upvote_counter, update_comment_upvote_counter
@@ -111,6 +111,8 @@ def problem_solution_page(request, pk):
     problem = get_object_or_404(Problem, pk=pk)
     solutions = Solution.objects.filter(problem=problem).order_by('-upvote_counter')
 
+    comment_form = CommentForm()
+
     for solution in solutions:
         setattr(solution, 'upvoted', SolutionVote.objects.filter(user=request.user, solution=solution, value=1).exists())
         setattr(solution, 'downvoted', SolutionVote.objects.filter(user=request.user, solution=solution, value=-1).exists())
@@ -123,11 +125,20 @@ def problem_solution_page(request, pk):
         'name': problem.name,
         'pk': pk,
         'problem_statement': problem.problem_statement,
-        'solutions': solutions
+        'solutions': solutions,
+        'comment_form': comment_form,
     }
 
     return render(request, "problemBase/problemSolution.html", context)
 
+def create_comment(request):
+    if request.method == 'POST':
+        comment_content = request.POST.get('the_comment')
+        solution_id = request.POST.get('solution_id')
+        response_data = {}
+
+        solution = get_object_or_404(Solution, pk=solution_id)
+        comment = Comment(user=request.user, solution=solution, content=comment_content)
 
 @login_required(login_url='account:login')
 def solution_vote_page(request, pk, vote):
