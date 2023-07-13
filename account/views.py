@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from .forms import CreateUser
-from base.utils import get_user_stats
+from base.utils import get_user_stats, get_problem_stats
 
 # Create your views here.
 
@@ -89,9 +89,20 @@ def user_problems_added_page(request, pk):
 
     problems_added = user_stats.get('problems_added').order_by('-creation_date')
 
+    watching_stats = {}
+    solved_stats = {}
+
+    for problem in problems_added:
+        problem_stats = get_problem_stats(problem)
+        watching_stats[problem.id] = problem_stats['watching']
+        solved_stats[problem.id] = problem_stats['solved']
+
+
     context = {
         'user': user,
         'problems_added': problems_added,
+        'watching_stats': watching_stats,
+        'solved_stats': solved_stats,
     }
     return render(request, 'account/user_problems_added.html', context)
 

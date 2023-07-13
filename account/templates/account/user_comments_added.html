@@ -4,13 +4,39 @@
 
 {% block innerContent %}
 
-    <div class="container center-block flex-column mt-4" style="width: 60%;">
-
-        <h2>Comments added:</h2>
+    <div class="container center-block flex-column mt-4" style="width: 100%;">
+        <h2>Komentarze:</h2>
         {% for comment in comments_added %}
-            <p>Comment: {{ comment.content }}</p>
-            <p>Comment added: {{ comment.creation_date }}</p>
-        {% endfor %}
+            <hr>
+
+            <div class="d-flex flex-column mt-0 w-100">
+                <a class="link" href="{% url 'problems:solutions'  pk=comment.solution.problem.id %}">{{ comment.solution.problem.name }}</a>
+            </div>
+
+            <div class="d-flex text-secondary">
+                        {{ comment.update_date }}
+            </div>
+
+            <div class="home-container d-flex flex-row w-100 align-items-center justify-content-center">
+                <div class="d-flex flex-column">
+                    <div class="d-flex flex-column justify-content-center text-center align-items-center align-self-end">
+                        <div class="d-flex mt-0 justify-content-center">
+                            {% if comment.upvote_counter > 0 %}
+                                <h3 class="d-flex mt-0 justify-content-center">+{{ comment.upvote_counter }}</h3>
+                            {% else %}
+                                <h3 class="d-flex mt-0 justify-content-center">{{ comment.upvote_counter }}</h3>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex px-4"><!-- spacing between solution info and solution content --></div>
+
+                <div class="d-flex flex-column mt-0 w-100 justify-content-center" style="word-wrap: break-word;">
+                    <p>{{ comment.content }}</p>
+                </div>
+            </div>
+            {% endfor %}
     </div>
 
 {% endblock %}
