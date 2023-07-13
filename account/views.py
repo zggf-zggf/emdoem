@@ -92,6 +92,7 @@ def user_problems_added_page(request, pk):
     }
     return render(request, 'account/user_problems_added.html', context)
 
+
 def user_solutions_added_page(request, pk):
     user = get_object_or_404(get_user_model(), id=pk)
     user_stats = get_user_stats(user)
@@ -107,10 +108,9 @@ def user_solutions_added_page(request, pk):
 
 def user_comments_added_page(request, pk):
     user = get_object_or_404(get_user_model(), id=pk)
-    #user_stats = get_user_stats(user)
+    user_stats = get_user_stats(user)
 
-    #solutions_added = user_stats.get('solutions_added').order_by('-creation_date')
-    comments_added = Comment.user_set.all()
+    comments_added = user_stats.get('comments_added').order_by('-creation_date')
 
     context = {
         'comments_added': comments_added,

@@ -21,8 +21,8 @@
 
 
     <a href="{% url 'account:user_problems' pk=user.id %}">Utworzone zadania</a>
-    <a href="{% url 'account:user_problems' pk=user.id %}">Utworzone rozwiązania</a>
-    <a href="{% url 'account:user_problems' pk=user.id %}">Utworzone komentarze</a>
+    <a href="{% url 'account:user_solutions' pk=user.id %}">Utworzone rozwiązania</a>
+    <a href="{% url 'account:user_comments' pk=user.id %}">Utworzone komentarze</a>
 
 
 {% endblock %}
