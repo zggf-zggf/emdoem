@@ -1,11 +1,16 @@
-{% extends 'base/base.html' %}
+{% extends "account/userProfile.html" %}
 
+{% load static %}
 
-{% block content %}
+{% block innerContent %}
 
-    {% for comment in comments_added %}
-        <p>{{ comment.content }}</p>
-        <p>{{ comment.creation_date }}</p>
-    {% endfor %}
+    <div class="container center-block flex-column mt-4" style="width: 60%;">
+
+        <h2>Comments added:</h2>
+        {% for comment in comments_added %}
+            <p>Comment: {{ comment.content }}</p>
+            <p>Comment added: {{ comment.creation_date }}</p>
+        {% endfor %}
+    </div>
 
 {% endblock %}

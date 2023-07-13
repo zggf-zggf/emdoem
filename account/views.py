@@ -3,7 +3,6 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from .forms import CreateUser
 from base.utils import get_user_stats
-from base.models import Comment
 
 # Create your views here.
 
@@ -68,6 +67,7 @@ def profile_page(request, pk):
     problems_solved = user_stats.get('problems_solved')
     problems_added = user_stats.get('problems_added').order_by('-creation_date')
     solutions_added = user_stats.get('solutions_added').order_by('-creation_date')
+    comments_added = user_stats.get('comments_added').order_by('-creation_date')
 
     context = {
         'user': user,
@@ -75,10 +75,12 @@ def profile_page(request, pk):
         'problems_added': problems_added,
         'problems_added_count': problems_added.count(),
         'solutions_added': solutions_added,
-        'solutions_added_count': solutions_added.count()
+        'solutions_added_count': solutions_added.count(),
+        'comments_added': comments_added,
+        'comments_added_count': comments_added.count(),
     }
 
-    return render(request, 'account/userProfile.html', context)
+    return render(request, 'account/user_overview.html', context)
 
 
 def user_problems_added_page(request, pk):

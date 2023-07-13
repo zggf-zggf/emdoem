@@ -1,28 +1,28 @@
 {% extends 'base/base.html' %}
 
+{% load static %}
+
 {% block content %}
+    <div class="container center-block flex-column mt-4" style="width: 60%;">
+        <nav class="px-4 align-items-center navbar navbar-expand-lg navbar-light bg-light mb-3">
+            <div class="navbar-nav">
+                <h1 class="m-auto navbar-brand ">@{{ user.username }}</h1>
+                <div style="width: 15px;"></div>
+                <a class="ml-4 nav-item nav-link {% if request.resolver_match.view_name == 'account:profile_page' %}active{% endif %}"
+                   href="{% url 'account:profile_page' pk=user.id %}">Informacje ogólne</a>
+                <a class="ml-4 nav-item nav-link {% if request.resolver_match.view_name == 'account:user_problems' %}active{% endif %}"
+                   href="{% url 'account:user_problems' pk=user.id %}">Utworzone zadania</a>
+                <a class="ml-4 nav-item nav-link {% if request.resolver_match.view_name == 'account:user_solutions' %}active{% endif %}"
+                   href="{% url 'account:user_solutions' pk=user.id %}">Utworzone rozwiązania</a>
+                <a class="ml-4 nav-item nav-link {% if request.resolver_match.view_name == 'account:user_comments' %}active{% endif %}"
+                   href="{% url 'account:user_comments' pk=user.id %}">Utworzone komentarze</a>
+            </div>
+        </nav>
 
-    <h1>{{ user.username }}</h1>
-    <p>Problems solved: {{ problems_solved_count }}</p>
-    <p>Problems added: {{ problems_added_count }}</p>
-    <p>Solutions added: {{ solutions_added_count }}</p>
+        <div class="flex-column justify-content-center mx-4 py-2">
+            {% block innerContent %}
+            {% endblock %}
+        </div>
 
-    <h2>Solutions added:</h2>
-    {% for solution in solutions_added %}
-        <p>Problem: {{ solution.problem.name }}</p>
-        <p>Solution added: {{ solution.creation_date }}, upvote: {{ solution.upvote_counter }}</p>
-    {% endfor %}
-
-    <h2>Problems added:</h2>
-    {% for problem in problems_added %}
-        <p>Problem: {{ problem.name }}</p>
-        <p>Problem added: {{ problem.creation_date }}</p>
-    {% endfor %}
-
-
-    <a href="{% url 'account:user_problems' pk=user.id %}">Utworzone zadania</a>
-    <a href="{% url 'account:user_solutions' pk=user.id %}">Utworzone rozwiązania</a>
-    <a href="{% url 'account:user_comments' pk=user.id %}">Utworzone komentarze</a>
-
-
+    </div>
 {% endblock %}

@@ -1,11 +1,15 @@
-{% extends 'base/base.html' %}
+{% extends "account/userProfile.html" %}
 
+{% load static %}
 
-{% block content %}
+{% block innerContent %}
 
-    {% for solution in solutions_added %}
-        <p>{{ solution.problem.name }}</p>
-        <p>{{ solution.creation_date }}</p>
-    {% endfor %}
+    <div class="container center-block flex-column mt-4" style="width: 60%;">
+        <h2>Solutions added:</h2>
+        {% for solution in solutions_added %}
+            <p>Problem: {{ solution.problem.name }}</p>
+            <p>Solution added: {{ solution.creation_date }}, upvote: {{ solution.upvote_counter }}</p>
+        {% endfor %}
+    </div>
 
 {% endblock %}
