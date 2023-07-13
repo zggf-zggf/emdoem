@@ -6,6 +6,19 @@ from crispy_forms.layout import Layout, Fieldset, Submit, Row, Column, Div
 
 
 class UploadForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Column('name', 'category', css_class="col-lg-4"),
+            'problem_statement',
+            Div(Submit('submit', 'Zapisz', css_class='d-flex'), css_class='d-flex flex-row justify-content-end'),
+        )
+        self.fields["problem_statement"].label = ""
+        self.fields["name"].label = "Nazwa zadania"
+        self.fields["category"].label = "Kategoria"
+
+
     class Meta:
         model = Problem
         fields = ['name', 'category', 'problem_statement']

@@ -1,13 +1,8 @@
 {% extends "base/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <div class="d-flex flex-column p-4 bg-light">
-    <h2>Dodaj zadanie</h2>
-        <form method="POST">
-            {% csrf_token %}
-            {{ upload_form.media }}
-            {{ upload_form|crispy }}
-            <button class="btn btn-primary" type="submit">Submit</button>
-        </form>
+    <div class="flex-column p-4">
+        <h2>Dodaj zadanie</h2>
+        {% crispy upload_form %}
     </div>
 {% endblock %}

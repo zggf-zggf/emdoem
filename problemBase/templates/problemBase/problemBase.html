@@ -1,25 +1,28 @@
 {% extends 'base/base.html' %}
 {% block content %}
-
-    <div class="home-container">
-        <div>
+    <div class="home-container d-flex flex-row bg-light p-4">
+        <div class="d-flex flex-column p-3">
 
             <h3>Kategorie:</h3>
-            <hr>
 
-            <div>
-               <a href="{% url 'problems:problem_base' %}">Wszystkie kategorie</a>
-            </div>
-
-            {% for category in categories %}
-                <div>
-                    <a href="{% url 'problems:problem_base' %}?q={{ category }}">{{ category }}</a>
+            <a style="text-decoration: none;" href="{% url 'problems:problem_base' %}">
+                <div class="d-flex hover-overlay p-3 sidebar-item bg-dark text-white">
+                    Wszystkie kategorie
                 </div>
+            </a>
+            {% for category in categories %}
+                <a style="text-decoration: none;" href="{% url 'problems:problem_base' %}?q={{ category }}">
+                    <div class="d-flex hover-overlay p-3 sidebar-item bg-dark text-white">
+                        {{ category }}
+                    </div>
+                </a>
             {% endfor %}
 
         </div>
 
-        <div class="table-responsive">
+        <div class="d-flex" style="width: 120px"><!-- spacing between categories and problems --></div>
+
+        <div class="d-flex flex-column table-responsive">
         <table class="table table-borderless table-hover">
         <tbody>
             {% for problem in problems %}
