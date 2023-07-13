@@ -1,4 +1,4 @@
-from base.models import Problem, UserToProblem, Solution, SolutionVote, Comment, CommentVote
+from base.models import Problem, UserToProblem, Solution, SolutionVote, Comment, CommentVote, Category
 from django.shortcuts import get_object_or_404
 from django.db.models import Sum
 
@@ -69,3 +69,6 @@ def get_user_stats(user):
 
     return stats
 
+
+def get_categories():
+    return Category.objects.all()
