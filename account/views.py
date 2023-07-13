@@ -90,6 +90,7 @@ def user_problems_added_page(request, pk):
     problems_added = user_stats.get('problems_added').order_by('-creation_date')
 
     context = {
+        'user': user,
         'problems_added': problems_added,
     }
     return render(request, 'account/user_problems_added.html', context)
@@ -102,6 +103,7 @@ def user_solutions_added_page(request, pk):
     solutions_added = user_stats.get('solutions_added').order_by('-creation_date')
 
     context = {
+        'user': user,
         'solutions_added': solutions_added,
     }
 
@@ -115,6 +117,7 @@ def user_comments_added_page(request, pk):
     comments_added = user_stats.get('comments_added').order_by('-creation_date')
 
     context = {
+        'user': user,
         'comments_added': comments_added,
     }
 

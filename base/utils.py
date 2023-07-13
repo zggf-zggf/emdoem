@@ -46,7 +46,7 @@ def update_comment_upvote_counter(comment):
 
 
 def get_user_stats(user):
-    solutions_added = Solution.objects.filter(user=user, upvote_counter__gt=0)
+    solutions_added = Solution.objects.filter(user=user)
     problems_added = Problem.objects.filter(added_by=user)
     comments_added = Comment.objects.filter(user=user)
 
