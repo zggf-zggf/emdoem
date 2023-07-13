@@ -7,8 +7,10 @@ from django.shortcuts import get_object_or_404
 from base.utils import get_watchers_of_problem, get_problem_stats, process_vote, update_solution_upvote_counter, update_comment_upvote_counter
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
+from django.core.exceptions import PermissionDenied
+import json
 
 
 def problem_base(request):
@@ -139,6 +141,19 @@ def create_comment(request):
 
         solution = get_object_or_404(Solution, pk=solution_id)
         comment = Comment(user=request.user, solution=solution, content=comment_content)
+        comment.save()
+
+        response_data['result'] = 'Create comment successful!'
+        response_data['comment_id'] = comment.id
+        response_data['comment_content'] = comment.content
+
+        return HttpResponse(
+            json.dumps(response_data),
+            content_type="application/json"
+        )
+
+    else:
+        raise PermissionDenied()
 
 @login_required(login_url='account:login')
 def solution_vote_page(request, pk, vote):
