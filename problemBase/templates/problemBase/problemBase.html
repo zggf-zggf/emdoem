@@ -1,28 +1,28 @@
 {% extends 'base/base.html' %}
 {% block content %}
-    <div class="home-container d-flex flex-row bg-light p-4">
-        <div class="d-flex flex-column p-3">
+    <div class="home-container d-flex flex-row p-4">
+        <nav class="collapse d-lg-block sidebar collapse">
+          <div class="list-group list-group-flush mx-3 mt-4">
+            <h3 class="pl-2">Kategoria</h3>
 
-            <h3>Kategorie:</h3>
-
-            <a style="text-decoration: none;" href="{% url 'problems:problem_base' %}">
-                <div class="d-flex hover-overlay p-3 sidebar-item bg-dark text-white">
-                    Wszystkie kategorie
-                </div>
+            <a style="text-decoration: none;"
+               href="{% url 'problems:problem_base' %}"
+                class="list-group-item list-group-item-action py-2 ripple">
+                <span> Wszystkie kategorie </span>
             </a>
             {% for category in categories %}
-                <a style="text-decoration: none;" href="{% url 'problems:problem_base' %}?q={{ category }}">
-                    <div class="d-flex hover-overlay p-3 sidebar-item bg-dark text-white">
-                        {{ category }}
-                    </div>
+                <a style="text-decoration: none;"
+                   href="{% url 'problems:problem_base' %}?q={{ category }}"
+                   class="list-group-item list-group-item-action py-2 ripple">
+                    <span> {{ category }} </span>
                 </a>
             {% endfor %}
-
-        </div>
+          </div>
+        </nav>
 
         <div class="d-flex" style="width: 120px"><!-- spacing between categories and problems --></div>
 
-        <div class="d-flex flex-column table-responsive">
+        <div class="d-flex flex-column table-responsive mt-5">
         <table class="table table-borderless table-hover">
         <tbody>
             {% for problem in problems %}
