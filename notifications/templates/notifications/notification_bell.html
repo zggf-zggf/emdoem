@@ -1,0 +1,21 @@
+<li class="nav-item dropdown mr-3 pr-3">
+    <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown"
+       aria-expanded="false">
+        <i class="bi bi-bell"> </i>
+        {% if notifications_data.count > 0 %}
+            <span class="text-danger">
+                {{ notifications_data.count }}
+            </span>
+        {% endif %}
+    </a>
+    <ul class="dropdown-menu">
+        {% for notification in notifications_data.notifications %}
+            <li>
+                <a class="dropdown-item" style="white-space: normal; word-break: break-word; width: 420px;" href="{{ notification.url }}">
+                    <h6>{{ notification.name }}</h6>
+                    <p class='text-break'>{{ notification.content }}</p>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</li>

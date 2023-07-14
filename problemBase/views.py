@@ -10,9 +10,12 @@ from django.db.models import Sum
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.core.exceptions import PermissionDenied
+from notifications.utils import notify_new_comment
+from notifications.views import show_notifications
+from django.template.response import TemplateResponse
 import json
 
-
+@show_notifications
 def problem_base(request):
     q = request.GET.get('q') if request.GET.get('q') is not None else ''
 
@@ -29,9 +32,10 @@ def problem_base(request):
         print(stats)
 
     context = {'problems': problems, 'categories': categories}
-    return render(request, "problemBase/problemBase.html", context)
+    return TemplateResponse(request, "problemBase/problemBase.html", context)
 
 
+@show_notifications
 @login_required(login_url='account:login')
 def problem_page(request, pk):
     problem = get_object_or_404(Problem, pk=pk)
@@ -60,9 +64,11 @@ def problem_page(request, pk):
         'solution_form': solution_form
     }
 
-    return render(request, "problemBase/problemStatement.html", context)
+    return TemplateResponse(request, "problemBase/problemStatement.html", context)
 
 
+@show_notifications
+@login_required
 def problem_page_info(request, pk):
     problem = get_object_or_404(Problem, pk=pk)
 
@@ -75,9 +81,10 @@ def problem_page_info(request, pk):
         'category': problem.category,
     }
 
-    return render(request, "problemBase/problemInfo.html", context);
+    return TemplateResponse(request, "problemBase/problemInfo.html", context);
 
 
+@show_notifications
 @login_required(login_url='account:login')
 def upload_problem_page(request):
     upload_form = UploadForm()
@@ -105,9 +112,10 @@ def upload_problem_page(request):
 
     context = {'upload_form': upload_form}
 
-    return render(request, "problemBase/problemUpload.html", context)
+    return TemplateResponse(request, "problemBase/problemUpload.html", context)
 
 
+@show_notifications
 @login_required(login_url='account:login')
 def problem_solution_page(request, pk):
     problem = get_object_or_404(Problem, pk=pk)
@@ -131,7 +139,7 @@ def problem_solution_page(request, pk):
         'comment_form': comment_form,
     }
 
-    return render(request, "problemBase/problemSolution.html", context)
+    return TemplateResponse(request, "problemBase/problemSolution.html", context)
 
 def create_comment(request):
     if request.method == 'POST':
@@ -146,6 +154,9 @@ def create_comment(request):
         response_data['result'] = 'Create comment successful!'
         response_data['comment_id'] = comment.id
         response_data['comment_content'] = comment.content
+
+        if request.user != comment.solution.user:
+            notify_new_comment(comment)
 
         return HttpResponse(
             json.dumps(response_data),
@@ -207,6 +218,7 @@ def comment_vote_page(request, pk, vote):
     return HttpResponseRedirect(reverse('problems:solutions', kwargs={'pk': comment.solution.problem.id}))
 
 
+@show_notifications
 @login_required(login_url='account:login')
 def solution_edit_page(request, pk):
     solution = get_object_or_404(Solution, pk=pk)
@@ -231,7 +243,7 @@ def solution_edit_page(request, pk):
         'problem_statement': problem.problem_statement,
     }
 
-    return render(request, "problemBase/solutionEdit.html", context)
+    return TemplateResponse(request, "problemBase/solutionEdit.html", context)
 
 @login_required
 def delete_comment(request, pk):

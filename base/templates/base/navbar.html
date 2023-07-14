@@ -38,6 +38,7 @@
                             <li><a class="dropdown-item" href="{% url 'account:logout' %}">Wyloguj</a></li>
                         </ul>
                     </li>
+                    {% include 'notifications/notification_bell.html' %}
                 {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'account:login' %}">Zaloguj</a>
