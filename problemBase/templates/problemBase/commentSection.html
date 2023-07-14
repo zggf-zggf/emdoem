@@ -2,7 +2,13 @@
     {% for comment in comments %}
         <div class="d-flex d-row border-top border-2 pt-2" mb-0>
             <a href="{% url 'account:profile_page' comment.user.id %}">@{{ comment.user.username }}</a>
+            &nbsp;
             <p class="text-secondary mb-1">{{ comment.creation_date }}</p>
+            {% if comment.user == request.user %}
+                &nbsp;
+                <a href="{% url 'problems:delete_comment' pk=comment.id %}" class="link-secondary"
+                   onclick="return confirm('Czy na pewno chcesz usunąć komentarz?');">usuń</a>
+            {% endif %}
         </div>
         <div class="d-flex d-row mt-0 text-break">
             <p class="mb-1">{{ comment.content }}</p>

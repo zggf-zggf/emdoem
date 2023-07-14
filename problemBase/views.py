@@ -232,3 +232,11 @@ def solution_edit_page(request, pk):
     }
 
     return render(request, "problemBase/solutionEdit.html", context)
+
+@login_required
+def delete_comment(request, pk):
+    comment = get_object_or_404(Comment, id=pk)
+    if comment.user != request.user:
+        raise PermissionDenied();
+    comment.delete()
+    return redirect('problems:solutions', pk=comment.solution.problem.id)
