@@ -3,6 +3,8 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from .forms import CreateUser
 from base.utils import get_user_stats, get_problem_stats
+from notifications.views import show_notifications
+from django.template.response import TemplateResponse
 
 # Create your views here.
 
@@ -60,6 +62,7 @@ def logout_user(request):
     return redirect('home:home')
 
 
+@show_notifications
 def profile_page(request, pk):
     user = get_object_or_404(get_user_model(), id=pk)
     user_stats = get_user_stats(user)
@@ -80,9 +83,9 @@ def profile_page(request, pk):
         'comments_added_count': comments_added.count(),
     }
 
-    return render(request, 'account/user_overview.html', context)
+    return TemplateResponse(request, 'account/user_overview.html', context)
 
-
+@show_notifications
 def user_problems_added_page(request, pk):
     user = get_object_or_404(get_user_model(), id=pk)
     user_stats = get_user_stats(user)
@@ -104,9 +107,10 @@ def user_problems_added_page(request, pk):
         'watching_stats': watching_stats,
         'solved_stats': solved_stats,
     }
-    return render(request, 'account/user_problems_added.html', context)
+    return TemplateResponse(request, 'account/user_problems_added.html', context)
 
 
+@show_notifications
 def user_solutions_added_page(request, pk):
     user = get_object_or_404(get_user_model(), id=pk)
     user_stats = get_user_stats(user)
@@ -118,9 +122,10 @@ def user_solutions_added_page(request, pk):
         'solutions_added': solutions_added,
     }
 
-    return render(request, 'account/user_solutions_added.html', context)
+    return TemplateResponse(request, 'account/user_solutions_added.html', context)
 
 
+@show_notifications
 def user_comments_added_page(request, pk):
     user = get_object_or_404(get_user_model(), id=pk)
     user_stats = get_user_stats(user)
@@ -132,4 +137,4 @@ def user_comments_added_page(request, pk):
         'comments_added': comments_added,
     }
 
-    return render(request, 'account/user_comments_added.html', context)
+    return TemplateResponse(request, 'account/user_comments_added.html', context)
