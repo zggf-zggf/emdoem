@@ -5,6 +5,8 @@ from .forms import CreateUser
 from base.utils import get_user_stats, get_problem_stats
 from notifications.views import show_notifications
 from django.template.response import TemplateResponse
+from itertools import chain
+from operator import attrgetter
 
 # Create your views here.
 
@@ -72,6 +74,14 @@ def profile_page(request, pk):
     solutions_added = user_stats.get('solutions_added').order_by('-creation_date')
     comments_added = user_stats.get('comments_added').order_by('-creation_date')
 
+    recent_activities = sorted(
+        chain(problems_added, solutions_added, comments_added),
+        key=attrgetter('creation_date'),
+        reverse=True,
+    )
+
+    recent_activities = recent_activities[:4]
+
     context = {
         'user': user,
         'problems_solved_count': problems_solved.count,
@@ -81,9 +91,11 @@ def profile_page(request, pk):
         'solutions_added_count': solutions_added.count(),
         'comments_added': comments_added,
         'comments_added_count': comments_added.count(),
+        'recent_activities': recent_activities,
     }
 
     return TemplateResponse(request, 'account/user_overview.html', context)
+
 
 @show_notifications
 def user_problems_added_page(request, pk):
@@ -99,7 +111,6 @@ def user_problems_added_page(request, pk):
         problem_stats = get_problem_stats(problem)
         watching_stats[problem.id] = problem_stats['watching']
         solved_stats[problem.id] = problem_stats['solved']
-
 
     context = {
         'user': user,

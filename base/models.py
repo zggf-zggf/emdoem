@@ -3,6 +3,7 @@ from datetime import datetime
 from ckeditor.fields import RichTextField
 from django.contrib.auth.models import AbstractUser
 
+
 # Create your models here.
 
 
@@ -26,6 +27,15 @@ class Problem(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     watchers = models.JSONField("Watchers", default={"watcher": "task"})
 
+    def problem_id(self):
+        return self.id
+
+    def problem_name(self):
+        return self.name
+
+    def display(self):
+        return self.problem_statement
+
 
 class Solution(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
@@ -33,11 +43,20 @@ class Solution(models.Model):
     upvote_counter = models.IntegerField(default=0)
     creation_date = models.DateTimeField(auto_now_add=True)
     content = RichTextField(blank=True, null=True)
-    #do usuniecia
+    # do usuniecia
     voters = models.JSONField("Voters", default={"voters": 1})
 
     def __str__(self):
         return str(self.id)
+
+    def problem_id(self):
+        return self.problem.id
+
+    def problem_name(self):
+        return self.problem.name
+
+    def display(self):
+        return self.content
 
 
 class UserToProblem(models.Model):
@@ -67,6 +86,15 @@ class Comment(models.Model):
     def __str__(self):
         return str(self.content)
 
+    def problem_id(self):
+        return self.solution.problem.id
+
+    def problem_name(self):
+        return self.solution.problem.name
+
+    def display(self):
+        return self.content
+
 
 class SolutionVote(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -75,6 +103,7 @@ class SolutionVote(models.Model):
 
     def __str__(self):
         return str(self.user) + " " + str(self.solution) + " " + str(self.value)
+
 
 class CommentVote(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
