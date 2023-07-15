@@ -11,6 +11,6 @@ def notify_new_comment(comment):
 def prepare_notifications(user):
     if user.is_authenticated:
         count = NewCommentNotification.objects.filter(user=user, is_read=False).count()
-        notifications = NewCommentNotification.objects.filter(user=user, is_read=False).order_by('creation_date')[0 : 3]
+        notifications = NewCommentNotification.objects.filter(user=user).order_by('creation_date')[0 : 3]
         return {'count': count, 'notifications': notifications}
 

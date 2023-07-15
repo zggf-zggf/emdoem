@@ -11,9 +11,12 @@
     <ul class="dropdown-menu">
         {% for notification in notifications_data.notifications %}
             <li>
-                <a class="dropdown-item" style="white-space: normal; word-break: break-word; width: 420px;" href="{{ notification.url }}">
-                    <h6>{{ notification.name }}</h6>
-                    <p class='text-break'>{{ notification.content }}</p>
+                <a class="dropdown-item pt-2 {% if notification.is_read %} bg-light {% endif %}"
+                   style="white-space: normal; word-break: break-word; width: 420px;" href="{{ notification.url }}">
+                    <h6>
+                        {{ notification.name }}
+                    </h6>
+                    <p class='text-break mb-1'>{{ notification.content }}</p>
                 </a>
             </li>
         {% endfor %}
