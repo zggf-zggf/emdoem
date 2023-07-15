@@ -3,7 +3,7 @@
        aria-expanded="false">
         <i class="bi bi-bell"> </i>
         {% if notifications_data.count > 0 %}
-            <span class="text-danger">
+            <span class="text-danger fw-bold">
                 {{ notifications_data.count }}
             </span>
         {% endif %}
@@ -20,5 +20,8 @@
                 </a>
             </li>
         {% endfor %}
+        <li class="d-flex flex-row justify-content-end p-1">
+            <a class="link-secondary d-flex text-decoration-none" href="{% url 'account:user_notifications' pk=request.user.id %}"> zobacz wszystkie &nbsp;&nbsp;&nbsp; </a>
+        </li>
     </ul>
 </li>

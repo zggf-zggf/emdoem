@@ -7,6 +7,8 @@ from notifications.views import show_notifications
 from django.template.response import TemplateResponse
 from itertools import chain
 from operator import attrgetter
+from django.core.exceptions import PermissionDenied
+from notifications.utils import prepare_all_notifications
 
 # Create your views here.
 
@@ -149,3 +151,17 @@ def user_comments_added_page(request, pk):
     }
 
     return TemplateResponse(request, 'account/user_comments_added.html', context)
+
+@show_notifications
+def user_notifications_page(request, pk):
+    user = get_object_or_404(get_user_model(), id=pk)
+    if request.user != user:
+        raise PermissionDenied()
+
+    all_notifications_data = prepare_all_notifications(user)
+    context = {
+        'user': user,
+        'all_notifications_data': all_notifications_data
+    }
+
+    return TemplateResponse(request, 'account/user_notifications.html', context)

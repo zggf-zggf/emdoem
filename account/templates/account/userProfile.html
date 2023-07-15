@@ -16,6 +16,10 @@
                    href="{% url 'account:user_solutions' pk=user.id %}">Rozwiązania</a>
                 <a class="ml-4 nav-item nav-link {% if request.resolver_match.view_name == 'account:user_comments' %}active{% endif %}"
                    href="{% url 'account:user_comments' pk=user.id %}">Komentarze</a>
+                {% if user == request.user %}
+                <a class="ml-4 nav-item nav-link {% if request.resolver_match.view_name == 'account:user_notifications' %}active{% endif %}"
+                   href="{% url 'account:user_notifications' pk=user.id %}">Powiadomienia <span class="text-danger fw-bold">{{ notifications_data.count }}</span></a>
+                {% endif %}
             </div>
         </nav>
 

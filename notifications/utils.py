@@ -1,5 +1,5 @@
 from base.models import Comment, Solution
-from notifications.models import NewCommentNotification
+from notifications.models import NewCommentNotification, Notification
 
 def notify_new_comment(comment):
    notification = NewCommentNotification(comment=comment,
@@ -10,7 +10,12 @@ def notify_new_comment(comment):
 
 def prepare_notifications(user):
     if user.is_authenticated:
-        count = NewCommentNotification.objects.filter(user=user, is_read=False).count()
-        notifications = NewCommentNotification.objects.filter(user=user).order_by('creation_date')[0 : 3]
+        count = Notification.objects.filter(user=user, is_read=False).count()
+        notifications = Notification.objects.filter(user=user).order_by('creation_date')[0 : 3]
         return {'count': count, 'notifications': notifications}
+
+def prepare_all_notifications(user):
+    if user.is_authenticated:
+        notifications = Notification.objects.filter(user=user).order_by('creation_date')
+        return {'notifications': notifications}
 

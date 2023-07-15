@@ -8,8 +8,6 @@ class Notification(models.Model):
     content = models.CharField(max_length=300)
     creation_date = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
-    class Meta:
-        abstract = True
 
     def get_url(self):
         raise NotImplementedError('this method is abstract')

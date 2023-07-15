@@ -11,4 +11,5 @@ urlpatterns = [
     path('<str:pk>/problems', views.user_problems_added_page, name="user_problems"),
     path('<str:pk>/solutions', views.user_solutions_added_page, name="user_solutions"),
     path('<str:pk>/comments', views.user_comments_added_page, name="user_comments"),
+    path('<str:pk>/notifications', views.user_notifications_page, name="user_notifications"),
 ]
