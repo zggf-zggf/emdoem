@@ -6,7 +6,7 @@
         {% for notification in all_notifications_data.notifications %}
             <div class="d-flex flex-column">
                 <a class="dropdown-item p-2 hover-effect {% if notification.is_read %} bg-light {% endif %}"
-                   style="white-space: normal; word-break: break-word;" href="{{ notification.get_url }}">
+                   style="white-space: normal; word-break: break-word;" href="{{ notification.url }}">
                     <div class="d-flex">
                         <h6> {{ notification.name }} </h6>
                     </div>

@@ -10,7 +10,7 @@ from django.db.models import Sum
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.core.exceptions import PermissionDenied
-from notifications.utils import notify_new_comment
+from notifications.utils import notify_new_comment, notify_new_solution
 from notifications.views import show_notifications
 from django.template.response import TemplateResponse
 import json
@@ -55,6 +55,7 @@ def problem_page(request, pk):
             setattr(solution, 'problem', problem)
 
             solution.save()
+            notify_new_solution(solution)
 
             return redirect('problems:solutions', pk=problem.id)
 
@@ -223,13 +224,13 @@ def watch_problem_page(request, pk):
 
 @login_required(login_url='account:login')
 def problem_surrender_page(request, pk):
-    solution = get_object_or_404(Solution, pk=pk)
-    utp, _ = UserToProblem.objects.get_or_create(problem=solution.problem, user=request.user)
+    problem = get_object_or_404(Problem, pk=pk)
+    utp, _ = UserToProblem.objects.get_or_create(problem=problem, user=request.user)
 
     setattr(utp, 'surrendered', True)
     utp.save()
 
-    return HttpResponseRedirect(reverse('problems:solutions', kwargs={'pk': solution.problem.id}))
+    return HttpResponseRedirect(reverse('problems:solutions', kwargs={'pk': problem.id}))
 
 
 @login_required(login_url='account:login')
