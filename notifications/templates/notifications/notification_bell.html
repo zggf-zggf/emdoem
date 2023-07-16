@@ -1,9 +1,9 @@
-<li class="nav-item dropdown mr-3 pr-3">
+<li class="nav-item dropdown mr-3 pr-3" id="notification-bell">
     <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown"
        aria-expanded="false">
         <i class="bi bi-bell"> </i>
         {% if notifications_data.count > 0 %}
-            <span class="text-danger fw-bold">
+            <span class="text-danger fw-bold" id="notifications-count">
                 {{ notifications_data.count }}
             </span>
         {% endif %}
@@ -20,8 +20,41 @@
                 </a>
             </li>
         {% endfor %}
+        {% if notifications_data.count > 3 %}
+        <li class="d-flex flex-row justify-content-center p-0 bold ">
+            <div class="d-flex" >. . .</div>
+        </li>
+        {% endif %}
         <li class="d-flex flex-row justify-content-end p-1">
             <a class="link-secondary d-flex text-decoration-none" href="{% url 'account:user_notifications' pk=request.user.id %}"> zobacz wszystkie &nbsp;&nbsp;&nbsp; </a>
         </li>
     </ul>
 </li>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#notification-bell").click(function () {
+            $("#notifications-count").hide();
+            read_notifications();
+        })
+    });
+
+    function read_notifications(){
+        console.log("reading notifications...") // sanity check
+        $.get({
+            url: "{% url 'notifications:read_all' %}", // the endpoint
+            type: "GET", // http method
+            data: {},
+
+            // handle a successful response
+            success: function (json) {
+                console.log("success"); // another sanity check
+            },
+
+            // handle a non-successful response
+            error: function (xhr, errmsg, err) {
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+    }
+</script>
