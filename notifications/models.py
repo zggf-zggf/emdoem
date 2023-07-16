@@ -8,14 +8,12 @@ class Notification(models.Model):
     content = models.CharField(max_length=300)
     creation_date = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
-
-    def get_url(self):
-        raise NotImplementedError('this method is abstract')
+    type = models.CharField(max_length=20)
 
 class NewCommentNotification(Notification):
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
 
+    @property
     def get_url(self):
+        print('dobrze')
         return reverse('problems:solutions', kwargs={'pk': self.comment.solution.problem.id})
-
-    url = property(get_url)

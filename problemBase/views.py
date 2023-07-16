@@ -168,8 +168,8 @@ def create_comment(request):
         response_data['comment_id'] = comment.id
         response_data['comment_content'] = comment.content
 
-        if request.user != comment.solution.user:
-            notify_new_comment(comment)
+        #if request.user != comment.solution.user:
+        notify_new_comment(comment)
 
         return HttpResponse(
             json.dumps(response_data),
