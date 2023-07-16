@@ -1,6 +1,7 @@
 from base.models import Problem, UserToProblem, Solution, SolutionVote, Comment, CommentVote, Category
 from django.shortcuts import get_object_or_404
 from django.db.models import Sum
+from itertools import chain
 
 
 def get_watchers_of_problem (problem):
@@ -51,14 +52,14 @@ def get_user_stats(user):
     comments_added = Comment.objects.filter(user=user)
 
     # Wybieramy rozwiązania, które mają dodatnią liczbę upvotów.
-    problems_solved = Solution.objects.filter(user=user, upvote_counter__gt=0)
+    problems_solved_solutions = Solution.objects.filter(user=user, upvote_counter__gt=0)
+    problems_solved_list = []
 
     # Zamieniamy rozwiązania na zadania, których dotyczą.
-    for solution in problems_solved:
-        solution = solution.problem
-
+    for solution in problems_solved_solutions:
+        problems_solved_list.append(solution.problem.id)
     # Usuwamy duplikaty.
-    problems_solved = problems_solved.distinct()
+    problems_solved = Problem.objects.filter(id__in=problems_solved_list)
 
     stats = {
         'problems_solved': problems_solved,
@@ -72,3 +73,14 @@ def get_user_stats(user):
 
 def get_categories():
     return Category.objects.all()
+
+
+def solved_problem(user, problem):
+    problems_solved = Solution.objects.filter(user=user, upvote_counter__gt=0)
+
+    # Zamieniamy rozwiązania na zadania, których dotyczą.
+    for solution in problems_solved:
+        if solution.problem == problem:
+            return True
+
+    return False

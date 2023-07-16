@@ -4,7 +4,7 @@ from base.models import Problem, Category, Solution, SolutionVote, Comment, Comm
 from .forms import UploadForm, SolutionForm, CommentForm
 from base.models import UserToProblem
 from django.shortcuts import get_object_or_404
-from base.utils import get_watchers_of_problem, get_problem_stats, process_vote, update_solution_upvote_counter, update_comment_upvote_counter
+from base.utils import get_watchers_of_problem, get_problem_stats, process_vote, update_solution_upvote_counter, update_comment_upvote_counter, solved_problem
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from django.http import HttpResponseRedirect, HttpResponse
@@ -14,6 +14,7 @@ from notifications.utils import notify_new_comment
 from notifications.views import show_notifications
 from django.template.response import TemplateResponse
 import json
+
 
 @show_notifications
 def problem_base(request):
@@ -135,12 +136,18 @@ def problem_solution_page(request, pk):
             setattr(comment, 'upvoted', CommentVote.objects.filter(user=request.user, comment=comment, value=1).exists())
             setattr(comment, 'downvoted', CommentVote.objects.filter(user=request.user, comment=comment, value=-1).exists())
 
+    utp, _ = UserToProblem.objects.get_or_create(problem=problem, user=request.user)
+
+    display_solutions = solved_problem(request.user, problem) or utp.surrendered
+    print(display_solutions)
+
     context = {
         'name': problem.name,
         'pk': pk,
         'problem_statement': problem.problem_statement,
         'solutions': solutions,
         'comment_form': comment_form,
+        'display_solutions': display_solutions,
     }
 
     return TemplateResponse(request, "problemBase/problemSolution.html", context)
@@ -212,6 +219,17 @@ def watch_problem_page(request, pk):
     utp.save()
 
     return HttpResponseRedirect(reverse('problems:statement', kwargs={'pk': pk}))
+
+
+@login_required(login_url='account:login')
+def problem_surrender_page(request, pk):
+    solution = get_object_or_404(Solution, pk=pk)
+    utp, _ = UserToProblem.objects.get_or_create(problem=solution.problem, user=request.user)
+
+    setattr(utp, 'surrendered', True)
+    utp.save()
+
+    return HttpResponseRedirect(reverse('problems:solutions', kwargs={'pk': solution.problem.id}))
 
 
 @login_required(login_url='account:login')
