@@ -57,11 +57,15 @@ def problem_page(request, pk):
 
             return redirect('problems:solutions', pk=problem.id)
 
+    problem_stats = get_problem_stats(problem)
+
     context = {
         'name': problem.name,
         'problem_statement': problem.problem_statement,
         'pk': pk,
-        'solution_form': solution_form
+        'solution_form': solution_form,
+        'watching_count': problem_stats['watching'],
+        'watched': utp.is_watching,
     }
 
     return TemplateResponse(request, "problemBase/problemStatement.html", context)
@@ -141,6 +145,8 @@ def problem_solution_page(request, pk):
 
     return TemplateResponse(request, "problemBase/problemSolution.html", context)
 
+
+@login_required(login_url='account:login')
 def create_comment(request):
     if request.method == 'POST':
         comment_content = request.POST.get('the_comment')
@@ -166,6 +172,7 @@ def create_comment(request):
     else:
         raise PermissionDenied()
 
+
 @login_required(login_url='account:login')
 def solution_vote_page(request, pk, vote):
     solution = get_object_or_404(Solution, pk=pk)
@@ -190,6 +197,21 @@ def solution_vote_page(request, pk, vote):
             update_solution_upvote_counter(solution)
 
     return HttpResponseRedirect(reverse('problems:solutions', kwargs={'pk': solution.problem.id}))
+
+
+@login_required(login_url='account:login')
+def watch_problem_page(request, pk):
+    problem = get_object_or_404(Problem, pk=pk)
+    utp, _ = UserToProblem.objects.get_or_create(problem=problem, user=request.user)
+
+    if utp.is_watching:
+        setattr(utp, 'is_watching', False)
+    else:
+        setattr(utp, 'is_watching', True)
+
+    utp.save()
+
+    return HttpResponseRedirect(reverse('problems:statement', kwargs={'pk': pk}))
 
 
 @login_required(login_url='account:login')
