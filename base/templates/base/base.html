@@ -31,15 +31,6 @@
 
     <div id="content", name="content", class="m-5 d-flex justify-content-center" style="height: 60vh;">
 
-
-    {% if messages %}
-        <ul class="messages">
-        {% for message in messages %}
-            <li>{{ message }}</li>
-        {% endfor %}
-        </ul>
-    {% endif %}
-
     {% block content %}
     {% endblock %}
     </div>

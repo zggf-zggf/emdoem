@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, get_user_model
-from .forms import CreateUser
+from .forms import CreateUser, LoginUserForm
 from base.utils import get_user_stats, get_problem_stats
 from notifications.views import show_notifications
 from django.template.response import TemplateResponse
@@ -17,23 +17,27 @@ def login_page(request):
     page = 'login'
 
     if request.method == 'POST':
-        username = request.POST.get('username').lower()
-        password = request.POST.get('password')
+        form = LoginUserForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            username = data['username'].lower()
+            password = data['password']
 
-        try:
-            user = get_user_model().objects.get(username=username)
-        except:
-            messages.error(request, 'Nie ma takiego użytkownika.')
+            try:
+                user = get_user_model().objects.get(username=username)
+            except:
+                messages.error(request, 'Nie ma takiego użytkownika.')
 
-        user = authenticate(request, username=username, password=password)
+            user = authenticate(request, username=username, password=password)
 
-        if user is not None:
-            login(request, user)
-            return redirect('home:home')
-        else:
-            messages.error(request, 'Nazwa użytkownika lub hasło się nie zgadza.')
+            if user is not None:
+                login(request, user)
+                return redirect('home:home')
+            else:
+                messages.error(request, 'Nazwa użytkownika lub hasło się nie zgadza.')
 
-    context = {'page': page}
+    form = LoginUserForm()
+    context = {'page': page, 'form': form}
     return render(request, 'account/login_register.html', context)
 
 

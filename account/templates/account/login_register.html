@@ -1,32 +1,24 @@
 {% extends 'base/base.html' %}
-
+{% load crispy_forms_tags %}
 {% block content %}
 
     {% if page == 'login' %}
     <div>
-        <form method="POST" action="">
-            {% csrf_token %}
-
-            <label>Nazwa użytkownika:</label>
-            <input type="text" name="username" placeholder="Wprowadź nazwę użytkownika..."/>
-
-            <label>Hasło:</label>
-            <input type="password" name="password" placeholder="Wprowadź hasło..."/>
-
-            <input type="submit" value="Login">
-        </form>
+        {% crispy form %}
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
 
         <p>Nie masz jeszcze konta?</p>
         <a href="{% url 'account:register' %}">Zarejestruj się</a>
     </div>
     {% else %}
     <div>
-        <form method="POST" action="">
-            {% csrf_token %}
-            {{ form.as_p }}
-
-            <input type="submit" value="Register"/>
-        </form>
+        {% crispy form %}
 
         <p>Masz już konto?</p>
         <a href="{% url 'account:login' %}">Zaloguj się</a>
