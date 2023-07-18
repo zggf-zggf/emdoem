@@ -19,6 +19,13 @@
     {% else %}
     <div>
         {% crispy form %}
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
 
         <p>Masz już konto?</p>
         <a href="{% url 'account:login' %}">Zaloguj się</a>
