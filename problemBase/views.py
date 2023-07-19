@@ -14,6 +14,8 @@ from notifications.utils import notify_new_comment, notify_new_solution
 from notifications.views import show_notifications
 from django.template.response import TemplateResponse
 import json
+from django.utils import timezone
+from datetime import timedelta
 
 
 @show_notifications
@@ -294,3 +296,40 @@ def delete_comment(request, pk):
         raise PermissionDenied()
     comment.delete()
     return redirect('problems:solutions', pk=comment.solution.problem.id)
+
+@login_required
+def begin_surrender_page(request, pk):
+    problem = get_object_or_404(Problem, pk=pk)
+    utp, _ = UserToProblem.objects.get_or_create(user=request.user, problem=problem)
+
+    utp.start_surrendering()
+
+    response_data = {}
+    response_data['result'] = 'success!'
+    return HttpResponse(
+        json.dumps(response_data),
+        content_type="application/json"
+    )
+
+@login_required
+def get_surrender_time(request, pk):
+    problem = get_object_or_404(Problem, pk=pk)
+    utp, _ = UserToProblem.objects.get_or_create(user=request.user, problem=problem)
+
+    end_time = utp.surrender_end_time
+    # Calculate the remaining time (time left until end_time)
+    remaining_time = end_time - timezone.now()
+
+    # Extract minutes and seconds from the remaining time
+    minutes = remaining_time.seconds // 60
+    seconds = remaining_time.seconds % 60
+
+    response_data = {}
+    response_data['result'] = 'Begin surrendering successful!'
+    response_data['remaining_minutes'] = minutes
+    response_data['remaining_seconds'] = seconds
+
+    return HttpResponse(
+        json.dumps(response_data),
+        content_type="application/json"
+    )

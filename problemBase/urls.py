@@ -14,4 +14,6 @@ urlpatterns = [
     path('upload', views.upload_problem_page, name="upload_problem"),
     path('watch/<int:pk>', views.watch_problem_page, name="watch_problem"),
     path('surrender/<int:pk>', views.problem_surrender_page, name="surrender_problem"),
+    path('begin_surrender/<int:pk>', views.begin_surrender_page, name="begin_surrender"),
+    path('surrender_time/<int:pk>', views.get_surrender_time, name="surrender_time"),
 ]

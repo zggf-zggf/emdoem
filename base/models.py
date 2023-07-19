@@ -1,5 +1,5 @@
 from django.db import models
-from datetime import datetime
+from datetime import datetime, timedelta
 from ckeditor.fields import RichTextField
 from django.contrib.auth.models import AbstractUser
 
@@ -64,12 +64,19 @@ class UserToProblem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
     surrendered = models.BooleanField(default=False)
+    began_surrendering = models.BooleanField(default=False)
+    surrender_end_time = models.DateTimeField(null=True)
     is_watching = models.BooleanField(default=False)
     last_visit = models.DateTimeField(null=True)
 
     def timestamp(self):
         self.last_visit = datetime.now()
         self.save()
+
+    def start_surrendering(self):
+        self.surrender_end_time = datetime.now() + timedelta(minutes=10)
+        self.began_surrendering = True;
+        self.save();
 
     def __str__(self):
         return str(self.user)
