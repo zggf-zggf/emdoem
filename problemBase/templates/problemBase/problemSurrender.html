@@ -30,7 +30,7 @@
     <p>Gdy zdecydujesz się poddać zostanie uruchomione 10-cio minutowe odliczanie, po którym otrzymasz dostęp do rozwiązań.
     W tym czasie możesz zmienić decyzję (zrezygnować z poddania się). </p>
     <div class="d-flex flex-row justify-content-end">
-        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#surrenderModal">
+        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#surrenderModal" id="surrender-modal-close">
             Poddaję się
         </button>
     </div>
@@ -55,7 +55,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
-        <a type="button" class="btn align-self-end  btn-outline-danger" id="surrender-btd" href="{% url 'problems:begin_surrender' pk=pk %}">Poddaję się</a>
+        <a type="button" class="btn align-self-end  btn-outline-danger" id="surrender-btn" href="#">Poddaję się</a>
       </div>
     </div>
   </div>
@@ -63,6 +63,7 @@
 
 {% load static %}
 <script>
-    var surrender_timer_url = "{% url 'problems:surrender_time' pk=pk %}"
+    var surrender_begin_url = "{% url 'problems:begin_surrender' pk=pk %}";
+    var surrender_timer_url = "{% url 'problems:surrender_time' pk=pk %}";
 </script>
 <script src="{% static 'problemBase/surrender.js' %}"></script>

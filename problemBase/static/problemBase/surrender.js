@@ -1,18 +1,19 @@
 var remainingMinutes = 0;
 var remainingSeconds = 0;
-
 $(document).ready(function () {
     $("#surrender-btn").click(function (event){
         event.preventDefault();
-        $.get({
-            url: $(this).attr('href'), // the endpoint
+        event.stopImmediatePropagation();
+        console.log("button clicked");
+        $.ajax({
+            url: surrender_begin_url, // the endpoint
             type: "GET", // http method
             data: {},
 
             // handle a successful response
             success: function (json) {
-                show_timer();
                 console.log("success"); // another sanity check
+                show_timer();
             },
 
             // handle a non-successful response
@@ -20,6 +21,7 @@ $(document).ready(function () {
                 console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
             }
         });
+        return false;
     });
 });
 function show_timer() {
@@ -29,9 +31,18 @@ function show_timer() {
         data: {},
 
         success: function (json) {
+            console.log("success"); // another sanity check
             remainingMinutes = json.remainingMinutes
             remainingSeconds = json.remainingSeconds
-            console.log("success"); // another sanity check
+            // Calculate the end time (current time + remaining time)
+            const endTime = new Date();
+            endTime.setMinutes(endTime.getMinutes() + remainingMinutes);
+            endTime.setSeconds(endTime.getSeconds() + remainingSeconds);
+
+            // Start the countdown timer
+            $("#timer").show();
+            $("#surrender-modal-close").click();
+            updateTimer(endTime);
         },
 
         error: function (xhr, errmsg, err) {
@@ -40,14 +51,6 @@ function show_timer() {
     });
     // Get the remaining time from Django template variable (you can set this in the template)
 
-// Calculate the end time (current time + remaining time)
-    const endTime = new Date();
-    endTime.setMinutes(endTime.getMinutes() + remainingMinutes);
-    endTime.setSeconds(endTime.getSeconds() + remainingSeconds);
-
-// Start the countdown timer
-    $("#timer").show();
-    updateTimer(endTime);
 }
 
 function updateTimer(endTime) {
@@ -55,6 +58,7 @@ function updateTimer(endTime) {
 
     // Update the timer every second
     const timerInterval = setInterval(function () {
+        console.log("update timer")
         const currentTime = new Date();
         const timeDifference = endTime - currentTime;
 
