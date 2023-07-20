@@ -141,8 +141,11 @@ def problem_solution_page(request, pk):
 
     utp, _ = UserToProblem.objects.get_or_create(problem=problem, user=request.user)
 
+    waiting_for_surrender = (utp.began_surrendering and not utp.surrendered)
+    if waiting_for_surrender:
+        check_surrender_countdown(utp)
+
     display_solutions = solved_problem(request.user, problem) or utp.surrendered
-    print(display_solutions)
 
     context = {
         'name': problem.name,
@@ -151,9 +154,17 @@ def problem_solution_page(request, pk):
         'solutions': solutions,
         'comment_form': comment_form,
         'display_solutions': display_solutions,
+        'waiting_for_surrender': waiting_for_surrender,
     }
 
     return TemplateResponse(request, "problemBase/problemSolution.html", context)
+
+def check_surrender_countdown(utp):
+    if utp.start_surrendering:
+        end_time = utp.surrender_end_time
+        if end_time < timezone.now():
+            setattr(utp, 'surrendered', True)
+            utp.save()
 
 
 @login_required(login_url='account:login')
@@ -289,7 +300,7 @@ def solution_edit_page(request, pk):
     return TemplateResponse(request, "problemBase/solutionEdit.html", context)
 
 
-@login_required
+@login_required(login_url='account:login')
 def delete_comment(request, pk):
     comment = get_object_or_404(Comment, id=pk)
     if comment.user != request.user:
@@ -297,7 +308,7 @@ def delete_comment(request, pk):
     comment.delete()
     return redirect('problems:solutions', pk=comment.solution.problem.id)
 
-@login_required
+@login_required(login_url='account:login')
 def begin_surrender_page(request, pk):
     problem = get_object_or_404(Problem, pk=pk)
     utp, _ = UserToProblem.objects.get_or_create(user=request.user, problem=problem)
@@ -311,7 +322,7 @@ def begin_surrender_page(request, pk):
         content_type="application/json"
     )
 
-@login_required
+@login_required(login_url='account:login')
 def get_surrender_time(request, pk):
     problem = get_object_or_404(Problem, pk=pk)
     utp, _ = UserToProblem.objects.get_or_create(user=request.user, problem=problem)
@@ -325,7 +336,7 @@ def get_surrender_time(request, pk):
     seconds = remaining_time.seconds % 60
 
     response_data = {}
-    response_data['result'] = 'Begin surrendering successful!'
+    response_data['result'] = 'success'
     response_data['remaining_minutes'] = minutes
     response_data['remaining_seconds'] = seconds
 
@@ -333,3 +344,15 @@ def get_surrender_time(request, pk):
         json.dumps(response_data),
         content_type="application/json"
     )
+
+@login_required(login_url='account:login')
+def revert_surrender_page(request, pk):
+    problem = get_object_or_404(Problem, pk=pk)
+    utp, _ = UserToProblem.objects.get_or_create(problem=problem, user=request.user)
+
+    if not utp.surrendered:
+        utp.began_surrendering = False
+        utp.surrender_end_time = None
+        utp.save()
+
+    return redirect('problems:solutions', pk=problem.id)

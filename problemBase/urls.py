@@ -16,4 +16,5 @@ urlpatterns = [
     path('surrender/<int:pk>', views.problem_surrender_page, name="surrender_problem"),
     path('begin_surrender/<int:pk>', views.begin_surrender_page, name="begin_surrender"),
     path('surrender_time/<int:pk>', views.get_surrender_time, name="surrender_time"),
+    path('revert_surrender/<int:pk>', views.revert_surrender_page, name="revert_surrender"),
 ]

@@ -61,13 +61,15 @@
                     </div>
                 </div>
             {% endfor %}
+            {% if not solutions %}
+                <p>Nikt jeszcze nie rozwiązał tego zadania...</p>
+            {% endif %}
         </div>
+        <form id="commentForm" autocomplete="off" class="border-top border-2 pt-3" style="display:none;">
+            {% crispy comment_form %}
+        </form>
         {% endif %}
     </div>
-
-    <form id="commentForm" autocomplete="off" class="border-top border-2 pt-3" style="display:none;">
-        {% crispy comment_form %}
-    </form>
 
 {% endblock %}
 
