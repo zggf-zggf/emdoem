@@ -11,7 +11,7 @@ def get_watchers_of_problem (problem):
 
 def get_problem_stats (problem):
     # Counts solutions with positive number of upvotes, potentially to be changed in the future
-    solved = Solution.objects.filter(problem=problem, upvote_counter__gt=0).count()
+    solved = Solution.objects.filter(problem=problem).count()
     watching = UserToProblem.objects.filter(problem=problem, is_watching=True).count()
     stats = {"solved": solved, "watching": watching}
     return stats
