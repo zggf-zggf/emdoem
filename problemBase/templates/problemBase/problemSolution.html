@@ -38,22 +38,13 @@
                     <div class="px-4 d-flex"><!-- spacing between solution info and solution content --></div>
                     <div class="d-flex flex-column mt-0 w-100" style="word-wrap: break-word; min-width: 0;">
                         <p class="mb-4">{{ solution.content|safe }}</p>
-                        <div class="d-flex flex-row mb-3 justify-content-end">
-                            <div class="mt-4 d-flex flex-column justify-content-center text-center align-items-center align-self-end">
-
-                                <div class="d-flex">
-                                    <h3>{{ solution.upvote_counter }}</h3>
-                                </div>
-                                <div class="d-flex flex-row justify-content-center" style="min-width: 160px;">
-                                    <div class="d-flex flex-row px-1">
-                                        <a class="btn align-self-end {% if solution.upvoted %} btn-success {% else %} btn-outline-success {% endif %}"
-                                           href="{% url 'problems:vote_solution' pk=solution vote='upvote' %}">Fajne</a>
-                                    </div>
-                                    <div class="d-flex flex-row px-1">
-                                        <a class="btn align-self-start {% if solution.downvoted %} btn-danger {% else %} btn-outline-danger {% endif %}"
-                                           href="{% url 'problems:vote_solution' pk=solution vote='downvote' %}">Blef</a>
-                                    </div>
-                                </div>
+                        <div class="d-flex flex-row mb-3 mt-4 justify-content-end">
+                            <div class="d-flex flex-column align-items-center justify-content-center h-100 px-2 h3">
+                                {{ solution.upvote_counter }}
+                            </div>
+                            <div class="d-flex flex-row px-1 ml-2 me-3">
+                                <a class="btn align-self-end {% if solution.upvoted %} btn-success {% else %} btn-outline-success {% endif %}"
+                                   href="{% url 'problems:vote_solution' pk=solution vote='upvote' %}">Fajne</a>
                             </div>
                         </div>
                         {% include 'problemBase/commentSection.html' with comments=solution.comments solution_id=solution.id %}
