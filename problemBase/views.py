@@ -16,6 +16,7 @@ from django.template.response import TemplateResponse
 import json
 from django.utils import timezone
 from datetime import timedelta
+from ranking.utils import notify_problem_solved
 
 
 @show_notifications
@@ -200,6 +201,7 @@ def solution_vote_page(request, pk, vote):
                 vote.value = 0
             else:
                 vote.value = 1
+                notify_problem_solved(solution.problem, solution.user)
             vote.save()
             update_solution_upvote_counter(solution)
 

@@ -8,24 +8,18 @@
 
         <div class="card col-md-3 px-0">
             <div class="card-header text-center">
-                <h3>Informacje o użytkowniku</h3>
+                <h3>Z ostatniej chwili</h3>
             </div>
             <div class="d-flex flex-column table-responsive card-body">
                 <table class="table table-borderless table-hover">
                     <tbody>
+                    {% for log in problem_solved_logs %}
                     <tr class="h5">
-                        <td>
-                            <h4>#{{ user_position|get_item:user }}</h4>
-                        </td>
-                        <td>
-                            <a class="link-underline link-underline-opacity-0"
-                               href="{% url 'account:profile_page' user.id %}">@{{ request.user }}</a>
-                        </td>
-                        <td style="width: 160px;"></td>
-                        <td class="prevent-select"
-                            title="Rozwiązania">{{ problems_solved_count|get_item:request.user }}</td>
-                        <td class="prevent-select" title="Rozwiązania"><i class="bi bi-check"></i></td>
+                        <p><a class="link-underline link-underline-opacity-0" href="{% url 'account:profile_page' pk=log.user.id %}">
+                            @{{ log.user.username }}
+                        </a> rozwiązał zadanie "{{ log.problem.name }}"</p>
                     </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
             </div>

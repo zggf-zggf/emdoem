@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from base.utils import get_ranking
+from .utils import get_ranking
 
 # Create your views here.
 
@@ -7,11 +7,7 @@ from base.utils import get_ranking
 def ranking_page(request):
     ranking = get_ranking()
 
-    context = {
-        'users_ranking': ranking[0],
-        'problems_solved_count': ranking[1],
-        'user_position': ranking[2],
-    }
+    context = ranking
 
     return render(request, 'ranking/ranking_page.html', context)
 

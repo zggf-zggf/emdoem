@@ -85,38 +85,6 @@ def solved_problem(user, problem):
     return False
 
 
-def get_ranking():
-    users = get_user_model().objects.all()
-
-    for user in users:
-        setattr(user, "user_problem_count", get_problems_solved_list(user).count())
-
-    users = sorted(
-        chain(users),
-        key=attrgetter('user_problem_count'),
-        reverse=True
-    )
-
-    users_dictionary = {}
-    user_position = {}
-
-    previous_count = -1
-    user_count = 1
-    position = 0
-
-    for user in users:
-        if previous_count != user.user_problem_count:
-            position = user_count
-            previous_count = user.user_problem_count
-
-        user_count += 1
-
-        users_dictionary[user] = user.user_problem_count
-        user_position[user] = position
-
-    return [users, users_dictionary, user_position]
-
-
 def get_problems_solved_list(user):
     # Wybieramy rozwiązania, które mają dodatnią liczbę upvotów.
     problems_solved_solutions = Solution.objects.filter(user=user, upvote_counter__gt=0)

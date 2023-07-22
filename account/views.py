@@ -2,13 +2,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from .forms import CreateUser, LoginUserForm
-from base.utils import get_user_stats, get_problem_stats, get_ranking
+from base.utils import get_user_stats, get_problem_stats
 from notifications.views import show_notifications
 from django.template.response import TemplateResponse
 from itertools import chain
 from operator import attrgetter
 from django.core.exceptions import PermissionDenied
 from notifications.utils import prepare_all_notifications
+from ranking.utils import get_ranking
 
 # Create your views here.
 
@@ -100,8 +101,8 @@ def profile_page(request, pk):
         'comments_added': comments_added,
         'comments_added_count': comments_added.count(),
         'recent_activities': recent_activities,
-        'users_ranking': ranking[0],
-        'user_position': ranking[2],
+        'users_ranking': ranking['user_ranking'],
+        'user_position': ranking['user_position'],
     }
 
     return TemplateResponse(request, 'account/user_overview.html', context)
