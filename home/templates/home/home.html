@@ -1,0 +1,43 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+    <div class="d-flex flex-column w-75">
+        <h1>Witaj @{{ request.user.username }}! Czas rozwalić parę zadań.</h1>
+        <div class="row row-md mt-4 w-100">
+            <div class="card col-md-7 px-0">
+                <div class="card-header text-center">
+                    <h3>Ostatnio przeglądane</h3>
+                </div>
+                <div class="d-flex flex-column table-responsive card-body">
+                    <table class="table table-borderless table-hover">
+                        <tbody>
+                        {% for problem in recently_visited %}
+                            {% include 'problemBase/problemDBEntry.html' with problem=problem %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {% if not recently_visited %}
+                        <p>Nie zobaczyłeś jeszcze żadnego zadanka, na co czekasz!</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-4 px-0">
+                <div class="card px-0">
+                    <div class="card-header text-center">
+                        <h3>Powiadomienia</h3>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="d-flex flex-column justify-content-center m-0 p-0">
+                            {% include 'notifications/notifications_list.html' with notifications=notifications_data.notifications %}
+                        </div>
+                        {% if not notifications_data.notifications %}
+                            <p>Brak powiadomień</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

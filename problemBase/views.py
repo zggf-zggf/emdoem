@@ -4,7 +4,7 @@ from base.models import Problem, Category, Solution, SolutionVote, Comment, Comm
 from .forms import UploadForm, SolutionForm, CommentForm
 from base.models import UserToProblem
 from django.shortcuts import get_object_or_404
-from base.utils import get_watchers_of_problem, get_problem_stats, process_vote, update_solution_upvote_counter, update_comment_upvote_counter, solved_problem
+from base.utils import get_watchers_of_problem, get_problem_stats, process_vote, update_solution_upvote_counter, update_comment_upvote_counter, solved_problem, add_stats_to_problems
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from django.http import HttpResponseRedirect, HttpResponse
@@ -28,11 +28,7 @@ def problem_base(request):
     )
     categories = Category.objects.all()
 
-    for problem in problems:
-        stats = get_problem_stats(problem)
-        setattr(problem, "watchers_count", stats["watching"])
-        setattr(problem, "solved", stats["solved"])
-        print(stats)
+    add_stats_to_problems(problems)
 
     context = {'problems': problems, 'categories': categories}
     return TemplateResponse(request, "problemBase/problemBase.html", context)

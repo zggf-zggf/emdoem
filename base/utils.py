@@ -3,7 +3,6 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Sum
 from itertools import chain
 
-
 def get_watchers_of_problem (problem):
     queryset = UserToProblem.objects.filter(problem=problem, is_watching=True).values('user')
     return list(queryset)
@@ -15,6 +14,12 @@ def get_problem_stats (problem):
     watching = UserToProblem.objects.filter(problem=problem, is_watching=True).count()
     stats = {"solved": solved, "watching": watching}
     return stats
+
+def add_stats_to_problems (problems):
+    for problem in problems:
+        stats = get_problem_stats(problem)
+        setattr(problem, "watchers_count", stats["watching"])
+        setattr(problem, "solved", stats["solved"])
 
 
 def process_vote(solution, voter, vote):
