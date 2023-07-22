@@ -2,51 +2,71 @@
 
 {% load static %}
 
+{% load custom_tags %}
+
 {% block innerContent %}
     <div class="justify-content-center d-flex" style="padding-bottom: 200px;">
 
-        <div class="container center-block flex-column mt-4" style="width: 30%;">
-            <h2>Statystyki</h2>
-            <div class="d-flex flex-row">
-                <div class="d-flex text-secondary mx-2">
-                    Rozwiązane zadania:
-                </div>
-
-                <div class="d-flex">
-                    {{ problems_solved_count }}
-                </div>
+        <div class="card col-md-4 px-0">
+            <div class="card-header text-center">
+                <h3>Statystyki</h3>
             </div>
+            <div class="d-flex flex-column table-responsive card-body">
+                <table class="table table-borderless table-hover">
+                    <tbody>
 
-            <div class="d-flex flex-row">
-                <div class="d-flex text-secondary mx-2">
-                    Dodane zadania:
-                </div>
+                    <tr class="h5">
+                        <td>
+                            <h5>Pozycja w rankingu</h5>
+                        </td>
+                        <td style="width: 60px;"></td>
+                        <td class="prevent-select"
+                            title="Rozwiązania">{{ user_position|get_item:user }}</td>
+                    </tr>
 
-                <div class="d-flex">
-                    {{ problems_added_count }}
-                </div>
-            </div>
+                    <tr class="h5">
+                        <td>
+                            <h5>Rozwiazane zadania</h5>
+                        </td>
+                        <td style="width: 60px;"></td>
+                        <td class="prevent-select"
+                            title="Rozwiązania">{{ problems_solved_count }}</td>
+                    </tr>
 
-            <div class="d-flex flex-row">
-                <div class="d-flex text-secondary mx-2">
-                    Dodane rozwiązania:
-                </div>
+                    <tr class="h5">
+                        <td>
+                            <h5>Dodane zadania</h5>
+                        </td>
+                        <td style="width: 60px;"></td>
+                        <td class="prevent-select"
+                            title="Rozwiązania">{{ problems_added_count }}</td>
+                    </tr>
 
-                <div class="d-flex">
-                    {{ solutions_added_count }}
-                </div>
-            </div>
+                    <tr class="h5">
+                        <td>
+                            <h5>Dodane rozwiązania</h5>
+                        </td>
+                        <td style="width: 60px;"></td>
+                        <td class="prevent-select"
+                            title="Rozwiązania">{{ solutions_added_count }}</td>
+                    </tr>
 
-            <div class="d-flex flex-row">
-                <div class="d-flex text-secondary mx-2">
-                    Dodane komentarze:
-                </div>
+                    <tr class="h5">
+                        <td>
+                            <h5>Dodane komentarze</h5>
+                        </td>
+                        <td style="width: 60px;"></td>
+                        <td class="prevent-select"
+                            title="Rozwiązania">{{ comments_added_count }}</td>
+                    </tr>
 
-                <div class="d-flex">
-                    {{ comments_added_count }}
-                </div>
+                    </tbody>
+                </table>
             </div>
         </div>
+
+        <div class="col-md-1"></div>
+
 
         <div class="container center-block flex-column mt-4" style="width: 100%;">
 

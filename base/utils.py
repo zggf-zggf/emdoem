@@ -98,10 +98,23 @@ def get_ranking():
     )
 
     users_dictionary = {}
-    for user in users:
-        users_dictionary[user] = user.user_problem_count
+    user_position = {}
 
-    return [users, users_dictionary]
+    previous_count = -1
+    user_count = 1
+    position = 0
+
+    for user in users:
+        if previous_count != user.user_problem_count:
+            position = user_count
+            previous_count = user.user_problem_count
+
+        user_count += 1
+
+        users_dictionary[user] = user.user_problem_count
+        user_position[user] = position
+
+    return [users, users_dictionary, user_position]
 
 
 def get_problems_solved_list(user):

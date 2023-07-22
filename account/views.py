@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from .forms import CreateUser, LoginUserForm
-from base.utils import get_user_stats, get_problem_stats
+from base.utils import get_user_stats, get_problem_stats, get_ranking
 from notifications.views import show_notifications
 from django.template.response import TemplateResponse
 from itertools import chain
@@ -88,6 +88,8 @@ def profile_page(request, pk):
 
     recent_activities = recent_activities[:4]
 
+    ranking = get_ranking()
+
     context = {
         'user': user,
         'problems_solved_count': problems_solved.count,
@@ -98,6 +100,8 @@ def profile_page(request, pk):
         'comments_added': comments_added,
         'comments_added_count': comments_added.count(),
         'recent_activities': recent_activities,
+        'users_ranking': ranking[0],
+        'user_position': ranking[2],
     }
 
     return TemplateResponse(request, 'account/user_overview.html', context)

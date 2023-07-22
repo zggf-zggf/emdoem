@@ -9,7 +9,8 @@ def ranking_page(request):
 
     context = {
         'users_ranking': ranking[0],
-        'problems_solved_count': ranking[1]
+        'problems_solved_count': ranking[1],
+        'user_position': ranking[2],
     }
 
     return render(request, 'ranking/ranking_page.html', context)
