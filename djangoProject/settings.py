@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'problemBase',
     'account',
     'notifications',
+    'ranking',
 ]
 
 AUTH_USER_MODEL = 'base.User'

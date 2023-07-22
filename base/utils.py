@@ -2,6 +2,9 @@ from base.models import Problem, UserToProblem, Solution, SolutionVote, Comment,
 from django.shortcuts import get_object_or_404
 from django.db.models import Sum
 from itertools import chain
+from operator import attrgetter
+from django.contrib.auth import get_user_model
+
 
 def get_watchers_of_problem (problem):
     queryset = UserToProblem.objects.filter(problem=problem, is_watching=True).values('user')
@@ -14,6 +17,7 @@ def get_problem_stats (problem):
     watching = UserToProblem.objects.filter(problem=problem, is_watching=True).count()
     stats = {"solved": solved, "watching": watching}
     return stats
+
 
 def add_stats_to_problems (problems):
     for problem in problems:
@@ -56,18 +60,8 @@ def get_user_stats(user):
     problems_added = Problem.objects.filter(added_by=user)
     comments_added = Comment.objects.filter(user=user)
 
-    # Wybieramy rozwiązania, które mają dodatnią liczbę upvotów.
-    problems_solved_solutions = Solution.objects.filter(user=user, upvote_counter__gt=0)
-    problems_solved_list = []
-
-    # Zamieniamy rozwiązania na zadania, których dotyczą.
-    for solution in problems_solved_solutions:
-        problems_solved_list.append(solution.problem.id)
-    # Usuwamy duplikaty.
-    problems_solved = Problem.objects.filter(id__in=problems_solved_list)
-
     stats = {
-        'problems_solved': problems_solved,
+        'problems_solved': get_problems_solved_list(user),
         'problems_added': problems_added,
         'solutions_added': solutions_added,
         'comments_added': comments_added,
@@ -89,3 +83,36 @@ def solved_problem(user, problem):
             return True
 
     return False
+
+
+def get_ranking():
+    users = get_user_model().objects.all()
+
+    for user in users:
+        setattr(user, "user_problem_count", get_problems_solved_list(user).count())
+
+    users = sorted(
+        chain(users),
+        key=attrgetter('user_problem_count'),
+        reverse=True
+    )
+
+    users_dictionary = {}
+    for user in users:
+        users_dictionary[user] = user.user_problem_count
+
+    return [users, users_dictionary]
+
+
+def get_problems_solved_list(user):
+    # Wybieramy rozwiązania, które mają dodatnią liczbę upvotów.
+    problems_solved_solutions = Solution.objects.filter(user=user, upvote_counter__gt=0)
+    problems_solved_list = []
+
+    # Zamieniamy rozwiązania na zadania, których dotyczą.
+    for solution in problems_solved_solutions:
+        problems_solved_list.append(solution.problem.id)
+    # Usuwamy duplikaty.
+    problems_solved = Problem.objects.filter(id__in=problems_solved_list)
+
+    return problems_solved
