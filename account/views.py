@@ -101,7 +101,7 @@ def profile_page(request, pk):
         'comments_added': comments_added,
         'comments_added_count': comments_added.count(),
         'recent_activities': recent_activities,
-        'users_ranking': ranking['user_ranking'],
+        'users_ranking': ranking['users_ranking'],
         'user_position': ranking['user_position'],
     }
 
