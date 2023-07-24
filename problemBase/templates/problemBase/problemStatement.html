@@ -31,7 +31,10 @@
             <p>{{ problem_statement|safe }}</p>
         </div>
         <div class="ml-4">
-            <button class="btn btn-outline-secondary mb-4 mt-5" data-bs-toggle="collapse" href="#solutionForm"
+            <div class="mt-5">
+                {% include 'problemBase/addingSolutionInfo.html' %}
+            </div>
+            <button class="btn btn-outline-secondary mb-4" data-bs-toggle="collapse" href="#solutionForm"
                     role="button"
                     aria-expanded="false" aria-controls="solutionForm" data-bs-target="#solutionForm"
                     style="width: 200px;">
