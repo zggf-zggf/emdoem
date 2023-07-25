@@ -1,13 +1,20 @@
 {% for notification in notifications %}
-    <div class="d-flex flex-column">
-        <a class="dropdown-item p-2 hover-effect {% if notification.is_read %} bg-light {% endif %}"
+    <tr class="flex-column d-flex">
+        <td>
+        <a class="dropdown-item p-2"
            style="white-space: normal; word-break: break-word;" href="{{ notification.url }}">
-            <div class="d-flex">
-                <h6> {{ notification.name }} </h6>
-            </div>
-            <div class="d-flex">
-                <p class='text-break mb-1'>{{ notification.content }}</p>
-            </div>
+                <div class="d-flex">
+                    <h6>
+                        <b>{{ notification.name }}</b>
+                        {% if not notification.is_read %}
+                            <span class="badge bg-danger">New</span>
+                        {% endif %}
+                    </h6>
+                </div>
+                <div class="d-flex">
+                    <p class='text-break mb-1'>{{ notification.content }}</p>
+                </div>
         </a>
-    </div>
+        </td>
+    </tr>
 {% endfor %}

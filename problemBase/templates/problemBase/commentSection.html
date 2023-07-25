@@ -1,7 +1,7 @@
 <div class="d-flex flex-column lh-sm w-100" style="font-size: 14px;">
     {% for comment in comments %}
         <div class="d-flex d-row border-top border-2 pt-2" mb-0>
-            <a href="{% url 'account:profile_page' comment.user.id %}">@{{ comment.user.username }}</a>
+            <a class="text-decoration-none" href="{% url 'account:profile_page' comment.user.id %}">@{{ comment.user.username }}</a>
             &nbsp;
             <p class="text-secondary mb-1">{{ comment.creation_date }}</p>
             {% if comment.user == request.user %}

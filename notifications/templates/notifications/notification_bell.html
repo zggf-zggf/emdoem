@@ -11,10 +11,13 @@
     <ul class="dropdown-menu">
         {% for notification in notifications_data.notifications %}
             <li>
-                <a class="dropdown-item pt-2 {% if notification.is_read %} bg-light {% endif %}"
+                <a class="dropdown-item pt-2 "
                    style="white-space: normal; word-break: break-word; width: 420px;" href="{{ notification.url }}">
                     <h6>
-                        {{ notification.name }}
+                        <b>{{ notification.name }}</b>
+                        {% if not notification.is_read %}
+                            <span class="badge bg-danger">New</span>
+                        {% endif %}
                     </h6>
                     <p class='text-break mb-1'>{{ notification.content }}</p>
                 </a>

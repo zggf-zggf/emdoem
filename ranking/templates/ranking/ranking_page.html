@@ -6,15 +6,15 @@
 {% block content %}
     <div class="col col-md mt-4 h-300 w-200">
         <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Dropdown button
+            <button class="btn btn-secondary dropdown-toggle show" type="button" id="dropdownMenuButton1"
+                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Kategoria
             </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                 {% for category in categories %}
-                    <a class="dropdown-item" href="{% url 'ranking:ranking-selected' pk=category.id %}">{{ category }}</a>
+                    <a class="dropdown-item" href="{% url 'ranking:ranking-selected' pk=category.id %}"><li>{{ category }}</li></a>
                 {% endfor %}
-            </div>
+            </ul>
         </div>
 
         <div class="row row-md mt-4 w-100">
