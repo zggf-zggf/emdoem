@@ -4,56 +4,70 @@
 {% load custom_tags %}
 
 {% block content %}
-    <div class="row row-md mt-4 w-100">
-
-        <div class="card col-md-3 px-0">
-            <div class="card-header text-center">
-                <h3>Z ostatniej chwili</h3>
-            </div>
-            <div class="d-flex flex-column table-responsive card-body">
-                <table class="table table-borderless table-hover">
-                    <tbody>
-                    {% for log in problem_solved_logs %}
-                    <tr class="h5">
-                        <p><a class="link-underline link-underline-opacity-0" href="{% url 'account:profile_page' pk=log.user.id %}">
-                            @{{ log.user.username }}
-                        </a> rozwiązał zadanie "{{ log.problem.name }}"</p>
-                    </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+    <div class="col col-md mt-4 h-300 w-200">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Dropdown button
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                {% for category in categories %}
+                    <a class="dropdown-item" href="{% url 'ranking:ranking-selected' pk=category.id %}">{{ category }}</a>
+                {% endfor %}
             </div>
         </div>
 
-        <div class="col-md-1"></div>
+        <div class="row row-md mt-4 w-100">
 
-        <div class="card col-md-7 px-0">
-            <div class="card-header text-center">
-                <h3>Ranking rozwiązanych zadań</h3>
+            <div class="card col-md-3 px-0">
+                <div class="card-header text-center">
+                    <h3>Z ostatniej chwili</h3>
+                </div>
+                <div class="d-flex flex-column table-responsive card-body">
+                    <table class="table table-borderless table-hover">
+                        <tbody>
+                        {% for log in problem_solved_logs %}
+                            <tr class="h5">
+                                <p><a class="link-underline link-underline-opacity-0"
+                                      href="{% url 'account:profile_page' pk=log.user.id %}">
+                                    @{{ log.user.username }}
+                                </a> rozwiązał zadanie "{{ log.problem.name }}"</p>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div class="d-flex flex-column table-responsive card-body">
-                <table class="table table-borderless table-hover">
-                    <tbody>
 
-                    {% for user in users_ranking %}
-                        <tr class="mb-0 h5 align-middle">
-                        <td>
-                            <h4 class="mb-0">#{{ user_position|get_item:user }}</h4>
-                        </td>
-                            <td>
-                                <a class="link-underline link-underline-opacity-0"
-                                   href="{% url 'account:profile_page' user.id %}">@{{ user }}</a>
-                            </td>
-                            <td style="width: 160px;"></td>
-                            <td class="prevent-select"
-                                title="Rozwiązania">{{ problems_solved_count|get_item:user }}</td>
-                            <td class="prevent-select" title="Rozwiązania"><i class="bi bi-check"></i></td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+            <div class="col-md-1"></div>
+
+            <div class="card col-md-7 px-0">
+                <div class="card-header text-center">
+                    <h3>Ranking rozwiązanych zadań</h3>
+                </div>
+                <div class="d-flex flex-column table-responsive card-body">
+                    <table class="table table-borderless table-hover">
+                        <tbody>
+
+                        {% for user in users_ranking %}
+                            <tr class="mb-0 h5 align-middle">
+                                <td>
+                                    <h4 class="mb-0">#{{ user_position|get_item:user }}</h4>
+                                </td>
+                                <td>
+                                    <a class="link-underline link-underline-opacity-0"
+                                       href="{% url 'account:profile_page' user.id %}">@{{ user }}</a>
+                                </td>
+                                <td style="width: 160px;"></td>
+                                <td class="prevent-select"
+                                    title="Rozwiązania">{{ problems_solved_count|get_item:user }}</td>
+                                <td class="prevent-select" title="Rozwiązania"><i class="bi bi-check"></i></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-
 {% endblock %}

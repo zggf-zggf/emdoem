@@ -61,7 +61,7 @@ def get_user_stats(user):
     comments_added = Comment.objects.filter(user=user)
 
     stats = {
-        'problems_solved': get_problems_solved_list(user),
+        'problems_solved': get_problems_solved_list(user, ''),
         'problems_added': problems_added,
         'solutions_added': solutions_added,
         'comments_added': comments_added,
@@ -85,9 +85,13 @@ def solved_problem(user, problem):
     return False
 
 
-def get_problems_solved_list(user):
+def get_problems_solved_list(user, pk):
     # Wybieramy rozwiązania, które mają dodatnią liczbę upvotów.
-    problems_solved_solutions = Solution.objects.filter(user=user, upvote_counter__gt=0)
+    if pk == '':
+        problems_solved_solutions = Solution.objects.filter(user=user, upvote_counter__gt=0)
+    else:
+        problems_solved_solutions = Solution.objects.filter(user=user, upvote_counter__gt=0, problem__category_id=pk)
+
     problems_solved_list = []
 
     # Zamieniamy rozwiązania na zadania, których dotyczą.

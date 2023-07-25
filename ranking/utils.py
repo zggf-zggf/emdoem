@@ -5,16 +5,18 @@ from base.utils import get_problems_solved_list
 from itertools import chain
 from operator import attrgetter
 
+
 def notify_problem_solved(problem, user):
     if not ProblemSolvedLog.objects.filter(problem=problem, user=user).exists():
         psl = ProblemSolvedLog(problem=problem, user=user)
         psl.save()
 
-def get_ranking():
+
+def get_ranking(pk):
     users = get_user_model().objects.all()
 
     for user in users:
-        setattr(user, "user_problem_count", get_problems_solved_list(user).count())
+        setattr(user, "user_problem_count", get_problems_solved_list(user, pk).count())
 
     users = sorted(
         chain(users),
