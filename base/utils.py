@@ -25,6 +25,22 @@ def add_stats_to_problems (problems):
         setattr(problem, "watchers_count", stats["watching"])
         setattr(problem, "solved", stats["solved"])
 
+def add_status_to_problems (problems, user):
+    if not user.is_authenticated:
+        return
+
+    for problem in problems:
+        #https://stackoverflow.com/questions/3090302/how-do-i-get-the-object-if-it-exists-or-none-if-it-does-not-exist-in-django
+        utp = UserToProblem.objects.filter(user=user, problem=problem).first()
+        if utp is not None:
+            if solved_problem(user, problem):
+                setattr(problem, 'status', 'solved')
+            elif utp.surrendered:
+                setattr(problem, 'status', 'surrendered')
+            else:
+                setattr(problem, 'status', 'visited')
+
+
 
 def process_vote(solution, voter, vote):
     if voter == solution.user.username:
