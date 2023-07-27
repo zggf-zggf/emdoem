@@ -31,11 +31,11 @@
                         <table class="table table-hover m-0 p-0">
                             <tbody>
                                 {% include 'notifications/notifications_list.html' with notifications=notifications_data.notifications %}
+                                {% if not notifications_data.notifications %}
+                                    <tr><td class="text-center"><p>Brak powiadomień</p></td></tr>
+                                {% endif %}
                             </tbody>
                         </table>
-                        {% if not notifications_data.notifications %}
-                            <p>Brak powiadomień</p>
-                        {% endif %}
                     </div>
                 </div>
             </div>

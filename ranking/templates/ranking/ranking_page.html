@@ -31,7 +31,11 @@
                                 <p><a class="link-underline link-underline-opacity-0"
                                       href="{% url 'account:profile_page' pk=log.user.id %}">
                                     @{{ log.user.username }}
-                                </a> rozwiązał zadanie "{{ log.problem.name }}"</p>
+                                </a> rozwiązał zadanie
+                                    <a class="text-decoration-none" href="{% url 'problems:statement' pk=log.problem.id %}">
+                                     {{ log.problem.name }}
+                                    </a>
+                                    </p>
                             </tr>
                         {% endfor %}
                         </tbody>
