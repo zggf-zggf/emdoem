@@ -50,6 +50,9 @@
                 </div>
             </div>
             {% endfor %}
+            {% if not problems_added %}
+                Tutaj będą wszystkie dodane przez Ciebie zadania.
+            {% endif %}
     </div>
 
 {% endblock %}

@@ -4,5 +4,8 @@
 {% block innerContent %}
     <div class="d-flex flex-column justify-content-center mx-4">
     {% include 'notifications/notifications_list.html' with notifications=all_notifications_data.notifications %}
+    {% if not all_notifications_data.notifications %}
+        Tutaj będą wszystkie twoje powiadomienia.
+    {% endif %}
     </div>
 {% endblock %}
