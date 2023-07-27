@@ -85,12 +85,12 @@ def solved_problem(user, problem):
     return False
 
 
-def get_problems_solved_list(user, pk):
+def get_problems_solved_list(user, category_pk=''):
     # Wybieramy rozwiązania, które mają dodatnią liczbę upvotów.
-    if pk == '':
+    if category_pk == '':
         problems_solved_solutions = Solution.objects.filter(user=user, upvote_counter__gt=0)
     else:
-        problems_solved_solutions = Solution.objects.filter(user=user, upvote_counter__gt=0, problem__category_id=pk)
+        problems_solved_solutions = Solution.objects.filter(user=user, upvote_counter__gt=0, problem__category_id=category_pk)
 
     problems_solved_list = []
 

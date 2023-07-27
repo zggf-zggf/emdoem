@@ -12,11 +12,11 @@ def notify_problem_solved(problem, user):
         psl.save()
 
 
-def get_ranking(pk):
+def get_ranking(category_pk=''):
     users = get_user_model().objects.all()
 
     for user in users:
-        setattr(user, "user_problem_count", get_problems_solved_list(user, pk).count())
+        setattr(user, "user_problem_count", get_problems_solved_list(user, category_pk).count())
 
     users = sorted(
         chain(users),
