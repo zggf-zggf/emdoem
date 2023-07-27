@@ -37,7 +37,10 @@
                     <p>{{ comment.content }}</p>
                 </div>
             </div>
-            {% endfor %}
+        {% endfor %}
+        {% if not comments %}
+            Tutaj będą wszystkie twoje komentarze.
+        {% endif %}
     </div>
 
 {% endblock %}
