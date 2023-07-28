@@ -15,7 +15,7 @@ def welcome_page(request):
     return render(request, "home/index.html")
 
 def home_page(request):
-    utps = UserToProblem.objects.filter(user=request.user).order_by("last_visit")[:5]
+    utps = UserToProblem.objects.filter(user=request.user).order_by("-last_visit")[:5]
     recently_visited = []
     for utp in utps:
         recently_visited.append(utp.problem)

@@ -91,9 +91,8 @@ def get_categories():
 
 
 def solved_problem(user, problem):
-    problems_solved = Solution.objects.filter(user=user, upvote_counter__gt=0)
+    problems_solved = Solution.objects.filter(user=user, upvote_counter=0)
 
-    # Zamieniamy rozwiązania na zadania, których dotyczą.
     for solution in problems_solved:
         if solution.problem == problem:
             return True
