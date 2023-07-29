@@ -28,6 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# ALLOWED_HOSTS = ['127.0.0.1', 'twojadomena.pl']
+# CSRF_TRUSTED_ORIGINS = ['http://0.0.0.0:8000', 'https://twojadomena.pl']
 
 # Application definition
 
@@ -99,6 +101,17 @@ DATABASES = {
         'PORT': '6869',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'db_s205',
+#         'USER': 's205',
+#         'PASSWORD': 'DEEC_24818c',
+#         'HOST': 'psql01.mikr.us',
+#         'PORT': '5432',
+#     }
+# }
 
 
 # Password validation
