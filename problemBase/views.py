@@ -74,7 +74,7 @@ def problem_page(request, pk):
 
 
 @show_notifications
-@login_required
+@login_required(login_url='account:login')
 def problem_page_info(request, pk):
     problem = get_object_or_404(Problem, pk=pk)
 
@@ -156,6 +156,7 @@ def problem_solution_page(request, pk):
     }
 
     return TemplateResponse(request, "problemBase/problemSolution.html", context)
+
 
 def check_surrender_countdown(utp):
     if utp.start_surrendering:
@@ -307,6 +308,7 @@ def delete_comment(request, pk):
     comment.delete()
     return redirect('problems:solutions', pk=comment.solution.problem.id)
 
+
 @login_required(login_url='account:login')
 def begin_surrender_page(request, pk):
     problem = get_object_or_404(Problem, pk=pk)
@@ -320,6 +322,7 @@ def begin_surrender_page(request, pk):
         json.dumps(response_data),
         content_type="application/json"
     )
+
 
 @login_required(login_url='account:login')
 def get_surrender_time(request, pk):
@@ -343,6 +346,7 @@ def get_surrender_time(request, pk):
         json.dumps(response_data),
         content_type="application/json"
     )
+
 
 @login_required(login_url='account:login')
 def revert_surrender_page(request, pk):

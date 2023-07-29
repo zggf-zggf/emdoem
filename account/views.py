@@ -161,6 +161,7 @@ def user_comments_added_page(request, pk):
 
     return TemplateResponse(request, 'account/user_comments_added.html', context)
 
+
 @show_notifications
 def user_notifications_page(request, pk):
     user = get_object_or_404(get_user_model(), id=pk)

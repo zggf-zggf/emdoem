@@ -20,13 +20,15 @@ def show_notifications(view):
             return r
     return wrapper
 
+
 @login_required(login_url='account:login')
 def read_notification(request, pk):
     notification = get_object_or_404(Notification, pk=pk)
     if notification.user != request.user:
-        raise PermisionDenied()
+        raise PermissionDenied()
     notification.is_read = True
     notification.save()
+
 
 @login_required(login_url='account:login')
 def read_all_notifications(request):

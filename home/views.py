@@ -11,8 +11,10 @@ def home(request):
     else:
         return welcome_page(request)
 
+
 def welcome_page(request):
     return render(request, "home/index.html")
+
 
 def home_page(request):
     utps = UserToProblem.objects.filter(user=request.user).order_by("-last_visit")[:5]
