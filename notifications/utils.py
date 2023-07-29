@@ -28,7 +28,7 @@ def attach_urls(notifications):
     for notification in notifications:
         if notification.type == "comment":
             setattr(notification, 'url', notification.newcommentnotification.get_url())
-        elif notification.type ==  "solution":
+        elif notification.type == "solution":
             setattr(notification, 'url', notification.newsolutionnotification.get_url())
 
 
