@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,9 +24,12 @@ MEDIA_URL = ''
 SECRET_KEY = 'django-insecure-7s=g$3k(n6=w8k8f=#z@yxn4l1t79z9h=93b(=z(m=6%1c=6qj'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+
+# ALLOWED_HOSTS = ['127.0.0.1', 'twojadomena.pl']
+# CSRF_TRUSTED_ORIGINS = ['http://0.0.0.0:8000', 'https://twojadomena.pl']
 
 # Application definition
 
@@ -89,16 +91,15 @@ WSGI_APPLICATION = 'djangoProject.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
- 'default': {
-     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-     'NAME': 'example',
-     'USER': 'example',
-     'PASSWORD': 'example',
-     'HOST': 'example',
-     'PORT': '5432',
- }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'railway',
+        'USER': 'postgres',
+        'PASSWORD': 'EUhCPTNHtfMniM94HStU',
+        'HOST': 'containers-us-west-8.railway.app',
+        'PORT': '6869',
+    }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -228,7 +229,3 @@ CKEDITOR_CONFIGS = {
         ]),
     }
 }
-
-# Override production variables if DJANGO_DEVELOPMENT env variable is true
-if os.getenv('DJANGO_DEVELOPMENT') == 'true':
-    from .settings_dev import *  # or specific overrides
