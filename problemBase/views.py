@@ -56,6 +56,7 @@ def problem_page(request, pk):
 
             solution.save()
             notify_new_solution(solution)
+            notify_problem_solved(problem, user)
 
             return redirect('problems:solutions', pk=problem.id)
 
@@ -181,8 +182,8 @@ def create_comment(request):
         response_data['comment_id'] = comment.id
         response_data['comment_content'] = comment.content
 
-        #if request.user != comment.solution.user:
-        notify_new_comment(comment)
+        if request.user != comment.solution.user:
+            notify_new_comment(comment)
 
         return HttpResponse(
             json.dumps(response_data),
@@ -203,7 +204,6 @@ def solution_vote_page(request, pk, vote):
                 vote.value = 0
             else:
                 vote.value = 1
-                notify_problem_solved(solution.problem, solution.user)
             vote.save()
             update_solution_upvote_counter(solution)
 

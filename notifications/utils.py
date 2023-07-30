@@ -16,12 +16,13 @@ def notify_new_solution(solution):
     watchers = get_watchers_of_problem(solution.problem)
     print(watchers)
     for watcher in watchers:
-        notification = NewSolutionNotification(type="solution",
-                                          solution=solution,
-                                          user_id=watcher['user'],
-                                          name=("@"+solution.user.username+" dodał rozwiązanie"),
-                                          content=("Użytkownik @"+solution.user.username+" dodał rozwiązanie do zadania \""+solution.problem.name+"\""))
-        notification.save()
+        if solution.user != watcher:
+            notification = NewSolutionNotification(type="solution",
+                                              solution=solution,
+                                              user_id=watcher['user'],
+                                              name=("@"+solution.user.username+" dodał rozwiązanie"),
+                                              content=("Użytkownik @"+solution.user.username+" dodał rozwiązanie do zadania \""+solution.problem.name+"\""))
+            notification.save()
 
 
 def attach_urls(notifications):
