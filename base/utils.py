@@ -91,7 +91,7 @@ def get_categories():
 
 
 def solved_problem(user, problem):
-    problems_solved = Solution.objects.filter(user=user, upvote_counter=0)
+    problems_solved = Solution.objects.filter(user=user, upvote_counter__gte=0)
 
     for solution in problems_solved:
         if solution.problem == problem:
@@ -101,11 +101,10 @@ def solved_problem(user, problem):
 
 
 def get_problems_solved_list(user, category_pk=''):
-    # Wybieramy rozwiązania, które mają dodatnią liczbę upvotów.
     if category_pk == '':
-        problems_solved_solutions = Solution.objects.filter(user=user, upvote_counter__gt=0)
+        problems_solved_solutions = Solution.objects.filter(user=user)
     else:
-        problems_solved_solutions = Solution.objects.filter(user=user, upvote_counter__gt=0, problem__category_id=category_pk)
+        problems_solved_solutions = Solution.objects.filter(user=user, problem__category_id=category_pk)
 
     problems_solved_list = []
 
