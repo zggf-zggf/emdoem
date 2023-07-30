@@ -19,64 +19,68 @@
 
         <div class="row row-md mt-4 w-100">
 
-            <div class="card col-md-3 px-0">
-                <div class="card-header text-center">
-                    <h3>Z ostatniej chwili</h3>
-                </div>
-                <div class="d-flex flex-column table-responsive card-body">
-                    <table class="table table-borderless table-hover">
-                        <tbody>
-                        {% for log in problem_solved_logs %}
-                            <tr class="h5">
-                                <p><a class="link-underline link-underline-opacity-0"
-                                      href="{% url 'account:profile_page' pk=log.user.id %}">
-                                    @{{ log.user.username }}
-                                </a> rozwiązał zadanie
-                                    <a class="text-decoration-none" href="{% url 'problems:statement' pk=log.problem.id %}">
-                                     {{ log.problem.name }}
-                                    </a>
-                                    </p>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+            <div class="col-md-3 px-0">
+                <div class="card px-0">
+                    <div class="card-header text-center">
+                        <h3>Z ostatniej chwili</h3>
+                    </div>
+                    <div class="d-flex flex-column table-responsive card-body">
+                        <table class="table table-borderless table-hover">
+                            <tbody>
+                            {% for log in problem_solved_logs %}
+                                <tr class="h5">
+                                    <p><a class="link-underline link-underline-opacity-0"
+                                          href="{% url 'account:profile_page' pk=log.user.id %}">
+                                        @{{ log.user.username }}
+                                    </a> rozwiązał zadanie
+                                        <a class="text-decoration-none" href="{% url 'problems:statement' pk=log.problem.id %}">
+                                         {{ log.problem.name }}
+                                        </a>
+                                        </p>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
             <div class="col-md-1"></div>
 
-            <div class="card col-md-7 px-0">
-                <div class="card-header text-center">
-                    <h3>Ranking rozwiązanych zadań</h3>
-                </div>
-                <div class="d-flex flex-column table-responsive card-body">
-                    <table class="table table-borderless table-hover">
-                        <thead>
-                        <tr class="h5">
-                            <th>Pozycja</th>
-                            <th>Człowiek</th>
-                            <th></th>
-                            <th>#</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-
-                        {% for user in users_ranking %}
-                            <tr class="mb-0 h5 align-middle {% if user == request.user %} table-highlight {% endif %}">
-                                <td>
-                                    <h4 class="mb-0">#{{ user_position|get_item:user }}</h4>
-                                </td>
-                                <td>
-                                    <a class="link-underline link-underline-opacity-0"
-                                       href="{% url 'account:profile_page' user.id %}">@{{ user }}</a>
-                                </td>
-                                <td style="width: 160px;"></td>
-                                <td class="prevent-select"
-                                    title="Rozwiązania">{{ problems_solved_count|get_item:user }}</td>
+            <div class="col-md-7 px-0">
+                <div class="card px-0">
+                    <div class="card-header text-center">
+                        <h3>Ranking rozwiązanych zadań</h3>
+                    </div>
+                    <div class="d-flex flex-column table-responsive card-body">
+                        <table class="table table-borderless table-hover">
+                            <thead>
+                            <tr class="h5">
+                                <th>Pozycja</th>
+                                <th>Człowiek</th>
+                                <th></th>
+                                <th>#</th>
                             </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+
+                            {% for user in users_ranking %}
+                                <tr class="mb-0 h5 align-middle {% if user == request.user %} table-highlight {% endif %}">
+                                    <td>
+                                        <h4 class="mb-0">#{{ user_position|get_item:user }}</h4>
+                                    </td>
+                                    <td>
+                                        <a class="link-underline link-underline-opacity-0"
+                                           href="{% url 'account:profile_page' user.id %}">@{{ user }}</a>
+                                    </td>
+                                    <td style="width: 160px;"></td>
+                                    <td class="prevent-select"
+                                        title="Rozwiązania">{{ problems_solved_count|get_item:user }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
