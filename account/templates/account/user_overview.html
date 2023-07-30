@@ -87,7 +87,11 @@
 
                 <div class="home-container d-flex flex-row w-100">
                     <div class="d-flex flex-column mt-0 w-100" style="word-wrap: break-word;">
-                        <p class="mb-4">{{ activity.display|safe }}</p>
+                        {% if request.user.is_authenticated and activity.solved %}
+                            <p class="mb-4">{{ activity.display|safe }}</p>
+                        {% else %}
+                            <p class="mb-4">Jeszcze nie rozwiązałeś/aś tego zadania!</p>
+                        {% endif %}
                     </div>
                 </div>
             {% endfor %}

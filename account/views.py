@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from .forms import CreateUser, LoginUserForm
-from base.utils import get_user_stats, get_problem_stats
+from base.utils import get_user_stats, get_problem_stats, solved_problem
 from notifications.views import show_notifications
 from django.template.response import TemplateResponse
 from itertools import chain
@@ -10,6 +10,7 @@ from operator import attrgetter
 from django.core.exceptions import PermissionDenied
 from notifications.utils import prepare_all_notifications
 from ranking.utils import get_ranking
+from base.models import Problem
 
 # Create your views here.
 
@@ -81,6 +82,18 @@ def profile_page(request, pk):
     solutions_added = user_stats.get('solutions_added').order_by('-creation_date')
     comments_added = user_stats.get('comments_added').order_by('-creation_date')
 
+    for problem in problems_solved:
+        setattr(problem, 'solved', True)
+
+    for comment in comments_added:
+        setattr(comment, 'solved', True)
+
+    for solution in solutions_added:
+        if request.user.is_authenticated:
+            setattr(solution, 'solved', solved_problem(request.user, Problem.objects.get(id=solution.problem_id)))
+        else:
+            setattr(solution, 'solved', False)
+
     recent_activities = sorted(
         chain(problems_added, solutions_added, comments_added),
         key=attrgetter('creation_date'),
@@ -138,6 +151,12 @@ def user_solutions_added_page(request, pk):
     user_stats = get_user_stats(user)
 
     solutions_added = user_stats.get('solutions_added').order_by('-creation_date')
+
+    for solution in solutions_added:
+        if request.user.is_authenticated:
+            setattr(solution, 'solved', solved_problem(request.user, Problem.objects.get(id=solution.problem_id)))
+        else:
+            setattr(solution, 'solved', False)
 
     context = {
         'user': user,
