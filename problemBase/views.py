@@ -56,7 +56,7 @@ def problem_page(request, pk):
 
             solution.save()
             notify_new_solution(solution)
-            notify_problem_solved(problem, user)
+            notify_problem_solved(problem, request.user)
 
             return redirect('problems:solutions', pk=problem.id)
 
