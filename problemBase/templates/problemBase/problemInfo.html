@@ -3,6 +3,7 @@
 {% block innerContent %}
     <p>Nazwa zadania: {{ name }}</p>
     <p>Kategoria: {{ category }}</p>
+    <p>Źródło: {{ source|urlize }}</p>
     <p>Dodane przez <a href="{% url 'account:profile_page' added_by.id %}">@{{ added_by.username }}</a> w dniu {{ creation_date }}</p>
     <a href="#" class="btn btn-danger">Zgłoś</a>
 {% endblock %}

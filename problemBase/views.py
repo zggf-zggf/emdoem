@@ -86,6 +86,7 @@ def problem_page_info(request, pk):
         'added_by': problem.added_by,
         'creation_date': problem.creation_date,
         'category': problem.category,
+        'source': problem.source
     }
 
     return TemplateResponse(request, "problemBase/problemInfo.html", context);

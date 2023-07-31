@@ -26,6 +26,7 @@ class Problem(models.Model):
     # SET_NULL := when deleted, this field will be null, therefore we will not lose the object.
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     watchers = models.JSONField("Watchers", default={"watcher": "task"})
+    source = models.CharField(max_length=100)
 
     def problem_id(self):
         return self.id
