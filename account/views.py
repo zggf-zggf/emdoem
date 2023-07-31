@@ -82,7 +82,7 @@ def profile_page(request, pk):
     solutions_added = user_stats.get('solutions_added').order_by('-creation_date')
     comments_added = user_stats.get('comments_added').order_by('-creation_date')
 
-    for problem in problems_solved:
+    for problem in problems_added:
         setattr(problem, 'solved', True)
 
     for comment in comments_added:
