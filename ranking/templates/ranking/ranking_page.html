@@ -12,7 +12,9 @@
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                 {% for category in categories %}
-                    <a class="dropdown-item" href="{% url 'ranking:ranking-selected' pk=category.id %}"><li>{{ category }}</li></a>
+                    <a class="dropdown-item" href="{% url 'ranking:ranking-selected' pk=category.id %}">
+                        <li>{{ category }}</li>
+                    </a>
                 {% endfor %}
             </ul>
         </div>
@@ -33,10 +35,11 @@
                                           href="{% url 'account:profile_page' pk=log.user.id %}">
                                         @{{ log.user.username }}
                                     </a> rozwiązał zadanie
-                                        <a class="text-decoration-none" href="{% url 'problems:statement' pk=log.problem.id %}">
-                                         {{ log.problem.name }}
+                                        <a class="text-decoration-none"
+                                           href="{% url 'problems:statement' pk=log.problem.id %}">
+                                            {{ log.problem.name }}
                                         </a>
-                                        </p>
+                                    </p>
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -65,18 +68,20 @@
                             <tbody>
 
                             {% for user in users_ranking %}
-                                <tr class="mb-0 h5 align-middle {% if user == request.user %} table-highlight {% endif %}">
-                                    <td>
-                                        <h4 class="mb-0">#{{ user_position|get_item:user }}</h4>
-                                    </td>
-                                    <td>
-                                        <a class="link-underline link-underline-opacity-0"
-                                           href="{% url 'account:profile_page' user.id %}">@{{ user }}</a>
-                                    </td>
-                                    <td style="width: 160px;"></td>
-                                    <td class="prevent-select"
-                                        title="Rozwiązania">{{ problems_solved_count|get_item:user }}</td>
-                                </tr>
+                                {% if problems_solved_count|get_item:user %}
+                                    <tr class="mb-0 h5 align-middle {% if user == request.user %} table-highlight {% endif %}">
+                                        <td>
+                                            <h4 class="mb-0">#{{ user_position|get_item:user }}</h4>
+                                        </td>
+                                        <td>
+                                            <a class="link-underline link-underline-opacity-0"
+                                               href="{% url 'account:profile_page' user.id %}">@{{ user }}</a>
+                                        </td>
+                                        <td style="width: 160px;"></td>
+                                        <td class="prevent-select"
+                                            title="Rozwiązania">{{ problems_solved_count|get_item:user }}</td>
+                                    </tr>
+                                {% endif %}
                             {% endfor %}
                             </tbody>
                         </table>
@@ -87,7 +92,7 @@
     </div>
     <style>
         .table-highlight td {
-           background-color: antiquewhite;
+            background-color: antiquewhite;
         }
     </style>
 {% endblock %}
