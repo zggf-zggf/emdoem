@@ -1,7 +1,8 @@
 from base.models import Comment, Solution
-from notifications.models import NewCommentNotification, Notification, NewSolutionNotification
+from notifications.models import NewCommentNotification, Notification, NewSolutionNotification, NewProblemNotification
 from base.utils import get_watchers_of_problem
-
+from django.contrib.auth import get_user_model
+from base.models import UserToProblem
 
 def notify_new_comment(comment):
    notification = NewCommentNotification( type="comment",
@@ -11,6 +12,17 @@ def notify_new_comment(comment):
                                          content=("Użytkownik @"+comment.user.username+" dodał komentarz do twojego rozwiązania w zadaniu \""+comment.solution.problem.name+"\""))
    notification.save()
 
+def notify_new_problem(problem):
+    users = get_user_model().objects.all()
+    for user in users:
+        if user != problem.added_by:
+            if not UserToProblem.objects.filter(problem=problem, user=user).exists():
+                notification = NewProblemNotification( type="problem",
+                                           problem=problem,
+                                           user=user,
+                                           name=("Nowe zadanie w kategorii " + problem.category.name + "."),
+                                           content=("@"+problem.added_by.username+" dodał nowe zadanie które może cię zainteresować w kategorii " + problem.category.name))
+                notification.save()
 
 def notify_new_solution(solution):
     watchers = get_watchers_of_problem(solution.problem)
@@ -31,6 +43,8 @@ def attach_urls(notifications):
             setattr(notification, 'url', notification.newcommentnotification.get_url())
         elif notification.type == "solution":
             setattr(notification, 'url', notification.newsolutionnotification.get_url())
+        elif notification.type == "problem":
+            setattr(notification, 'url', notification.newproblemnotification.get_url())
 
 
     # for notification in notifications:

@@ -10,7 +10,7 @@ from django.db.models import Sum
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.core.exceptions import PermissionDenied
-from notifications.utils import notify_new_comment, notify_new_solution
+from notifications.utils import notify_new_comment, notify_new_solution, notify_new_problem
 from notifications.views import show_notifications
 from django.template.response import TemplateResponse
 import json
@@ -115,6 +115,8 @@ def upload_problem_page(request):
             setattr(utp, 'problem', created_problem)
             setattr(utp, 'is_watching', True)
             utp.save()
+
+            notify_new_problem(created_problem)
 
             return redirect('problems:problem_base')
 

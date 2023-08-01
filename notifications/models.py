@@ -1,5 +1,5 @@
 from django.db import models
-from base.models import Comment, Solution, User
+from base.models import Comment, Solution, User, Problem
 from django.urls import reverse
 
 class Notification(models.Model):
@@ -21,3 +21,9 @@ class NewSolutionNotification(Notification):
 
     def get_url(self):
         return reverse('problems:solutions', kwargs={'pk': self.solution.problem.id})
+
+class NewProblemNotification(Notification):
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
+
+    def get_url(self):
+        return reverse('problems:statement', kwargs={'pk': self.problem.id})
