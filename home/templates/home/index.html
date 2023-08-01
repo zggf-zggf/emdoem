@@ -1,8 +1,10 @@
 {% extends "base/nakedBase.html" %}
+{% load static %}
 
 {% block content %}
     <div class="flex-column align-items-center" style="width: 40%;">
-        <h1 class="text-center" style="font-size: 56px;">Witaj na <b>Solak.edu.pl</b>!</h1>
+        <div class="text-center mb-4" > <img src="{% static 'base/logo.png' %}" height="54px"> </div>
+        <h1 class="text-center" style="font-size: 56px;">Witaj na SOLAKu</h1>
         <h3>Chcemy ułatwić przygotowania do egzaminów i kolokwiów.</h3>
         <p>Zadania z każdego przedmiotu są w innym miejscu, na różnych stronach, w książkach czy w głowach ludzi ;).
         Nawet w obrębie jednego przedmiotu z reguły brakuje porządnego źródła zadań, co dopiero z rozwiązaniami.
