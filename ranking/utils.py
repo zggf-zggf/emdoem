@@ -39,7 +39,10 @@ def get_ranking(category_pk=''):
         user_count += 1
 
         users_dictionary[user] = user.user_problem_count
-        user_position[user] = position
+        if user.user_problem_count == 0:
+            user_position[user] = "-"
+        else:
+            user_position[user] = position
 
     problem_solved_logs = ProblemSolvedLog.objects.all().order_by('-date')[:7]
     ranking = {}
