@@ -51,6 +51,12 @@ class ProblemBaseView(ListView):
             Q(name__icontains=q)
         )
         return object_list
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        add_stats_to_problems(data['object_list'])
+        add_status_to_problems(data['object_list'], self.request.user)
+        return data
+
 
 
 
