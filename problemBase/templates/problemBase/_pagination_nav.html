@@ -1,0 +1,21 @@
+{% if page_obj.paginator.num_pages != 1 %}
+<div class="pagination h5">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}"><i class="bi bi-arrow-left-square"></i></a>
+        {% else %}
+            <i class="invisible bi bi-arrow-left-square"></i>
+        {% endif %}
+
+        <span class="current px-1">
+            {{ page_obj.number }} z {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}"><i class="bi bi-arrow-right-square"></i></a>
+        {% else %}
+            <i class="invisible bi bi-arrow-right-square"></i>
+        {% endif %}
+    </span>
+</div>
+{% endif %}

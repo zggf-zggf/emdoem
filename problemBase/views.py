@@ -17,8 +17,11 @@ import json
 from django.utils import timezone
 from datetime import timedelta
 from ranking.utils import notify_problem_solved
+from django.views.generic.list import ListView
+from django.utils.decorators import method_decorator
 
 
+#legacy code
 @show_notifications
 def problem_base(request):
     q = request.GET.get('q') if request.GET.get('q') is not None else ''
@@ -34,6 +37,25 @@ def problem_base(request):
 
     context = {'problems': problems, 'categories': categories}
     return TemplateResponse(request, "problemBase/problemBase.html", context)
+
+
+@method_decorator(show_notifications, name='dispatch')
+class ProblemBaseView(ListView):
+    model = Problem
+    paginate_by = 15
+
+    def get_queryset(self):
+        q = self.request.GET.get('q') if self.request.GET.get('q') is not None else ''
+        object_list = Problem.objects.filter(
+            Q(category__name__icontains=q) |
+            Q(name__icontains=q)
+        )
+        return object_list
+
+
+
+
+
 
 
 @show_notifications

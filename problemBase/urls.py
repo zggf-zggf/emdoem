@@ -1,8 +1,10 @@
 from django.urls import path
 from . import views
+from .views import ProblemBaseView
 app_name = 'problems'
 urlpatterns = [
-    path('', views.problem_base, name="problem_base"),
+    #path('', views.problem_base, name="problem_base"),
+    path('', ProblemBaseView.as_view(template_name="problemBase/problemBase.html"), name="problem_base"),
     path('<int:pk>', views.problem_page, name="statement"),
     path('<int:pk>/info', views.problem_page_info, name="info"),
     path('<int:pk>/solutions', views.problem_solution_page, name="solutions"),
