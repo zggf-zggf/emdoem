@@ -118,7 +118,7 @@ def solution_edit_page(request, pk):
         'problem_statement': problem.problem_statement,
     }
 
-    return TemplateResponse(request, "problembase/solutionEdit.html", context)
+    return TemplateResponse(request, "solutions/solutionEdit.html", context)
 
 @login_required(login_url='account:login')
 def begin_surrender_page(request, pk):

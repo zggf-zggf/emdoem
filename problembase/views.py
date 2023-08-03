@@ -20,7 +20,7 @@ from base.utils import get_watchers_of_problem, get_problem_stats, process_vote,
 from notifications.utils import notify_new_comment, notify_new_solution, notify_new_problem
 from notifications.views import show_notifications
 from ranking.utils import notify_problem_solved
-from .forms import UploadForm, SolutionForm, CommentForm
+from .forms import UploadForm, SolutionForm, CommentForm, ProblemForm
 
 
 #legacy code
@@ -99,6 +99,7 @@ def problem_page(request, pk):
         'solution_form': solution_form,
         'watching_count': problem_stats['watching'],
         'watched': utp.is_watching,
+        'added_by': problem.added_by,
     }
 
     return TemplateResponse(request, "problembase/problemStatement.html", context)
@@ -236,4 +237,31 @@ def delete_comment(request, pk):
         raise PermissionDenied()
     comment.delete()
     return redirect('solutions:solutions', pk=comment.solution.problem.id)
+
+
+@show_notifications
+@login_required(login_url='account:login')
+def problem_edit_page(request, pk):
+    problem = get_object_or_404(Problem, pk=pk)
+
+    if request.user != problem.added_by:
+        return redirect('problems:statement', pk=problem.id)
+
+    problem_form = ProblemForm(request.POST or None, instance=problem)
+
+    if problem_form.is_valid():
+        problem = problem_form.save(commit=False)
+
+        problem.save()
+        return redirect('problems:statement', pk=problem.id)
+
+    context = {
+        'problem_form': problem_form,
+        'name': problem.name,
+        'problem_id': pk,
+        'pk': problem.id,
+        'problem_statement': problem.problem_statement,
+    }
+
+    return TemplateResponse(request, "problembase/problemEdit.html", context)
 
