@@ -3,7 +3,7 @@ from . import views
 from .views import ProblemBaseView
 app_name = 'problems'
 urlpatterns = [
-    path('', ProblemBaseView.as_view(template_name="problembase/problembase.html"), name="problem_base"),
+    path('', ProblemBaseView.as_view(template_name="problembase/problemBase.html"), name="problem_base"),
     path('<int:pk>', views.problem_page, name="statement"),
     path('<int:pk>/info', views.problem_page_info, name="info"),
     path('comment/<int:pk>/<str:vote>', views.comment_vote_page, name="vote_comment"),
