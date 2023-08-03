@@ -1,5 +1,5 @@
 """
-URL configuration for djangoProject project.
+URL configuration for solak project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/
@@ -22,10 +22,11 @@ from django.conf import settings
 urlpatterns = [
     path('admin_admin/', admin.site.urls),
     path('', include('home.urls')),
-    path('problems/', include('problemBase.urls')),
+    path('problems/', include('problembase.urls')),
     path('account/', include('account.urls')),
     path('notifications/', include('notifications.urls')),
     path('ranking/', include('ranking.urls')),
+    path('solutions/', include('solutions.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

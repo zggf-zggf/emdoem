@@ -1,4 +1,4 @@
-<div class="d-flex my-3 flex-column">
+<div class="d-flex my-4 flex-column">
     <div id="surrender-info">
     {% if waiting_for_surrender %}
         <h4>Poddałeś się</h4>
@@ -7,7 +7,7 @@
             <div class='spinner-border spinner-border-lg' id='counter-spinner'></div>
         </span></div>
         <div class="d-flex flex-row justify-content-end mx-5">
-            <a class='btn btn-primary' href="{% url 'problems:revert_surrender' pk=pk %}">Anuluj poddanie się</a>
+            <a class='btn btn-primary' href="{% url 'solutions:revert_surrender' pk=pk %}">Anuluj poddanie się</a>
         </div>
     {% else %}
         <p>
@@ -73,10 +73,10 @@
 
 {% load static %}
 <script>
-    var surrender_begin_url = "{% url 'problems:begin_surrender' pk=pk %}";
-    var surrender_timer_url = "{% url 'problems:surrender_time' pk=pk %}";
+    var surrender_begin_url = "{% url 'solutions:begin_surrender' pk=pk %}";
+    var surrender_timer_url = "{% url 'solutions:surrender_time' pk=pk %}";
 </script>
-<script src="{% static 'problemBase/surrender.js' %}"></script>
+<script src="{% static 'solutions/surrender.js' %}"></script>
 {% if waiting_for_surrender %}
     <script>
         show_timer();
