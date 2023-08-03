@@ -49,7 +49,7 @@ class ProblemBaseView(ListView):
         object_list = Problem.objects.filter(
             Q(category__name__icontains=q) |
             Q(name__icontains=q)
-        ).order_by('creation_date')
+        ).order_by('-creation_date')
         return object_list
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
