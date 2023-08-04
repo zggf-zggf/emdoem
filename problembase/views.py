@@ -146,6 +146,7 @@ def upload_problem_page(request):
             setattr(utp, 'user', request.user)
             setattr(utp, 'problem', created_problem)
             setattr(utp, 'is_watching', True)
+            utp.timestamp()
             utp.save()
 
             notify_new_problem(created_problem)
