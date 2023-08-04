@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from .forms import CreateUser, LoginUserForm
-from base.utils import get_user_stats, get_problem_stats, solved_problem
+from problembase.utils import get_user_stats, get_problem_stats, has_user_solved_problem
 from notifications.views import show_notifications
 from django.template.response import TemplateResponse
 from itertools import chain
@@ -90,7 +90,8 @@ def profile_page(request, pk):
 
     for solution in solutions_added:
         if request.user.is_authenticated:
-            setattr(solution, 'solved', solved_problem(request.user, Problem.objects.get(id=solution.problem_id)))
+            setattr(solution, 'solved',
+                    has_user_solved_problem(request.user, Problem.objects.get(id=solution.problem_id)))
         else:
             setattr(solution, 'solved', False)
 
@@ -154,7 +155,8 @@ def user_solutions_added_page(request, pk):
 
     for solution in solutions_added:
         if request.user.is_authenticated:
-            setattr(solution, 'solved', solved_problem(request.user, Problem.objects.get(id=solution.problem_id)))
+            setattr(solution, 'solved',
+                    has_user_solved_problem(request.user, Problem.objects.get(id=solution.problem_id)))
         else:
             setattr(solution, 'solved', False)
 

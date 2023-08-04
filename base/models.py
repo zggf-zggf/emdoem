@@ -37,6 +37,9 @@ class Problem(models.Model):
     def display(self):
         return self.problem_statement
 
+    def __str__(self):
+        return str(self.name)
+
 
 class Solution(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
@@ -80,7 +83,7 @@ class UserToProblem(models.Model):
         self.save();
 
     def __str__(self):
-        return str(self.user)
+        return str(self.user) + " " + str(self.problem)
 
 
 class Comment(models.Model):

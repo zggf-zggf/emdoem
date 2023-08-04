@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from base.models import Problem, UserToProblem
-from base.utils import add_stats_to_problems, add_status_to_problems
+from problembase.utils import add_stats_to_problems, add_status_to_problems
 from notifications.utils import prepare_notifications
 # Create your views here.
 
@@ -17,7 +17,7 @@ def welcome_page(request):
 
 
 def home_page(request):
-    utps = UserToProblem.objects.filter(user=request.user).order_by("-last_visit")[:5]
+    utps = UserToProblem.objects.filter(user=request.user, last_visit__isnull=False).order_by("-last_visit")[:5]
     recently_visited = []
     for utp in utps:
         recently_visited.append(utp.problem)

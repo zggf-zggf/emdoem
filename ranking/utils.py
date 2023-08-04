@@ -1,7 +1,7 @@
 from base.models import User, Problem, UserToProblem, Solution
 from .models import ProblemSolvedLog
 from django.contrib.auth import get_user_model
-from base.utils import get_problems_solved_list
+from problembase.utils import get_problems_solved_list
 from itertools import chain
 from operator import attrgetter
 

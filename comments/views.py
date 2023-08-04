@@ -9,7 +9,7 @@ from django.urls import reverse
 from django.utils import timezone
 from base.models import Problem, Category, Solution, SolutionVote, Comment, CommentVote
 from base.models import UserToProblem
-from base.utils import update_comment_upvote_counter
+from comments.utils import update_comment_upvote_counter
 from notifications.utils import notify_new_comment
 from notifications.views import show_notifications
 from .forms import CommentForm

@@ -16,8 +16,8 @@ from django.views.generic.list import ListView
 
 from base.models import Problem, Category, Solution, SolutionVote, Comment, CommentVote
 from base.models import UserToProblem
-from base.utils import get_watchers_of_problem, get_problem_stats, process_vote, update_solution_upvote_counter, \
-    update_comment_upvote_counter, solved_problem, add_stats_to_problems, add_status_to_problems
+from solutions.utils import update_solution_upvote_counter
+from problembase.utils import has_user_solved_problem, get_problem_stats, add_stats_to_problems, add_status_to_problems, get_watchers_of_problem
 from notifications.utils import notify_new_comment, notify_new_solution, notify_new_problem
 from notifications.views import show_notifications
 from ranking.utils import notify_problem_solved
@@ -48,7 +48,7 @@ def problem_solution_page(request, pk):
     if waiting_for_surrender:
         check_surrender_countdown(utp)
 
-    display_solutions = solved_problem(request.user, problem) or utp.surrendered
+    display_solutions = has_user_solved_problem(request.user, problem) or utp.surrendered
 
     context = {
         'name': problem.name,
