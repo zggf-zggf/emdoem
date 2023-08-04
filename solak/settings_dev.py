@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'base',
     'problembase',
     'solutions',
+    'comments',
     'account',
     'notifications',
     'ranking',

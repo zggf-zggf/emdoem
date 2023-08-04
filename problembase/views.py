@@ -20,8 +20,8 @@ from base.utils import get_watchers_of_problem, get_problem_stats, process_vote,
 from notifications.utils import notify_new_comment, notify_new_solution, notify_new_problem
 from notifications.views import show_notifications
 from ranking.utils import notify_problem_solved
-from .forms import UploadForm, SolutionForm, CommentForm, ProblemForm
-
+from .forms import UploadForm, ProblemForm
+from solutions.forms import SolutionForm
 
 #legacy code
 @show_notifications
@@ -158,34 +158,6 @@ def upload_problem_page(request):
 
 
 
-@login_required(login_url='account:login')
-def create_comment(request):
-    if request.method == 'POST':
-        comment_content = request.POST.get('the_comment')
-        solution_id = request.POST.get('solution_id')
-        response_data = {}
-
-        solution = get_object_or_404(Solution, pk=solution_id)
-        comment = Comment(user=request.user, solution=solution, content=comment_content)
-        comment.save()
-
-        response_data['result'] = 'Create comment successful!'
-        response_data['comment_id'] = comment.id
-        response_data['comment_content'] = comment.content
-
-        if request.user != comment.solution.user:
-            notify_new_comment(comment)
-
-        return HttpResponse(
-            json.dumps(response_data),
-            content_type="application/json"
-        )
-
-    else:
-        raise PermissionDenied()
-
-
-
 
 @login_required(login_url='account:login')
 def watch_problem_page(request, pk):
@@ -201,42 +173,6 @@ def watch_problem_page(request, pk):
 
     return HttpResponseRedirect(reverse('problems:statement', kwargs={'pk': pk}))
 
-
-@login_required(login_url='account:login')
-def comment_vote_page(request, pk, vote):
-    comment = get_object_or_404(Comment, pk=pk)
-    if vote == 'upvote':
-        if request.user != comment.user:
-            vote, _ = CommentVote.objects.get_or_create(comment=comment, user=request.user)
-            if vote.value == 1:
-                vote.value = 0
-            else:
-                vote.value = 1
-            vote.save()
-            update_comment_upvote_counter(comment)
-
-    elif vote == 'downvote':
-        if request.user != comment.user:
-            vote, _ = CommentVote.objects.get_or_create(comment=comment, user=request.user)
-            if vote.value == -1:
-                vote.value = 0
-            else:
-                vote.value = -1
-            vote.save()
-            update_comment_upvote_counter(comment)
-
-    return HttpResponseRedirect(reverse('solutions:solutions', kwargs={'pk': comment.solution.problem.id}))
-
-
-
-
-@login_required(login_url='account:login')
-def delete_comment(request, pk):
-    comment = get_object_or_404(Comment, id=pk)
-    if comment.user != request.user:
-        raise PermissionDenied()
-    comment.delete()
-    return redirect('solutions:solutions', pk=comment.solution.problem.id)
 
 
 @show_notifications

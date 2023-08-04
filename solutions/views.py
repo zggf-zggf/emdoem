@@ -21,7 +21,8 @@ from base.utils import get_watchers_of_problem, get_problem_stats, process_vote,
 from notifications.utils import notify_new_comment, notify_new_solution, notify_new_problem
 from notifications.views import show_notifications
 from ranking.utils import notify_problem_solved
-from problembase.forms import UploadForm, SolutionForm, CommentForm
+from .forms import SolutionForm
+from comments.forms import CommentForm
 
 
 # Create your views here.
