@@ -33,6 +33,12 @@
                                    href="{% url 'solutions:edit_solution'  pk=solution %}">Edytuj</a>
                             </div>
                         {% endif %}
+                        {% if solution.edited %}
+                            <div class="d-flex text-secondary">
+                                <a class="link-secondary solution-history-link"
+                                   href="{% url 'solutions:history' pk=solution %}">Historia zmian</a>
+                            </div>
+                        {% endif %}
 
                     </div>
                     <div class="px-4 d-flex"><!-- spacing between solution info and solution content --></div>
@@ -61,13 +67,51 @@
         </form>
         {% endif %}
     </div>
+    <!-- Modal -->
+    <div class="modal fade" id="solutionHistoryModal" tabindex="-1" aria-labelledby="solutionHistoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="solutionHistoryModalLabel">Historia zmian</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                        <p class="placeholder-glow">
+                            <span class="placeholder col-2"></span>
+                        </p>
+                        <p class="placeholder-glow">
+                            <span class="placeholder col-5"></span>
+                            <span class="placeholder col-4"></span>
+                            <span class="placeholder col-4"></span>
+                            <span class="placeholder col-2"></span>
+                            <span class="placeholder col-4"></span>
+                            <span class="placeholder col-6"></span>
+                            <span class="placeholder col-5"></span>
+                            <span class="placeholder col-2"></span>
+                            <span class="placeholder col-3"></span>
+                            <span class="placeholder col-4"></span>
+                            <span class="placeholder col-5"></span>
+                            <span class="placeholder col-4"></span>
+                            <span class="placeholder col-2"></span>
+                        </p>
+                        <p class="text-end placeholder-glow">
+                            <span class="placeholder col-4"></span>
+                        </p>
+                    <div class="history"> </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">zamknij</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
-
 
 {% block scripts %}
     <script>
         var url = "{% url 'solutions:comments:create' %}";
     </script>
     <script src="{% static 'problembase/comments.js' %}"></script>
+    <script src="{% static 'solutions/solution_history.js' %}"></script>
 {% endblock %}

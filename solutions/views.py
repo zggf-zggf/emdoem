@@ -16,13 +16,15 @@ from django.views.generic.list import ListView
 
 from base.models import Problem, Category, Solution, SolutionVote, Comment, CommentVote
 from base.models import UserToProblem
-from solutions.utils import update_solution_upvote_counter
-from problembase.utils import has_user_solved_problem, get_problem_stats, add_stats_to_problems, add_status_to_problems, get_watchers_of_problem
+from comments.forms import CommentForm
 from notifications.utils import notify_new_comment, notify_new_solution, notify_new_problem
 from notifications.views import show_notifications
+from problembase.utils import has_user_solved_problem, get_problem_stats, add_stats_to_problems, add_status_to_problems, \
+    get_watchers_of_problem
 from ranking.utils import notify_problem_solved
-from .forms import SolutionForm
-from comments.forms import CommentForm
+from solutions.utils import update_solution_upvote_counter
+from .forms import EditSolutionForm, SolutionForm
+from .models import SolutionHistory
 
 
 # Create your views here.
@@ -103,7 +105,7 @@ def solution_edit_page(request, pk):
     if request.user != solution.user:
         return redirect('solutions:solutions', pk=problem.id)
 
-    solution_form = SolutionForm(request.POST or None, instance=solution)
+    solution_form = EditSolutionForm(request.POST or None, instance=solution)
 
     if solution_form.is_valid():
         solution = solution_form.save(commit=False)
@@ -171,3 +173,22 @@ def revert_surrender_page(request, pk):
         utp.save()
 
     return redirect('solutions:solutions', pk=problem.id)
+
+@login_required(login_url='account:login')
+def solution_history_page(request, pk):
+    solution = get_object_or_404(Solution, pk=pk)
+    problem = solution.problem
+    utp, _ = UserToProblem.objects.get_or_create(problem=problem, user=request.user)
+
+    if not (has_user_solved_problem(request.user, problem) or utp.surrendered):
+        raise PermissionDenied()
+
+    history_list = SolutionHistory.objects.filter(solution=solution).order_by('-date')
+    context = {
+        'problem_name': problem.name,
+        'pk': pk,
+        'history_list': history_list,
+    }
+
+    return render(request, "solutions/_solutionHistory.html", context)
+

@@ -1,0 +1,11 @@
+<div class="d-flex flex-column">
+    {% for entry in history_list %}
+        <div class="d-flex flex-column border-bottom p-2">
+            <p class="text-secondary">{{ entry.date }}</p>
+            {{ entry.content|safe }}
+            <div class="d-flex flex-row justify-content-end">
+                {%  if entry.comment %} <p class="text-secondary">{{ entry.comment }}</p> {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>

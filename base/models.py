@@ -40,15 +40,13 @@ class Problem(models.Model):
     def __str__(self):
         return str(self.name)
 
-
 class Solution(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
     upvote_counter = models.IntegerField(default=0)
     creation_date = models.DateTimeField(auto_now_add=True)
     content = RichTextField(blank=True, null=True)
-    # do usuniecia
-    voters = models.JSONField("Voters", default={"voters": 1})
+    edited = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.id)
@@ -61,7 +59,6 @@ class Solution(models.Model):
 
     def display(self):
         return self.content
-
 
 class UserToProblem(models.Model):
     # CASCADE := when deleted, child will also be deleted.
