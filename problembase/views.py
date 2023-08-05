@@ -23,7 +23,8 @@ from problembase.utils import has_user_solved_problem, get_problem_stats, add_st
 from ranking.utils import notify_problem_solved
 from solutions.forms import SolutionForm
 from solutions.utils import update_solution_upvote_counter
-from .forms import UploadForm, ProblemForm
+from .forms import UploadForm, EditProblemForm
+from .models import ProblemHistory
 
 
 @method_decorator(show_notifications, name='dispatch')
@@ -80,6 +81,7 @@ def problem_page(request, pk):
         'watching_count': problem_stats['watching'],
         'watched': utp.is_watching,
         'added_by': problem.added_by,
+        'edited': problem.edited,
     }
 
     return TemplateResponse(request, "problembase/problemStatement.html", context)
@@ -97,7 +99,8 @@ def problem_page_info(request, pk):
         'added_by': problem.added_by,
         'creation_date': problem.creation_date,
         'category': problem.category,
-        'source': problem.source
+        'source': problem.source,
+        'edited': problem.edited,
     }
 
     return TemplateResponse(request, "problembase/problemInfo.html", context);
@@ -160,7 +163,7 @@ def problem_edit_page(request, pk):
     if request.user != problem.added_by:
         return redirect('problems:statement', pk=problem.id)
 
-    problem_form = ProblemForm(request.POST or None, instance=problem)
+    problem_form = EditProblemForm(request.POST or None, instance=problem)
     if problem_form.is_valid():
         problem = problem_form.save(commit=False)
 
@@ -175,3 +178,15 @@ def problem_edit_page(request, pk):
         'problem_statement': problem.problem_statement,
     }
     return TemplateResponse(request, "problembase/problemEdit.html", context)
+
+def problem_history_page(request, pk):
+    problem = get_object_or_404(Problem, pk=pk)
+
+    history_list = ProblemHistory.objects.filter(problem=problem).order_by('-date')
+    context = {
+        'problem_name': problem.name,
+        'pk': pk,
+        'history_list': history_list,
+    }
+
+    return render(request, "problembase/_problemHistory.html", context)

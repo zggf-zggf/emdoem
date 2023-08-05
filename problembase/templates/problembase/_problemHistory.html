@@ -1,0 +1,14 @@
+<div class="d-flex flex-column">
+    {% for entry in history_list %}
+        <div class="d-flex flex-column border-bottom p-2">
+            <p class="text-secondary">{{ entry.date }}</p>
+            <p>Nazwa: {{ entry.name }}</p>
+            {{ entry.problem_statement|safe }}
+            <p>Kategoria: {{ entry.category }}</p>
+            <p>Zródło: {{ entry.source|urlize }}</p>
+            <div class="d-flex flex-row justify-content-end">
+                {%  if entry.comment %} <p class="text-secondary">{{ entry.comment }}</p> {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>

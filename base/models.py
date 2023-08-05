@@ -23,10 +23,10 @@ class Problem(models.Model):
     creation_date = models.DateTimeField(auto_now_add=True)
     added_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     problem_statement = RichTextField(blank=True, null=True)
-    # SET_NULL := when deleted, this field will be null, therefore we will not lose the object.
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     watchers = models.JSONField("Watchers", default={"watcher": "task"})
     source = models.CharField(max_length=100)
+    edited = models.BooleanField(default=False)
 
     def problem_id(self):
         return self.id

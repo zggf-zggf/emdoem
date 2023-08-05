@@ -1,6 +1,7 @@
 {% extends "problembase/problem.html" %}
 {% load custom_tags %}
 {% load crispy_forms_tags %}
+{% load static %}
 
 {% block innerContent %}
 <div class="justify-content-center d-flex flex-column" style="padding-bottom: 200px;">
@@ -16,6 +17,12 @@
                 <div class="d-flex flex-column justify-content-center h-100 px-3 align-self-end">
                     <a class="link-secondary"
                        href="{% url 'problems:edit_problem'  pk=pk %}">Edytuj</a>
+                </div>
+            {% endif %}
+            {% if edited %}
+                <div class="d-flex flex-column justify-content-center h-100 px-3 align-self-end">
+                    <a class="link-secondary problem-history-link"
+                       href="{% url 'problems:history'  pk=pk %}">Historia zmian</a>
                 </div>
             {% endif %}
 
@@ -57,4 +64,9 @@
         </div>
     </div>
 </div>
+{% include 'problembase/_problemHistoryModal.html' %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'problembase/problem_history.js' %}"></script>
 {% endblock %}

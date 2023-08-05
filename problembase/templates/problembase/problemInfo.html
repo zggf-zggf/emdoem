@@ -1,9 +1,20 @@
 {% extends "problembase/problem.html" %}
+{% load static %}
 
 {% block innerContent %}
     <p>Nazwa zadania: {{ name }}</p>
     <p>Kategoria: {{ category }}</p>
     <p>Źródło: {{ source|urlize }}</p>
     <p>Dodane przez <a href="{% url 'account:profile_page' added_by.id %}">@{{ added_by.username }}</a> w dniu {{ creation_date }}</p>
+    {% if edited %}
+        <p>
+            <a class="link-secondary problem-history-link"
+               href="{% url 'problems:history'  pk=pk %}">Historia zmian</a>
+        </p>
+    {% endif %}
     <a href="#" class="btn btn-danger">Zgłoś</a>
+    {% include 'problembase/_problemHistoryModal.html' %}
+{% endblock %}
+{% block scripts %}
+    <script src="{% static 'problembase/problem_history.js' %}"></script>
 {% endblock %}
