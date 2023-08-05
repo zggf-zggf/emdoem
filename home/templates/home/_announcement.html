@@ -1,0 +1,10 @@
+<tr> <td>
+    <h3>{{ announcement.header }}</h3>
+    <p class="text-secondary">{{ announcement.date }}
+    {% if request.user.is_staff %}
+        <a class='text-decoration-none' href="{% url 'admin:home_announcement_change' announcement.id %}">Edytuj</a>
+        <a class='text-decoration-none' href="{% url 'admin:home_announcement_delete' announcement.id %}">Usuń</a>
+    {% endif %}
+    </p>
+    {{ announcement.content|safe }}
+</td> </tr>

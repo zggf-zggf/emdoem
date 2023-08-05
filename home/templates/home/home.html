@@ -3,7 +3,7 @@
 {% block content %}
     <div class="d-flex flex-column w-75">
         <h1>Witaj @{{ request.user.username }}! Czas rozwalić parę zadań.</h1>
-        <div class="row row-md mt-4 w-100">
+        <div class="d-flex row row-md mt-4 w-100">
             <div class="col-md-7 px-0">
                 <div class="card px-0">
                     <div class="card-header text-center0">
@@ -41,7 +41,26 @@
                     </div>
                 </div>
             </div>
-
         </div>
+        {% if announcements %}
+            <div class="d-flex mt-5" style="padding-bottom: 160px;">
+                <table class="table table-borderless m-0 p-0">
+                    <thead>
+                    <tr><th>
+                        <h4>Aktualności
+                            {% if request.user.is_staff %}
+                                <a class='text-decoration-none' href="{% url 'admin:home_announcement_add' %}">Dodaj</a>
+                            {% endif %}
+                        </h4>
+                    </th></tr>
+                    </thead>
+                    <tbody>
+                    {% for announcement in announcements %}
+                        {% include 'home/_announcement.html' with announcement=announcement %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}

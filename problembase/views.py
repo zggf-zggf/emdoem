@@ -16,30 +16,14 @@ from django.views.generic.list import ListView
 from base.models import Problem, Category, Solution, SolutionVote, Comment, CommentVote
 from base.models import UserToProblem
 from comments.utils import update_comment_upvote_counter
-from solutions.utils import update_solution_upvote_counter
-from problembase.utils import has_user_solved_problem, get_problem_stats, add_stats_to_problems, add_status_to_problems, get_watchers_of_problem
 from notifications.utils import notify_new_comment, notify_new_solution, notify_new_problem
 from notifications.views import show_notifications
+from problembase.utils import has_user_solved_problem, get_problem_stats, add_stats_to_problems, add_status_to_problems, \
+    get_watchers_of_problem
 from ranking.utils import notify_problem_solved
-from .forms import UploadForm, ProblemForm
 from solutions.forms import SolutionForm
-
-#legacy code
-@show_notifications
-def problem_base(request):
-    q = request.GET.get('q') if request.GET.get('q') is not None else ''
-
-    problems = Problem.objects.filter(
-        Q(category__name__icontains=q) |
-        Q(name__icontains=q)
-    )
-    categories = Category.objects.all()
-
-    add_stats_to_problems(problems)
-    add_status_to_problems(problems, request.user)
-
-    context = {'problems': problems, 'categories': categories}
-    return TemplateResponse(request, "problembase/problembase.html", context)
+from solutions.utils import update_solution_upvote_counter
+from .forms import UploadForm, ProblemForm
 
 
 @method_decorator(show_notifications, name='dispatch')
@@ -54,17 +38,12 @@ class ProblemBaseView(ListView):
             Q(name__icontains=q)
         ).order_by('-creation_date')
         return object_list
+
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         add_stats_to_problems(data['object_list'])
         add_status_to_problems(data['object_list'], self.request.user)
         return data
-
-
-
-
-
-
 
 
 @show_notifications
@@ -158,9 +137,6 @@ def upload_problem_page(request):
     return TemplateResponse(request, "problembase/problemUpload.html", context)
 
 
-
-
-
 @login_required(login_url='account:login')
 def watch_problem_page(request, pk):
     problem = get_object_or_404(Problem, pk=pk)
@@ -176,7 +152,6 @@ def watch_problem_page(request, pk):
     return HttpResponseRedirect(reverse('problems:statement', kwargs={'pk': pk}))
 
 
-
 @show_notifications
 @login_required(login_url='account:login')
 def problem_edit_page(request, pk):
@@ -186,7 +161,6 @@ def problem_edit_page(request, pk):
         return redirect('problems:statement', pk=problem.id)
 
     problem_form = ProblemForm(request.POST or None, instance=problem)
-
     if problem_form.is_valid():
         problem = problem_form.save(commit=False)
 
@@ -200,6 +174,4 @@ def problem_edit_page(request, pk):
         'pk': problem.id,
         'problem_statement': problem.problem_statement,
     }
-
     return TemplateResponse(request, "problembase/problemEdit.html", context)
-
