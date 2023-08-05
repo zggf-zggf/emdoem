@@ -22,9 +22,11 @@ class SolutionForm(ModelForm):
 class EditSolutionForm(ModelForm):
     comment = forms.CharField(widget=forms.Textarea())
     solution_instance = None
+    old_content = ''
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.solution_instance = kwargs['instance']
+        self.old_content = self.solution_instance.content
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Row(Column('content', Field('comment', rows=2), css_class='form-group col-md-8 mb-0'), css_class='form-row'),
@@ -41,7 +43,7 @@ class EditSolutionForm(ModelForm):
         if not SolutionHistory.objects.filter(solution=self.solution_instance).exists():
             SolutionHistory.objects.create(
                 solution=self.solution_instance,
-                content=self.solution_instance.content,
+                content=self.old_content,
             )
         SolutionHistory.objects.create(
             solution=self.solution_instance,
