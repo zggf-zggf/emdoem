@@ -28,7 +28,7 @@ def notify_new_solution(solution):
     watchers = get_watchers_of_problem(solution.problem)
     print(watchers)
     for watcher in watchers:
-        if solution.user != watcher:
+        if solution.user.id != watcher['user']:
             notification = NewSolutionNotification(type="solution",
                                               solution=solution,
                                               user_id=watcher['user'],
