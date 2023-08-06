@@ -1,0 +1,84 @@
+<div class="d-flex my-4 flex-column">
+    <div id="surrender-info">
+    {% if waiting_for_surrender %}
+        <h4>Poddałeś się</h4>
+        <p>gdy upłynie czas zobaczysz rozwiązania</p>
+        <div class='d-flex flex-row justify-content-center h1 text-danger'><span id='timer'>
+            <div class='spinner-border spinner-border-lg' id='counter-spinner'></div>
+        </span></div>
+        <div class="d-flex flex-row justify-content-end mx-5">
+            <a class='btn btn-primary' href="{% url 'solutions:revert_surrender' pk=pk %}">Anuluj poddanie się</a>
+        </div>
+    {% else %}
+        <p>
+            Rozwiązania są ukryte, dopóki nie rozwiążesz zadania lub nie poddasz się.
+        </p>
+        <h4>Wysyłanie rozwiązań</h4>
+            <p>Gdy rozwiążesz problem podziel się swoim rozwiązaniem wysyłając je.
+                Może to być zdjęcie kartki lub tekst napisany w edytorze.
+                Od razu po wysłaniu otrzymasz dostęp do rozwiązań innych użytkowników,
+                możliwości oceniania i komentowania ich.</p>
+        <h4>Jak działa poddawanie się?</h4>
+        <p>
+            Zachęcamy do rozwiązywania zadań do końca. Jeśli czujesz że wyczerpałeś wszystkie możliwości istnieje opcja poddania się,
+             niesie to za sobą następujące konsekwencje:
+        </p>
+        <ul>
+            <li> zobaczysz rozwiązania innych użytkowników, będziesz mógł je oceniać i komentować tak samo
+                jak użytkownicy którzy rozwiązali zadanie (po 10 minutach czekania)</li>
+            <li> nadal będziesz mógł dodać rozwiązanie, jednak zadanie <b> nie będzie uznane za rozwiązane </b></li>
+        </ul>
+        <h4>Czym nie jest poddawanie się?</h4>
+        <p>
+            Jeśli rozwiązałeś zadanie i chcesz porównać swoje rozwiązanie z rozwiązaniami innych <b>nie używaj tej opcji!</b>
+            Zamiast tego wyślij swoje rozwiązanie zadania - dzięki temu poznajemy różne drogi do celu ;).
+            Nie obawiaj się czy twoje rozwiązanie jest błędne, lub nieeleganckie.
+            Takie rozwiązania pomagają innym użytkownikom unikać podobnych błędów!
+        </p>
+        <h4>Uwaga:</h4>
+        <p>Gdy zdecydujesz się poddać zostanie uruchomione 10-cio minutowe odliczanie, po którym otrzymasz dostęp do rozwiązań.
+        W tym czasie możesz zmienić decyzję (zrezygnować z poddania się). </p>
+        <div class="d-flex flex-row justify-content-end">
+            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#surrenderModal" id="surrender-modal-close">
+                Poddaję się
+            </button>
+        </div>
+            <div class="d-flex my-5">
+                <h2>Dawaj wbijaj zadanko, chyba się nie poddasz...</h2>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="surrenderModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Kapitulacja</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <p>
+              Czy na pewno chcesz się poddać? Będziesz mieć tylko 10 minut na zmienienie decyzji.
+          </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel-surrender-btn">Anuluj</button>
+        <a type="button" class="btn align-self-end  btn-outline-danger" id="surrender-btn" href="#">Poddaję się</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% load static %}
+<script>
+    var surrender_begin_url = "{% url 'solutions:begin_surrender' pk=pk %}";
+    var surrender_timer_url = "{% url 'solutions:surrender_time' pk=pk %}";
+</script>
+<script src="{% static 'solutions/surrender.js' %}"></script>
+{% if waiting_for_surrender %}
+    <script>
+        show_timer();
+    </script>
+{% endif %}

@@ -14,13 +14,13 @@ class NewCommentNotification(Notification):
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
 
     def get_url(self):
-        return reverse('problems:solutions', kwargs={'pk': self.comment.solution.problem.id})
+        return reverse('solutions:solutions', kwargs={'pk': self.comment.solution.problem.id})
 
 class NewSolutionNotification(Notification):
     solution = models.ForeignKey(Solution, on_delete=models.CASCADE)
 
     def get_url(self):
-        return reverse('problems:solutions', kwargs={'pk': self.solution.problem.id})
+        return reverse('solutions:solutions', kwargs={'pk': self.solution.problem.id})
 
 class NewProblemNotification(Notification):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)

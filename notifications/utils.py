@@ -1,6 +1,6 @@
 from base.models import Comment, Solution
 from notifications.models import NewCommentNotification, Notification, NewSolutionNotification, NewProblemNotification
-from base.utils import get_watchers_of_problem
+from problembase.utils import get_watchers_of_problem
 from django.contrib.auth import get_user_model
 from base.models import UserToProblem
 
@@ -28,7 +28,7 @@ def notify_new_solution(solution):
     watchers = get_watchers_of_problem(solution.problem)
     print(watchers)
     for watcher in watchers:
-        if solution.user != watcher:
+        if solution.user.id != watcher['user']:
             notification = NewSolutionNotification(type="solution",
                                               solution=solution,
                                               user_id=watcher['user'],

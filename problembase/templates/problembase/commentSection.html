@@ -1,0 +1,31 @@
+<div class="d-flex flex-column lh-sm w-100" style="font-size: 14px;">
+    {% for comment in comments %}
+        <div class="d-flex d-row border-top border-2 pt-2" mb-0>
+            <a class="text-decoration-none" href="{% url 'account:profile_page' comment.user.id %}">@{{ comment.user.username }}</a>
+            &nbsp;
+            <p class="text-secondary mb-1">{{ comment.creation_date }}</p>
+            {% if comment.user == request.user %}
+                &nbsp;
+                <a href="{% url 'solutions:comments:delete' pk=comment.id %}" class="link-secondary"
+                   onclick="return confirm('Czy na pewno chcesz usunąć komentarz?');">usuń</a>
+            {% endif %}
+        </div>
+        <div class="d-flex d-row mt-0 text-break">
+            <p class="mb-1">{{ comment.content }}</p>
+        </div>
+        <div class="d-flex d-row justify-content-end align-items-center">
+            <a href="{% url 'solutions:comments:vote' pk=comment.id vote='upvote' %}" class="link-dark p-1">
+                <i class="bi bi-caret-up{% if comment.upvoted %}-fill{% endif %}"></i>
+            </a>
+            <p class="m-2 prevent-select">{{ comment.upvote_counter }}</p>
+            <a href="{% url 'solutions:comments:vote' pk=comment.id vote='downvote' %}"  class="text-dark p-1">
+                <i class="bi bi-caret-down{% if comment.downvoted %}-fill{% endif %}"></i>
+            </a>
+            <div class="px-3"></div>
+        </div>
+    {% endfor %}
+    <div class="d-flex flex-row justify-content-end">
+        <input type="hidden" name="solution_id" value="{{ solution_id }}">
+        <a class="pl-3 mb-4 text-decoration-none link-primary add-comment" style="cursor: pointer;">Dodaj komentarz</a>
+    </div>
+</div>

@@ -1,9 +1,0 @@
-{% extends "problemBase/problem.html" %}
-
-{% load crispy_forms_tags %}
-
-{% block innerContent %}
-    <h1 class="mb-3">Edytujesz swoje rozwiązanie do zadania "{{ name }}"</h1>
-    {% crispy solution_form %}
-
-{% endblock %}
