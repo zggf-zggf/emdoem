@@ -1,22 +1,48 @@
 {% extends 'base/base.html' %}
 {% load static %}
 {% block content %}
-    <div>
-        <h3>
-            {{ problemset.name }}
-            <a class="" href="{% url 'problemset:edit_basic' pk=problemset.pk %}"><i class="bi bi-pencil-square"></i></a>
-        </h3>
-        <p class="text-secondary">{{ problemset.description }}</p>
-        <ul class="list-group list-group-flush sortable">
-            {% for row in rows %}
-                {% if row.type == "problem" %}
-                    <li type="button" class="list-group-item list-group-item-action border-0">
-                        {{ row.name }}
-                    </li>
-                {% endif %}
-            {% endfor %}
-        </ul>
+    <div class="d-md-flex flex-sm-row">
+        <div class="d-flex flex-column">
+            <h3>
+                {{ problemset.name }}
+                <a class="" href="{% url 'problemset:edit_basic' pk=problemset.pk %}"><i class="bi bi-pencil-square"></i></a>
+            </h3>
+            <p class="text-secondary">{{ problemset.description }}</p>
+            <ul class="h5 editable-problemset list-group list-group-flush sortable w-100 text-break" style="min-width: 0;">
+                {% for row in rows %}
+                    {% if row.type == "problem" %}
+                        {% include 'problemset/_editableProblemEntry.html' with problem=row %}
+                    {% elif row.type == "heading" %}
+                        {% include 'problemset/_editableHeading.html' %}
+                    {% endif %}
+                {% endfor %}
+                <li class="toolbar text-center list-group-item">
+                    <button id="add-heading" class="btn btn-outline-primary add-heading">+Nagłówek</button>
+                    <button id="add-comment" class="btn btn-outline-primary add-comment">+Komentarz</button>
+                </li>
+            </ul>
+        </div>
+        <div class="d-flex flex-column border-start border-4 ms-5 px-4" style="min-width: 400px;">
+            <h4>Szukaj zadań</h4>
+            <form id="problemset-search-problem" class="d-flex" role="search" method="GET" action="{% url 'problemset:search_problem' %}">
+                <input class="w-75 form-control me-2" type="text" name="q" placeholder="Szukaj zadania..."
+                       aria-label="Search">
+                <div class="ms-3" id="search-placeholder" style="display: none">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </form>
+            <div class="d-flex" id="search-results-container">
+            </div>
+        </div>
     </div>
+    <template id="headingTemplate">
+        {% include 'problemset/_editableHeading.html' %}
+    </template>
+    <template id="commentTemplate">
+        {% include 'problemset/_editableComment.html' %}
+    </template>
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
     <script src="{% static 'problemset/problemset_edit.js' %}"></script>

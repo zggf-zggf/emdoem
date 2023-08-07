@@ -1,14 +1,18 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.template.response import TemplateResponse
+from django.views.generic.list import ListView
 
+from base.models import Problem
 from notifications.views import show_notifications
 from .forms import ProblemsetForm
 from .models import Problemset
 from .utils import process_problemset_json
+from problembase.utils import add_stats_to_problems, add_status_to_problems
 
 
 # Create your views here.
@@ -66,3 +70,21 @@ def problemset_edit_page(request, pk):
         'rows': json,
     }
     return TemplateResponse(request, "problemset/problemsetEdit.html", context)
+
+class ProblemSearchResults(ListView):
+    model = Problem
+    paginate_by = 15
+
+    def get_queryset(self):
+        q = self.request.GET.get('q') if self.request.GET.get('q') is not None else ''
+        object_list = Problem.objects.filter(
+            Q(category__name__icontains=q) |
+            Q(name__icontains=q)
+        ).order_by('-creation_date')
+        return object_list
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        add_stats_to_problems(data['object_list'])
+        add_status_to_problems(data['object_list'], self.request.user)
+        return data
