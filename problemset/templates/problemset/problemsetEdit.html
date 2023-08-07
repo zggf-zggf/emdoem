@@ -1,0 +1,26 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+    <div>
+        <h3>
+            {{ problemset.name }}
+            <a class="" href="{% url 'problemset:edit_basic' pk=problemset.pk %}"><i class="bi bi-pencil-square"></i></a>
+        </h3>
+        <p class="text-secondary">{{ problemset.description }}</p>
+        <ul class="list-group list-group-flush sortable">
+            {% for row in rows %}
+                {% if row.type == "problem" %}
+                    <li type="button" class="list-group-item list-group-item-action border-0">
+                        {{ row.name }}
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script src="{% static 'problemset/problemset_edit.js' %}"></script>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
