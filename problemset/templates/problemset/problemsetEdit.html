@@ -43,6 +43,7 @@
     <template id="commentTemplate">
         {% include 'problemset/_editableComment.html' %}
     </template>
+    <script>var editable_problem_entry_url = "{% url 'problemset:editable_problem_entry' pk=0 %}"</script>
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
     <script src="{% static 'problemset/problemset_edit.js' %}"></script>

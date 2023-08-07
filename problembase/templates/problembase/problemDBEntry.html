@@ -1,9 +1,9 @@
-<tr class="h5 mb-0 align-middle">
+<tr class="h5 mb-0 align-middle problem-db-entry" data-problem-id="{{ problem.id }}">
     <td>
         {{ problem.category }}
     </td>
     <td>
-        <a class="link-underline link-underline-opacity-0" href="{% url 'problems:statement' problem.id  %}">{{ problem.name }}</a>
+        <a class="problem-name d-inline link-underline link-underline-opacity-0" href="{% url 'problems:statement' problem.id  %}">{{ problem.name }}</a>
         {% if problem.status %}
             {% if problem.status == 'solved' %}
                 <span class="text-warning" title="Rozwiązałeś to zadanie"><b>R</b></span>

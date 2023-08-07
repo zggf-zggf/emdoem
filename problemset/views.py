@@ -88,3 +88,10 @@ class ProblemSearchResults(ListView):
         add_stats_to_problems(data['object_list'])
         add_status_to_problems(data['object_list'], self.request.user)
         return data
+
+def EditableProblemEntry(request, pk):
+    problem = get_object_or_404(Problem, pk=pk)
+    context = {
+        'problem': problem,
+    }
+    return render(request, 'problemset/_editableProblemEntry.html', context)
