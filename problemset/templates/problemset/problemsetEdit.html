@@ -1,19 +1,22 @@
 {% extends 'base/base.html' %}
 {% load static %}
 {% block content %}
-    <div class="d-md-flex flex-sm-row">
-        <div class="d-flex flex-column">
+    <div class="d-flex flex-row">
+        <div class="d-flex flex-column w-50">
             <h3>
                 {{ problemset.name }}
                 <a class="" href="{% url 'problemset:edit_basic' pk=problemset.pk %}"><i class="bi bi-pencil-square"></i></a>
             </h3>
             <p class="text-secondary">{{ problemset.description }}</p>
-            <ul class="h5 editable-problemset list-group list-group-flush sortable w-100 text-break" style="min-width: 0;">
+            <ul class="h5 editable-problemset list-group list-group-flush sortable text-break" style="min-width: 0;">
+                {% csrf_token %}
                 {% for row in rows %}
                     {% if row.type == "problem" %}
                         {% include 'problemset/_editableProblemEntry.html' with problem=row %}
                     {% elif row.type == "heading" %}
-                        {% include 'problemset/_editableHeading.html' %}
+                        {% include 'problemset/_editableHeading.html' with heading=row%}
+                    {% elif row.type == "comment" %}
+                        {% include 'problemset/_editableComment.html' with comment=row%}
                     {% endif %}
                 {% endfor %}
                 <li class="toolbar text-center list-group-item">
@@ -21,8 +24,9 @@
                     <button id="add-comment" class="btn btn-outline-primary add-comment">+Komentarz</button>
                 </li>
             </ul>
+            <div class="text-end autosave-status text-secondary mt-3">Zapisano wszystkie zmiany.</div>
         </div>
-        <div class="d-flex flex-column border-start border-4 ms-5 px-4" style="min-width: 400px;">
+        <div class="d-flex flex-column border-start border-4 ms-5 px-4 w-50" style="min-width: 400px;">
             <h4>Szukaj zadań</h4>
             <form id="problemset-search-problem" class="d-flex" role="search" method="GET" action="{% url 'problemset:search_problem' %}">
                 <input class="w-75 form-control me-2" type="text" name="q" placeholder="Szukaj zadania..."
@@ -44,6 +48,7 @@
         {% include 'problemset/_editableComment.html' %}
     </template>
     <script>var editable_problem_entry_url = "{% url 'problemset:editable_problem_entry' pk=0 %}"</script>
+    <script>var problemset_save_url = "{% url 'problemset:save' pk=problemset.pk %}"</script>
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
     <script src="{% static 'problemset/problemset_edit.js' %}"></script>

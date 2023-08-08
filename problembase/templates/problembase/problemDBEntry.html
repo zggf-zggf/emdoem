@@ -4,13 +4,7 @@
     </td>
     <td>
         <a class="problem-name d-inline link-underline link-underline-opacity-0" href="{% url 'problems:statement' problem.id  %}">{{ problem.name }}</a>
-        {% if problem.status %}
-            {% if problem.status == 'solved' %}
-                <span class="text-warning" title="Rozwiązałeś to zadanie"><b>R</b></span>
-            {% elif problem.status == 'surrendered' %}
-                <span class="text-secondary" title="Poddałeś to zadanie"><b>P</b></span>
-            {% endif %}
-        {% endif %}
+        {% include 'problembase/_problemStatus.html' with problem=problem %}
     </td>
     <td style="width: 160px;"></td>
     <td class="prevent-select" title="Rozwiązania">{{ problem.solved }}</td>

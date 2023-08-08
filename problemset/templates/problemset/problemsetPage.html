@@ -1,0 +1,28 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+    <div class="d-flex flex-column w-50">
+        <h3> {{ problemset.name }} </h3>
+        <p class="text-secondary">{{ problemset.description }}</p>
+        <ul class="h5 list-group list-group-flush text-break" style="min-width: 0;">
+            {% for row in rows %}
+                {% if row.type == "problem" %}
+                    <li class="ms-4 py-1 list-group-item border-0 entry">
+                        <a class="text-decoration-none" href="{% url 'problems:statement' pk=row.id %}">{{ row.name }}</a>
+                        <span class="d-inline">
+                            {% include 'problembase/_problemStatus.html' with problem=row %}
+                        </span>
+                    </li>
+                {% elif row.type == "heading" %}
+                    <li class="pb-1 list-group-item border-0 entry">
+                        <h4 style="display: inline;">{{ row.name }}</h4>
+                    </li>
+                {% elif row.type == "comment" %}
+                    <li class="ms-4 fs-6 pt-0 list-group-item border-0">
+                        <p class="text-secondary" style="display: inline;">{{ row.name }}</p>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

@@ -6,6 +6,7 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.template.response import TemplateResponse
 from django.views.generic.list import ListView
+from django.http import HttpResponse
 
 from base.models import Problem
 from notifications.views import show_notifications
@@ -13,6 +14,7 @@ from .forms import ProblemsetForm
 from .models import Problemset
 from .utils import process_problemset_json
 from problembase.utils import add_stats_to_problems, add_status_to_problems
+import json
 
 
 # Create your views here.
@@ -63,7 +65,7 @@ def problemset_edit_page(request, pk):
         raise PermissionDenied()
 
     json = problemset.content
-    process_problemset_json(json)
+    process_problemset_json(json, request.user)
     print(json)
     context = {
         'problemset': problemset,
@@ -95,3 +97,34 @@ def EditableProblemEntry(request, pk):
         'problem': problem,
     }
     return render(request, 'problemset/_editableProblemEntry.html', context)
+
+@login_required(login_url='account:login')
+def ProblemsetSave(request, pk):
+    if request.method == 'POST':
+        problemset = get_object_or_404(Problemset, pk=pk)
+        if problemset.user != request.user:
+            raise PermissionDenied()
+        problemset.content = json.loads(request.POST.get('json'))
+        problemset.save()
+        response_data = {}
+        response_data['result'] = 'Problemset saved successfully!'
+        return HttpResponse(
+            json.dumps(response_data),
+            content_type="application/json"
+        )
+
+    else:
+        raise PermissionDenied()
+
+@login_required(login_url='account:login')
+def ProblemsetView(request, pk):
+    problemset = get_object_or_404(Problemset, pk=pk)
+
+    json = problemset.content
+    process_problemset_json(json, request.user)
+    print(json)
+    context = {
+        'problemset': problemset,
+        'rows': json,
+    }
+    return TemplateResponse(request, "problemset/problemsetPage.html", context)
