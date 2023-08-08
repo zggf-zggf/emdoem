@@ -10,3 +10,6 @@ class Problemset(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.JSONField(default=content_default())
 
+class ProblemsetDuringEditing(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    problemset = models.ForeignKey(Problemset, null=True, on_delete=models.CASCADE)

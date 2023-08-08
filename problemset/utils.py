@@ -2,6 +2,7 @@ from base.models import Problem, UserToProblem
 from problembase.utils import add_status_to_problems
 import json
 import random
+from .models import ProblemsetDuringEditing
 
 def process_problemset_content(content, user):
     for row in content:
@@ -81,5 +82,21 @@ def get_basic_problemset_data_for_problem(problem, user):
     utp, _ = UserToProblem.objects.get_or_create(user=user, problem=problem)
     if utp.seen_in_problemset:
         return {'id': utp.seen_in_problemset.id}
+    else:
+        return None
+
+def register_problemset_editing_notification(user, problemset):
+   pde, _ = ProblemsetDuringEditing.objects.get_or_create(user=user)
+   pde.problemset = problemset
+   pde.save()
+def unregister_problemset_editing_notification(user):
+    pde, _ = ProblemsetDuringEditing.objects.get_or_create(user=user)
+    pde.problemset = None
+    pde.save()
+
+def check_for_problemset_editing_notification(user):
+    pde, _ = ProblemsetDuringEditing.objects.get_or_create(user=user)
+    if pde.problemset:
+        return {'id': pde.problemset.id}
     else:
         return None

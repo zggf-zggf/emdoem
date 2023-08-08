@@ -13,7 +13,7 @@ from base.models import Problem
 from notifications.views import show_notifications
 from .forms import ProblemsetForm
 from .models import Problemset
-from .utils import process_problemset_content, get_problemset_progress, get_motivation_on_progress
+from .utils import process_problemset_content, get_problemset_progress, get_motivation_on_progress, register_problemset_editing_notification, unregister_problemset_editing_notification
 from problembase.utils import add_stats_to_problems, add_status_to_problems
 from base.models import UserToProblem
 import json
@@ -65,6 +65,7 @@ def problemset_edit_page(request, pk):
     if problemset.user != request.user:
         raise PermissionDenied()
 
+    register_problemset_editing_notification(request.user, problemset)
     json = problemset.content
     process_problemset_content(json, request.user)
     print(json)
@@ -121,6 +122,7 @@ def ProblemsetSave(request, pk):
 def ProblemsetView(request, pk):
     problemset = get_object_or_404(Problemset, pk=pk)
 
+    unregister_problemset_editing_notification(request.user)
     content = problemset.content
     process_problemset_content(content, request.user)
     progress = get_problemset_progress(content, request.user)
@@ -140,3 +142,15 @@ def ProblemInProblemset(request, problem_pk, problemset_pk):
     utp.seen_in_problemset = problemset
     utp.save()
     return redirect(reverse('problems:statement', kwargs={'pk': problem_pk}))
+
+@login_required(login_url='account:logn')
+def UnregisterProblemsetEiditingNotification(request):
+    unregister_problemset_editing_notification(request.user)
+
+    response_data = {
+        'result': 'Unregistered!',
+    }
+    return HttpResponse(
+        json.dumps(response_data),
+        content_type="application/json"
+    )

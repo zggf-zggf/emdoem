@@ -1,8 +1,20 @@
 {% extends 'base/base.html' %}
+{% load static %}
 
 {% block content %}
     <div class="d-flex flex-column w-75">
         <h1>Witaj @{{ request.user.username }}! Czas rozwalić parę zadań.</h1>
+        {% if home_notifications.problemset_editing %}
+            <script>unregister_problemset_editing_notification_url = "{% url 'problemset:unregister_editing_notification' %}"</script>
+            <script src="{% static 'home/home_notifications.js' %}"></script>
+        <div class="card my-4 col-md-10">
+            <div class="card-body d-flex flex-row">
+                <div class="d-flex flex-column justify-content-center"> <h4 class="m-0 p-0"> Edytowałeś zbiór zadań, chcesz szybko wrócić do edycji? </h4> </div>
+                <a class="btn btn-success ms-5 me-2" href="{% url 'problemset:edit' pk=home_notifications.problemset_editing.id %}">Zabierz mnie tam!</a>
+                <a class="btn btn-danger mx-2" id="problemsetEditUnregister">Na razie skończyłem.</a>
+            </div>
+        </div>
+        {% endif %}
         <div class="d-flex row row-md mt-4 w-100">
             <div class="col-md-7 px-0">
                 <div class="card px-0">
