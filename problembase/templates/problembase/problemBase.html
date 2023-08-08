@@ -17,6 +17,9 @@
                     <span> {{ category }} </span>
                 </a>
             {% endfor %}
+            <div class="list-group-item mt-4">
+                <a class="btn btn-outline-secondary" href="{% url 'problems:upload_problem' %}">Dodaj zadanie</a>
+            </div>
           </div>
         </nav>
 

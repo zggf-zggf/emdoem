@@ -12,4 +12,5 @@ urlpatterns = [
     path('<int:pk>', views.ProblemsetView, name='problemset'),
     path('problem/<int:problemset_pk>/<int:problem_pk>', views.ProblemInProblemset, name='problem_in_problemset'),
     path('unregister_eiting_notification', views.UnregisterProblemsetEiditingNotification, name='unregister_editing_notification'),
+    path('list', views.ProblemsetListView.as_view(template_name="problemset/problemsetList.html"), name="problemset_list"),
 ]

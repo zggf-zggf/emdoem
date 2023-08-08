@@ -1,0 +1,13 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+    <div class="list-group list-group-flush w-50">
+        {% for problemset in object_list %}
+        <div class="list-group-item text-break py-4">
+            <h3>{{ problemset.name }}</h3>
+            <p>{{ problemset.description }}</p>
+            <p>Łącznie {{ problemset.progress.total }} zadań</p>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

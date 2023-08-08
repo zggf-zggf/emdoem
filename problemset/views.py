@@ -8,6 +8,7 @@ from django.template.response import TemplateResponse
 from django.views.generic.list import ListView
 from django.http import HttpResponse
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 
 from base.models import Problem
 from notifications.views import show_notifications
@@ -142,6 +143,26 @@ def ProblemInProblemset(request, problem_pk, problemset_pk):
     utp.seen_in_problemset = problemset
     utp.save()
     return redirect(reverse('problems:statement', kwargs={'pk': problem_pk}))
+
+@method_decorator(show_notifications, name='dispatch')
+class ProblemsetListView(ListView):
+    model = Problemset
+    paginate_by = 7
+
+    def get_queryset(self):
+        q = self.request.GET.get('q') if self.request.GET.get('q') is not None else ''
+        object_list = Problemset.objects.filter(
+            Q(description__icontains=q) |
+            Q(name__icontains=q)
+        ).order_by('-date')
+        return object_list
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        for problemset in data['object_list']:
+            process_problemset_content(problemset.content, self.request.user)
+            problemset.progress = get_problemset_progress(problemset.content, self.request.user)
+        return data
 
 @login_required(login_url='account:logn')
 def UnregisterProblemsetEiditingNotification(request):

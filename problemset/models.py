@@ -9,6 +9,7 @@ class Problemset(models.Model):
     description = models.CharField(max_length=300, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.JSONField(default=content_default())
+    date = models.DateTimeField(auto_now_add=True)
 
 class ProblemsetDuringEditing(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
