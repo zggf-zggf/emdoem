@@ -140,7 +140,8 @@ $(function() {
 		$(this).select();
 	});
 	$("#problemset-search-problem").submit(function(e){
-		e.preventDefault()
+		e.preventDefault();
+		$(this).children().blur();
 		$('#search-placeholder').show()
 		$.ajax({
 			url: $(this).prop('action') + "?q=" + $(this).find('input').val(),
