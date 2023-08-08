@@ -2,19 +2,31 @@
 {% block title %} {{ name }} {% endblock %}
 
 {% block content %}
-    <div class="container center-block flex-column mt-4" style="width: 60%;">
+    <div class="container center-block flex-column mt-4" style="width: {% if problemset_data %}75% {% else %}60%{% endif %};">
     <nav class="px-4 align-items-center navbar navbar-expand-lg navbar-light bg-light mb-3">
-        <div class="navbar-nav">
+        <div class="navbar-nav w-100">
             <h1 class="m-auto navbar-brand ">Zadanie</h1>
             <div style="width: 15px;"></div>
             <a class="ml-4 nav-item nav-link {% if request.resolver_match.view_name == 'problems:statement' %}active{% endif %}" href="{% url 'problems:statement' pk=pk %}">Treść</a>
             <a class="ml-4 nav-item nav-link {% if request.resolver_match.view_name == 'solutions:solutions' %}active{% endif %}" href="{% url 'solutions:solutions' pk=pk %}">Rozwiązania</a>
             <a class="ml-4 nav-item nav-link {% if request.resolver_match.view_name == 'problems:info' %}active{% endif %}" href="{% url 'problems:info' pk=pk %}">Info</a>
+            <div class='d-flex flex-fill justify-content-end align-self-center'>
+                {% if problemset_data %}
+                <a class='my-0 py-0 text-decoration-none text-secondary' href="{% url 'problemset:problemset' pk=problemset_data.id %}">Powrót do zbiorku <i class="bi bi-arrow-return-left"></i></a>
+                {% endif %}
+            </div>
         </div>
     </nav>
-    <div class="flex-column justify-content-center mx-4 py-2">
-        {% block innerContent %}
-        {% endblock %}
+    <div class="d-flex flex-row w-100">
+        <div class="flex-column justify-content-center mx-4 py-2 w-100">
+            {% block innerContent %}
+            {% endblock %}
+        </div>
+        <div class="">
+            {% if problemset_data and problemset_data.rows %}
+                {% include 'problemset/_problemsetPreview.html' with problemset_data=problemset_data%}
+            {% endif %}
+        </div>
     </div>
     </div>
 {% endblock %}

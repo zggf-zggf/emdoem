@@ -69,6 +69,7 @@ class UserToProblem(models.Model):
     surrender_end_time = models.DateTimeField(null=True)
     is_watching = models.BooleanField(default=False)
     last_visit = models.DateTimeField(null=True)
+    seen_in_problemset = models.ForeignKey("problemset.Problemset", null=True, on_delete=models.SET_NULL)
 
     def timestamp(self):
         self.last_visit = datetime.now()

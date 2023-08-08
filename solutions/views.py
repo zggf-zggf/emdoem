@@ -21,6 +21,7 @@ from notifications.utils import notify_new_comment, notify_new_solution, notify_
 from notifications.views import show_notifications
 from problembase.utils import has_user_solved_problem, get_problem_stats, add_stats_to_problems, add_status_to_problems, \
     get_watchers_of_problem
+from problemset.utils import get_basic_problemset_data_for_problem
 from ranking.utils import notify_problem_solved
 from solutions.utils import update_solution_upvote_counter
 from .forms import EditSolutionForm, SolutionForm
@@ -60,6 +61,7 @@ def problem_solution_page(request, pk):
         'comment_form': comment_form,
         'display_solutions': display_solutions,
         'waiting_for_surrender': waiting_for_surrender,
+        'problemset_data': get_basic_problemset_data_for_problem(problem, request.user),
     }
 
     return TemplateResponse(request, "solutions/problemSolution.html", context)

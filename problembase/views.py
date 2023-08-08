@@ -25,6 +25,8 @@ from solutions.forms import SolutionForm
 from solutions.utils import update_solution_upvote_counter
 from .forms import UploadForm, EditProblemForm
 from .models import ProblemHistory
+from problemset.models import Problemset
+from problemset.utils import problem_in_problemset_preview, get_basic_problemset_data_for_problem
 
 
 @method_decorator(show_notifications, name='dispatch')
@@ -83,6 +85,9 @@ def problem_page(request, pk):
         'added_by': problem.added_by,
         'edited': problem.edited,
     }
+    if utp.seen_in_problemset:
+        context['problemset_data'] = problem_in_problemset_preview(problem, utp.seen_in_problemset, request.user)
+        print(context['problemset_data'])
 
     return TemplateResponse(request, "problembase/problemStatement.html", context)
 
@@ -101,6 +106,7 @@ def problem_page_info(request, pk):
         'category': problem.category,
         'source': problem.source,
         'edited': problem.edited,
+        'problemset_data': get_basic_problemset_data_for_problem(problem, request.user),
     }
 
     return TemplateResponse(request, "problembase/problemInfo.html", context);

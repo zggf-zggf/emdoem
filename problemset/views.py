@@ -7,15 +7,16 @@ from django.shortcuts import render
 from django.template.response import TemplateResponse
 from django.views.generic.list import ListView
 from django.http import HttpResponse
+from django.urls import reverse
 
 from base.models import Problem
 from notifications.views import show_notifications
 from .forms import ProblemsetForm
 from .models import Problemset
-from .utils import process_problemset_json
+from .utils import process_problemset_content, get_problemset_progress, get_motivation_on_progress
 from problembase.utils import add_stats_to_problems, add_status_to_problems
+from base.models import UserToProblem
 import json
-
 
 # Create your views here.
 @show_notifications
@@ -65,7 +66,7 @@ def problemset_edit_page(request, pk):
         raise PermissionDenied()
 
     json = problemset.content
-    process_problemset_json(json, request.user)
+    process_problemset_content(json, request.user)
     print(json)
     context = {
         'problemset': problemset,
@@ -120,11 +121,22 @@ def ProblemsetSave(request, pk):
 def ProblemsetView(request, pk):
     problemset = get_object_or_404(Problemset, pk=pk)
 
-    json = problemset.content
-    process_problemset_json(json, request.user)
-    print(json)
+    content = problemset.content
+    process_problemset_content(content, request.user)
+    progress = get_problemset_progress(content, request.user)
     context = {
         'problemset': problemset,
-        'rows': json,
+        'progress': progress,
+        'rows': content,
+        'motivational_proggress_message': get_motivation_on_progress(progress['solved_amount']),
     }
     return TemplateResponse(request, "problemset/problemsetPage.html", context)
+
+@login_required(login_url='account:login')
+def ProblemInProblemset(request, problem_pk, problemset_pk):
+    problem = get_object_or_404(Problem, pk=problem_pk)
+    problemset = get_object_or_404(Problemset, pk=problemset_pk)
+    utp, _ = UserToProblem.objects.get_or_create(problem=problem, user=request.user)
+    utp.seen_in_problemset = problemset
+    utp.save()
+    return redirect(reverse('problems:statement', kwargs={'pk': problem_pk}))
