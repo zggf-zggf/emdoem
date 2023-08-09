@@ -61,7 +61,7 @@ def get_problemset_progress(problemset, user):
                    surrendered += 1
         utpset.total_count = total
         utpset.solved_count = solved
-        utpset.surredered_count = surrendered
+        utpset.surrendered_count = surrendered
         utpset.save()
     else:
         total = utpset.total_count
