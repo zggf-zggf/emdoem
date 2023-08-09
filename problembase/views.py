@@ -12,6 +12,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.generic.list import ListView
+from django.http import JsonResponse
 
 from base.models import Problem, Category, Solution, SolutionVote, Comment, CommentVote
 from base.models import UserToProblem
@@ -196,3 +197,35 @@ def problem_history_page(request, pk):
     }
 
     return render(request, "problembase/_problemHistory.html", context)
+
+@login_required(login_url='account:login')
+def upload_problem_api(request):
+    upload_form = UploadForm()
+
+    if request.method == 'POST':
+        upload_form = UploadForm(request.POST)
+        response_data = {}
+        if upload_form.is_valid():
+            created_problem = upload_form.save(commit=False)
+
+            setattr(created_problem, "added_by", request.user)
+            created_problem.save()
+
+            utp = UserToProblem()
+            setattr(utp, 'user', request.user)
+            setattr(utp, 'problem', created_problem)
+            setattr(utp, 'is_watching', True)
+            utp.timestamp()
+            utp.save()
+
+            response_data = {
+                'result': 'Success',
+                'problem_id': created_problem.id,
+            }
+        else:
+            response_data = {
+                'result': 'Form invalid',
+            }
+        return JsonResponse(response_data)
+    else:
+        raise PermissionDenied()

@@ -87,6 +87,24 @@ $(function(){
 	});
 });
 
+function add_problem_to_problemset(problem_id) {
+	$.ajax({
+		url: editable_problem_entry_url.slice(0, -1) + problem_id,
+		type: "GET", // http method
+		dataType: "html",
+		data: {},
+		success: function (data) {
+			console.log("success"); // another sanity check
+			$('.editable-problemset').children().last().before(data);
+			attach_edit_hover_listener($('.editable-problemset').children().last().prev());
+			$(obj).replaceWith("<i class=\"bi bi-check\"></i>")
+			save();
+		},
+		error: function (xhr, errmsg, err) {
+			console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+		}
+	});
+}
 function add_toolbar_to_problem_entries(){
 	$(".problem-name").parent().append("<span class='d-inline ms-1'><i class=\"add-problem bi bi-plus-square\" style='display: none; cursor: pointer;'></i></span>");
 	attach_add_hover_listener($(".search-results tr"));
@@ -95,22 +113,7 @@ function add_toolbar_to_problem_entries(){
 		$(this).after("<div class=\"spinner-border spinner-border-sm\" role=\"status\"></div>")
 		obj = $(this).next()
 		$(this).remove()
-		$.ajax({
-			url: editable_problem_entry_url.slice(0, -1) + problem_id,
-			type: "GET", // http method
-			dataType: "html",
-			data: {},
-			success: function (data) {
-				console.log("success"); // another sanity check
-				$('.editable-problemset').children().last().before(data);
-				attach_edit_hover_listener($('.editable-problemset').children().last().prev());
-				$(obj).replaceWith("<i class=\"bi bi-check\"></i>")
-				save();
-			},
-			error: function (xhr, errmsg, err) {
-				console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-			}
-		});
+		add_problem_to_problemset(problem_id)
 	});
 }
 function adapt_search_results(){

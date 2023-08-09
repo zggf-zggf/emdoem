@@ -22,6 +22,7 @@
                 <li class="toolbar text-center list-group-item">
                     <button id="add-heading" class="btn btn-outline-primary add-heading">+Nagłówek</button>
                     <button id="add-comment" class="btn btn-outline-primary add-comment">+Komentarz</button>
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#problemUploadModal">+Nowe zadanie</button>
                 </li>
             </ul>
             <div class="text-end autosave-status text-secondary mt-3">Zapisano wszystkie zmiany.</div>
@@ -53,6 +54,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
     <script src="{% static 'problemset/problemset_edit.js' %}"></script>
+    {% include 'problemset/_uploadProblemModal.html' %}
 {% endblock %}
 
 {% block scripts %}

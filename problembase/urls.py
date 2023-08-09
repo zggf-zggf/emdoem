@@ -9,5 +9,6 @@ urlpatterns = [
     path('upload', views.upload_problem_page, name="upload_problem"),
     path('<int:pk>/edit', views.problem_edit_page, name="edit_problem"),
     path('watch/<int:pk>', views.watch_problem_page, name="watch_problem"),
-    path('history/<int:pk>', views.problem_history_page, name='history')
+    path('history/<int:pk>', views.problem_history_page, name='history'),
+    path('upload_api', views.upload_problem_api, name='upload_api'),
 ]

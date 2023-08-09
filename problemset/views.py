@@ -17,6 +17,7 @@ from .models import Problemset, UserToProblemset
 from .utils import process_problemset_content, get_problemset_progress, get_motivation_on_progress, register_problemset_editing_notification, unregister_problemset_editing_notification, attach_problemset_progress
 from problembase.utils import add_stats_to_problems, add_status_to_problems
 from base.models import UserToProblem
+from problembase.forms import UploadForm
 import json
 
 # Create your views here.
@@ -69,10 +70,10 @@ def problemset_edit_page(request, pk):
     register_problemset_editing_notification(request.user, problemset)
     json = problemset.content
     process_problemset_content(json, request.user)
-    print(json)
     context = {
         'problemset': problemset,
         'rows': json,
+        'problem_form': UploadForm(),
     }
     return TemplateResponse(request, "problemset/problemsetEdit.html", context)
 

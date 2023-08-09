@@ -1,0 +1,31 @@
+<!-- Modal -->
+{% load crispy_forms_tags %}
+<div class="modal fade" id="problemUploadModal" tabindex="-1" aria-labelledby="problemUploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="problemUploadModalLabel">Utwórz nowe zadanie</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="problemUploadForm">
+                    {%  crispy problem_form %}
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="spinner-border spinner-border-sm" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .cke_dialog_ui_input_textarea textarea {z-index: 9999 !important;}
+    :root {
+        --ck-z-default: 100;
+        --ck-z-modal: calc( var(--ck-z-default) + 999 );
+    }
+</style>
+
+{% load static %}
+<script>var upload_problem_url = "{% url 'problems:upload_api' %}"</script>
+<script src="{% static 'problemset/upload_problem_modal.js' %}"></script>
