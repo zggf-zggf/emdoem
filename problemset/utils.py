@@ -68,6 +68,11 @@ def get_problemset_progress(processed_content, user):
             'solved_amount': 0,
             'surrendered_amount': 0,
         }
+
+def attach_problemset_progress(problemset, user):
+    process_problemset_content(problemset.content, user)
+    problemset.progress = get_problemset_progress(problemset.content, user)
+
 def get_motivation_on_progress(progress):
     if progress == 0:
         return random.choice(['Świeży zbiorek, coś pięknego!'])

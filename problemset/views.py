@@ -13,8 +13,8 @@ from django.utils.decorators import method_decorator
 from base.models import Problem
 from notifications.views import show_notifications
 from .forms import ProblemsetForm
-from .models import Problemset
-from .utils import process_problemset_content, get_problemset_progress, get_motivation_on_progress, register_problemset_editing_notification, unregister_problemset_editing_notification
+from .models import Problemset, UserToProblemset
+from .utils import process_problemset_content, get_problemset_progress, get_motivation_on_progress, register_problemset_editing_notification, unregister_problemset_editing_notification, attach_problemset_progress
 from problembase.utils import add_stats_to_problems, add_status_to_problems
 from base.models import UserToProblem
 import json
@@ -122,6 +122,8 @@ def ProblemsetSave(request, pk):
 @login_required(login_url='account:login')
 def ProblemsetView(request, pk):
     problemset = get_object_or_404(Problemset, pk=pk)
+    utpset, _ = UserToProblemset.objects.get_or_create(user=request.user, problemset=problemset)
+    utpset.timestamp()
 
     unregister_problemset_editing_notification(request.user)
     content = problemset.content
@@ -164,8 +166,7 @@ class ProblemsetListView(ListView):
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         for problemset in data['object_list']:
-            process_problemset_content(problemset.content, self.request.user)
-            problemset.progress = get_problemset_progress(problemset.content, self.request.user)
+            attach_problemset_progress(problemset, self.request.user)
         return data
 
 @login_required(login_url='account:logn')
