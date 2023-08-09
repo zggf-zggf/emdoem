@@ -1,4 +1,5 @@
 {% extends 'base/base.html' %}
+{% load static %}
 {% block content %}
     <div class="home-container d-flex flex-row p-4 h-100">
         <nav class="collapse d-lg-block sidebar collapse">
@@ -37,6 +38,7 @@
                 {% include 'problembase/_pagination_nav.html' with page_obj=page_obj %}
             </div>
         </div>
-
     </div>
+    <script>var problem_statement_api_url = "{% url 'problems:problem_statement_api' pk=0 %}"</script>
+    <script src="{% static 'problembase/problem_preview.js' %}"></script>
 {% endblock %}

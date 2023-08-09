@@ -106,7 +106,7 @@ function add_problem_to_problemset(problem_id) {
 	});
 }
 function add_toolbar_to_problem_entries(){
-	$(".problem-name").parent().append("<span class='d-inline ms-1'><i class=\"add-problem bi bi-plus-square\" style='display: none; cursor: pointer;'></i></span>");
+	$(".problem-link").parent().append("<span class='d-inline ms-1'><i class=\"add-problem bi bi-plus-square\" style='display: none; cursor: pointer;'></i></span>");
 	attach_add_hover_listener($(".search-results tr"));
 	$('.add-problem').click(function() {
 		let problem_id = $(this).closest('.problem-db-entry').data('problem-id');

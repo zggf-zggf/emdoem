@@ -29,7 +29,7 @@
             {% for row in rows %}
                 {% if row.type == "problem" %}
                     <li class="ms-4 py-1 list-group-item border-0 entry">
-                        <a class="text-decoration-none" href="{% url 'problemset:problem_in_problemset' problem_pk=row.id problemset_pk=problemset.pk %}">{{ row.name }}</a>
+                        <a class="problem-link" href="{% url 'problemset:problem_in_problemset' problem_pk=row.id problemset_pk=problemset.pk %}">{{ row.name }}</a>
                         <span class="d-inline">
                             {% include 'problembase/_problemStatus.html' with problem=row %}
                         </span>

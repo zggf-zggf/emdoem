@@ -3,7 +3,7 @@
         {{ problem.category }}
     </td>
     <td>
-        <a class="problem-name d-inline link-underline link-underline-opacity-0" href="{% url 'problems:statement' problem.id  %}">{{ problem.name }}</a>
+        <a class="problem-link d-inline" href="{% url 'problems:statement' problem.id  %}">{{ problem.name }}</a>
         {% include 'problembase/_problemStatus.html' with problem=problem %}
     </td>
     <td style="width: 160px;"></td>

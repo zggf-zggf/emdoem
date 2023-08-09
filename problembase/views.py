@@ -229,3 +229,7 @@ def upload_problem_api(request):
         return JsonResponse(response_data)
     else:
         raise PermissionDenied()
+
+def problem_statement_api(request, pk):
+    problem = get_object_or_404(Problem, pk=pk)
+    return render(request, 'problembase/_problemStatementApi.html', {'statement': problem.problem_statement})

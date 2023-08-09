@@ -11,4 +11,5 @@ urlpatterns = [
     path('watch/<int:pk>', views.watch_problem_page, name="watch_problem"),
     path('history/<int:pk>', views.problem_history_page, name='history'),
     path('upload_api', views.upload_problem_api, name='upload_api'),
+    path('problem_statement_api/<int:pk>', views.problem_statement_api, name='problem_statement_api'),
 ]
