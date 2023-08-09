@@ -1,13 +1,61 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
-    <div class="list-group list-group-flush w-50">
-        {% for problemset in object_list %}
-        <div class="list-group-item text-break py-4">
-            <h3>{{ problemset.name }}</h3>
-            <p>{{ problemset.description }}</p>
-            <p>Łącznie {{ problemset.progress.total }} zadań</p>
+    <div class="home-container d-flex flex-row p-4 h-100 justify-content-center">
+        <nav class="collapse d-lg-block sidebar collapse" style="max-width: 300px;">
+            <div class="list-group list-group-flush mx-3 mt-4">
+                <h3 class="">Zbiorki zadań</h3>
+                <div class="list-group-item text-secondary">
+                    <p>Tutaj możesz szukać, rozwiązywać i tworzyć zbiorki zadań.
+                        Przerobienie sprawdzonego zestawu problemów jest o wiele lepsze od klepania losowych zadań. Jest też większa satysfakcja!</p>
+                </div>
+                <a style="text-decoration: none;"
+                   href="{% url 'problemset:problemset_list' %}?featured=True"
+                   class="list-group-item list-group-item-action py-2 ripple">
+                    <span> Wyróżnione zbiorki </span>
+                </a>
+                <a style="text-decoration: none;"
+                   href="{% url 'problemset:problemset_list' %}?user={{ request.user.id }}"
+                   class="list-group-item list-group-item-action py-2 ripple">
+                    <span> Moje zbiorki </span>
+                </a>
+                <div class="list-group-item mt-3">
+                    <a class="btn btn-outline-secondary" href="{% url 'problemset:create' %}">Nowy zbiorek</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="d-flex" style="width: 120px"><!-- spacing between categories and problems --></div>
+        <div class="d-flex list-group list-group-flush w-50">
+            <form class="d-flex flex-row justify-content-center" role="search" method="GET" action="{% url 'problemset:problemset_list' %}">
+                <input class="form-control m-3 mb-4 w-75" type="text" name="q" placeholder="Szukaj zbiorku..."
+                       aria-label="Search">
+            </form>
+            {% if not object_list %}
+                <p>Nie znaleźliśmy niczego ://</p>
+            {% endif %}
+            {% for problemset in object_list %}
+            <div class="list-group-item text-break py-4">
+                <a class='text-decoration-none border-0' href="{% url 'problemset:problemset' pk=problemset.id %}">
+                <h3><span class="text-black">{{ problemset.name }}</span>
+                    {% if problemset.featured %}<i class="bi bi-check-all" style="color: lightseagreen; cursor: default;" title="Wyróżniony zbiorek"></i>{% endif %}
+                </h3>
+                <p class="text-secondary">{{ problemset.description }}</p>
+                </a>
+                {% if problemset.progress.total != 0 %}
+                    <div class="d-flex flex-row align-items-center">
+                        <div class="d-flex progress mb-2 w-75" style="height: 10px;">
+                            <span class="progress-bar bg-warning" title="{{ problemset.progress.solved_amount }}%" style="width: {{ problemset.progress.solved_amount }}%"></span>
+                            <span class="progress-bar bg-secondary" title="{{ problemset.progress.surrendered_amount }}%" style="width: {{ problemset.progress.surrendered_amount }}%"></span>
+                        </div>
+                        <p class="d-flex ms-3 fs-5">{{ problemset.progress.solved }}/{{ problemset.progress.total }}</p>
+                    </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <div class="d-flex flex-row justify-content-center mt-3">
+                {% include 'problembase/_pagination_nav.html' %}
+            </div>
         </div>
-        {% endfor %}
     </div>
 {% endblock %}

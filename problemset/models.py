@@ -10,6 +10,10 @@ class Problemset(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.JSONField(default=content_default())
     date = models.DateTimeField(auto_now_add=True)
+    featured = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.name)
 
 class ProblemsetDuringEditing(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

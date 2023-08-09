@@ -147,7 +147,7 @@ def ProblemInProblemset(request, problem_pk, problemset_pk):
 @method_decorator(show_notifications, name='dispatch')
 class ProblemsetListView(ListView):
     model = Problemset
-    paginate_by = 7
+    paginate_by = 10
 
     def get_queryset(self):
         q = self.request.GET.get('q') if self.request.GET.get('q') is not None else ''
@@ -155,6 +155,10 @@ class ProblemsetListView(ListView):
             Q(description__icontains=q) |
             Q(name__icontains=q)
         ).order_by('-date')
+        if self.request.GET.get('user'):
+            object_list = object_list.filter(user=self.request.GET.get('user'))
+        if self.request.GET.get('featured'):
+            object_list = object_list.filter(featured=self.request.GET.get('featured'))
         return object_list
 
     def get_context_data(self, **kwargs):

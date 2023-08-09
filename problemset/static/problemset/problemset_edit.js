@@ -54,6 +54,9 @@ $(function(){
 function update_name_field(obj){
 	if ($.trim(obj.value) == ''){
 		obj.value = (obj.defaultValue ? obj.defaultValue : '');
+		if(obj.value == '' && $(obj).prev().prev().html()=='') {
+			$(obj).closest('.list-group-item').remove()
+		}
 	}
 	else
 	{

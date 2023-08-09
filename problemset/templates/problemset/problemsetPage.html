@@ -3,6 +3,7 @@
 {% block content %}
     <div class="d-flex flex-column w-50">
         <h3> {{ problemset.name }}
+            {% if problemset.featured %}<i class="bi bi-check-all" style="color: lightseagreen; cursor: default;" title="Wyróżniony zbiorek"></i>{% endif %}
             {% if request.user == problemset.user %} <a href="{% url 'problemset:edit' pk=problemset.pk %}">Edytuj</a>{% endif %}
         </h3>
         <p class="text-secondary">{{ problemset.description }}</p>
@@ -44,5 +45,8 @@
                 {% endif %}
             {% endfor %}
         </ul>
+        <div class="d-flex flex-row justify-content-end">
+            <p class="text-secondary"> Zbiorek przygotował <a class="text-decoration-none" href="{% url 'account:profile_page' pk=problemset.user.pk %}">@{{ problemset.user }}</a>.</p>
+        </div>
     </div>
 {% endblock %}

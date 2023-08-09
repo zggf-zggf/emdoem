@@ -57,6 +57,8 @@ def get_problemset_progress(processed_content, user):
     if total != 0:
         return {
             'total': total,
+            'solved': solved,
+            'surrendered': surrendered,
             'solved_amount': 100 * solved / total,
             'surrendered_amount': 100 * surrendered / total,
         }
