@@ -2,9 +2,10 @@ from base.models import Problem, UserToProblem
 from problembase.utils import add_status_to_problems
 import json
 import random
-from .models import ProblemsetDuringEditing
+from .models import ProblemsetDuringEditing, UserToProblemset
 
 def process_problemset_content(content, user):
+    print("processing...")
     for row in content:
         if row['type'] == 'problem':
             process_problem_object(row, user)
@@ -42,17 +43,30 @@ def problem_in_problemset_preview(problem, problemset, user):
     }
     return problemset_data
 
-def get_problemset_progress(processed_content, user):
+def get_problemset_progress(problemset, user):
+    utpset, _ = UserToProblemset.objects.get_or_create(problemset=problemset, user=user)
     total = 0
     solved = 0
     surrendered = 0
-    for row in processed_content:
-        if row['type'] =='problem':
-           total += 1
-           if row['status'] == 'solved':
-               solved += 1
-           elif row['status'] == 'surrendered':
-               surrendered += 1
+    print(utpset.is_progress_valid())
+    if not utpset.is_progress_valid():
+        process_problemset_content(problemset.content, user)
+        processed_content = problemset.content
+        for row in processed_content:
+            if row['type'] =='problem':
+               total += 1
+               if row['status'] == 'solved':
+                   solved += 1
+               elif row['status'] == 'surrendered':
+                   surrendered += 1
+        utpset.total_count = total
+        utpset.solved_count = solved
+        utpset.surredered_count = surrendered
+        utpset.save()
+    else:
+        total = utpset.total_count
+        solved = utpset.solved_count
+        surrendered = utpset.surrendered_count
 
     if total != 0:
         return {
@@ -70,8 +84,7 @@ def get_problemset_progress(processed_content, user):
         }
 
 def attach_problemset_progress(problemset, user):
-    process_problemset_content(problemset.content, user)
-    problemset.progress = get_problemset_progress(problemset.content, user)
+    problemset.progress = get_problemset_progress(problemset, user)
 
 def get_motivation_on_progress(progress):
     if progress == 0:

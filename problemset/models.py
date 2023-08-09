@@ -20,9 +20,19 @@ class UserToProblemset(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     problemset = models.ForeignKey(Problemset, on_delete=models.CASCADE)
     last_visit = models.DateTimeField(null=True)
+    solved_count = models.IntegerField(default=0)
+    surrendered_count = models.IntegerField(default=0)
+    total_count = models.IntegerField(default=None, null=True)
 
     def timestamp(self):
         self.last_visit = datetime.now()
+        self.save()
+
+    def is_progress_valid(self):
+        return self.total_count is not None
+
+    def invalidate_progress_cache(self):
+        self.total_count = None
         self.save()
 
 

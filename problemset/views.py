@@ -124,11 +124,12 @@ def ProblemsetView(request, pk):
     problemset = get_object_or_404(Problemset, pk=pk)
     utpset, _ = UserToProblemset.objects.get_or_create(user=request.user, problemset=problemset)
     utpset.timestamp()
+    utpset.invalidate_progress_cache()
 
     unregister_problemset_editing_notification(request.user)
     content = problemset.content
     process_problemset_content(content, request.user)
-    progress = get_problemset_progress(content, request.user)
+    progress = get_problemset_progress(problemset, request.user)
     context = {
         'problemset': problemset,
         'progress': progress,

@@ -29,7 +29,6 @@ def home_page(request):
     recently_visited_problemsets = []
     for utpset in utpsets:
         problemset = utpset.problemset
-        process_problemset_content(problemset.content, request.user)
         attach_problemset_progress(problemset, request.user)
         recently_visited_problemsets.append(problemset)
 
