@@ -52,8 +52,8 @@
                                 {{ solution.upvote_counter }}
                             </div>
                             <div class="d-flex flex-row px-1 ml-2 me-3">
-                                <a class="btn align-self-end {% if solution.upvoted %} btn-success {% else %} btn-outline-success {% endif %}"
-                                   href="{% url 'solutions:vote_solution' pk=solution vote='upvote' %}">Fajne</a>
+                                <a class="vote-solution btn align-self-end {% if solution.upvoted %} btn-success {% else %} btn-outline-success {% endif %}
+                                {% if solution.user == request.user %} disabled {% endif %}" href="{% url 'solutions:vote_solution' pk=solution vote='upvote' %}">Fajne</a>
                             </div>
                         </div>
                         {% include 'comments/_commentSection.html' with comments=solution.comments solution_id=solution.id %}
@@ -118,4 +118,5 @@
     <script src="{% static 'comments/comments.js' %}"></script>
     <script src="{% static 'solutions/solution_history.js' %}"></script>
     <script src="{% static 'solutions/problem-statement-overflow.js'%}"></script>
+    <script src="{% static 'solutions/solutions_vote.js'%}"></script>
 {% endblock %}

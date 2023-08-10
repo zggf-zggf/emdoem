@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.db.models import Sum
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.shortcuts import render, redirect
@@ -96,7 +96,7 @@ def solution_vote_page(request, pk, vote):
             vote.save()
             update_solution_upvote_counter(solution)
 
-    return HttpResponseRedirect(reverse('solutions:solutions', kwargs={'pk': solution.problem.id}))
+    return JsonResponse({'count': solution.upvote_counter})
 
 @show_notifications
 @login_required(login_url='account:login')
