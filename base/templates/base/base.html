@@ -27,6 +27,8 @@
     <script>
         var csrf_token1 = '{{ csrf_token }}';
     </script>
+    <script>var problem_statement_api_url = "{% url 'problems:problem_statement_api' pk=0 %}"</script>
+    <script src="{% static 'problembase/problem_preview.js' %}"></script>
     {% block scripts %}
     {% endblock %}
 </head>

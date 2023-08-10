@@ -4,6 +4,10 @@ $(function() {
     var popover_problem_id = -1
     var left_offset = 0;
     var top_offset = 0;
+    $('body').on('click', '.problem-link', function() {
+        window.clearTimeout(timeoutIdShow);
+        timeoutIdShow = null;
+    });
     $('body').on('mouseover', '.problem-link', function() {
         if(timeoutIdHide) {
             window.clearTimeout(timeoutIdHide)
