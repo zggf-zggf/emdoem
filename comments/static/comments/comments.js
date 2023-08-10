@@ -50,3 +50,25 @@ function create_comment() {
         }
     });
 };
+
+$(function() {
+    $('body').on('click', '.comment-vote', function(e) {
+        e.preventDefault()
+        $(this).siblings().find('.bi-caret-down-fill').toggleClass('bi-caret-down bi-caret-down-fill');
+        $(this).find('i[class*="up"]').toggleClass('bi-caret-up bi-caret-up-fill');
+        console.log($(this).find('i[class^="bi-caret-up"]'))
+        $(this).siblings().find('.bi-caret-up-fill').toggleClass('bi-caret-up bi-caret-up-fill');
+        $(this).find('i[class*="down"]').toggleClass('bi-caret-down bi-caret-down-fill');
+        var obj = $(this)
+        $.ajax({
+            url: $(this).prop('href'),
+            method: "GET",
+            data: {csrfmiddlewaretoken: csrf_token1},
+            success(data) {
+                console.log('success')
+                obj.siblings('p').html(data.count)
+            }
+        })
+    })
+
+})

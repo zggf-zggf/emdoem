@@ -56,7 +56,7 @@
                                    href="{% url 'solutions:vote_solution' pk=solution vote='upvote' %}">Fajne</a>
                             </div>
                         </div>
-                        {% include 'problembase/commentSection.html' with comments=solution.comments solution_id=solution.id %}
+                        {% include 'comments/_commentSection.html' with comments=solution.comments solution_id=solution.id %}
 
                     </div>
                 </div>
@@ -115,7 +115,7 @@
     <script>
         var url = "{% url 'solutions:comments:create' %}";
     </script>
-    <script src="{% static 'problembase/comments.js' %}"></script>
+    <script src="{% static 'comments/comments.js' %}"></script>
     <script src="{% static 'solutions/solution_history.js' %}"></script>
     <script src="{% static 'solutions/problem-statement-overflow.js'%}"></script>
 {% endblock %}

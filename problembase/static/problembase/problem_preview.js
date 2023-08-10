@@ -43,7 +43,7 @@ $(function() {
                        console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
                    }
                });
-           }, 500)
+           }, 300)
         }
     })
     $('body').on('mouseout', '.problem-link', function() {
@@ -57,12 +57,12 @@ $(function() {
                 popover_problem_id = -1;
                 if($('.problem-popover').length) {
                     $('.problem-popover').animate({top: $('.problem-popover').position().top + 100, opacity: "0.2"}, {
-                        duration: 200, complete: function () {
+                        duration: 150, complete: function () {
                             $('.problem-popover').remove();
                         }
                     })
                 }
-            }, 500)
+            }, 300)
         }
     });
     $('body').on('mouseover', '.problem-popover', function() {
@@ -77,10 +77,10 @@ $(function() {
             timeoutIdShow = null
             popover_problem_id = -1;
             if($('.problem-popover').length) {
-                $('.problem-popover').animate({ top: $('.problem-popover').position().top+100, opacity: "0.2" }, {duration: 200, complete: function() {
+                $('.problem-popover').animate({ top: $('.problem-popover').position().top+100, opacity: "0.2" }, {duration: 150, complete: function() {
                         $('.problem-popover').remove()
                     }})
             }
-        }, 500)
+        }, 300)
     })
 })
