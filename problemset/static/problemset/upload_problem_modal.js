@@ -17,11 +17,12 @@ $(function(){
     } );
 
     $('#problemUploadForm').on('submit', function(e) {
-        console.log('hurra')
+        console.log('uploading problem...')
         var modal = $('#problemUploadModal')
         $(this).find('input[name="submit"]').addClass('invisible');
         modal.find('.spinner-border').show();
         e.preventDefault()
+        CKEDITOR.instances.id_problem_statement.updateElement();
         $.ajax({
             url: upload_problem_url,
             type: 'POST',

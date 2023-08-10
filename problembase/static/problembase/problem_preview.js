@@ -15,7 +15,7 @@ $(function() {
         }
         if (!timeoutIdShow) {
            obj = $(this)
-           problem_id = obj.closest('.problem-db-entry').data('problem-id')
+           problem_id = obj.data('problem-id')
            if(problem_id == popover_problem_id) {
                return;
            }

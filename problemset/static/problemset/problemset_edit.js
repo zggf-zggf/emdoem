@@ -87,7 +87,7 @@ $(function(){
 	});
 });
 
-function add_problem_to_problemset(problem_id) {
+function add_problem_to_problemset(problem_id, obj) {
 	$.ajax({
 		url: editable_problem_entry_url.slice(0, -1) + problem_id,
 		type: "GET", // http method
@@ -106,14 +106,14 @@ function add_problem_to_problemset(problem_id) {
 	});
 }
 function add_toolbar_to_problem_entries(){
-	$(".problem-link").parent().append("<span class='d-inline ms-1'><i class=\"add-problem bi bi-plus-square\" style='display: none; cursor: pointer;'></i></span>");
+	$(".problem-db-entry .problem-link").parent().append("<span class='d-inline ms-1'><i class=\"add-problem bi bi-plus-square\" style='display: none; cursor: pointer;'></i></span>");
 	attach_add_hover_listener($(".search-results tr"));
 	$('.add-problem').click(function() {
 		let problem_id = $(this).closest('.problem-db-entry').data('problem-id');
 		$(this).after("<div class=\"spinner-border spinner-border-sm\" role=\"status\"></div>")
 		obj = $(this).next()
 		$(this).remove()
-		add_problem_to_problemset(problem_id)
+		add_problem_to_problemset(problem_id, obj)
 	});
 }
 function adapt_search_results(){

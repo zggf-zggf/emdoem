@@ -1,5 +1,5 @@
 <li class="ms-4 py-1 problem-item list-group-item list-group-item-action border-0 entry" data-type="problem" data-id="{{ problem.id }}" style="cursor: move;">
-    <a class="text-decoration-none" href="{% url 'problems:statement' pk=problem.id %}">{{ problem.name }}</a>
+    <a class="problem-link" href="{% url 'problems:statement' pk=problem.id %}" data-problem-id="{{ problem.id }}">{{ problem.name }}</a>
     <span class="edit-name" style="display: none; cursor: pointer;"><i class="px-1 bi bi-pencil-square"></i></span>
     <input type="text" value="{{ problem.name }}" style="display: none;">
     <span class="delete-list-item" style="display: none; cursor: pointer;"><i class="px-1 bi bi-trash"></i></span>
