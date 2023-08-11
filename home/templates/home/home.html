@@ -45,7 +45,7 @@
                             {% for problemset in recently_visited_problemsets %}
                                 <tr class="align-middle">
                                     <td>
-                                    <a class="mt-2 text-decoration-none" href="{% url 'problemset:problemset' pk=problemset.id%}">
+                                    <a class="mt-2 text-decoration-none text-break" href="{% url 'problemset:problemset' pk=problemset.id%}">
                                         <p class="d-flex ms-3 fs-5 mb-0"> {{ problemset.name }} </p>
                                     </a>
                                     </td>

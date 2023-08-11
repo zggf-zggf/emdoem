@@ -1,7 +1,7 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
-    <div class="d-flex flex-column w-50">
+    <div class="d-flex flex-column w-50 text-break">
         <h3> {{ problemset.name }}
             {% if problemset.featured %}<i class="bi bi-check-all" style="color: lightseagreen; cursor: default;" title="Wyróżniony zbiorek"></i>{% endif %}
             {% if request.user == problemset.user %} <a href="{% url 'problemset:edit' pk=problemset.pk %}">Edytuj</a>{% endif %}

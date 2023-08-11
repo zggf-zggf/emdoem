@@ -3,11 +3,11 @@
 {% block content %}
     <div class="d-flex flex-row">
         <div class="d-flex flex-column w-50">
-            <h3>
+            <h3 class="text-break">
                 {{ problemset.name }}
                 <a class="" href="{% url 'problemset:edit_basic' pk=problemset.pk %}"><i class="bi bi-pencil-square"></i></a>
             </h3>
-            <p class="text-secondary">{{ problemset.description }}</p>
+            <p class="text-secondary text-break">{{ problemset.description }}</p>
             <ul class="h5 editable-problemset list-group list-group-flush sortable text-break" style="min-width: 0;">
                 {% csrf_token %}
                 {% for row in rows %}
@@ -28,7 +28,7 @@
             <div class="text-end autosave-status text-secondary mt-3">Zapisano wszystkie zmiany.</div>
             <div class="text-end mt-2"><a class="btn btn-outline-primary" href="{% url 'problemset:problemset' pk=problemset.pk %}">Gotowe</a></div>
         </div>
-        <div class="d-flex flex-column border-start border-4 ms-5 px-4 w-50" style="min-width: 400px;">
+        <div class="d-flex flex-column border-start border-4 ms-5 px-4 w-50" style="min-width: 600px;">
             <h4>Szukaj zadań</h4>
             <form id="problemset-search-problem" class="d-flex" role="search" method="GET" action="{% url 'problemset:search_problem' %}">
                 <input class="w-75 form-control me-2" type="text" name="q" placeholder="Szukaj zadania..."
