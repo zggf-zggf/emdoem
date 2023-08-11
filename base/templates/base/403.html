@@ -2,7 +2,9 @@
 {% load static %}
 
 {% block content %}
-    <h1>403</h1><br>
-    <p>Ta część strony nie jest dla Ciebie dostępna.</p><br>
-    <img src="{% static 'base/goggins.jpeg' %}" style="width: 300px;">
+    <div class="d-flex flex-column">
+        <h1 class="d-flex">403</h1>
+        <p class="d-flex">Ta część strony nie jest dla Ciebie dostępna.</p>
+        <img class="d-flex" src="{% static 'base/goggins.jpeg' %}" style="width: 300px;">
+    </div>
 {% endblock %}
