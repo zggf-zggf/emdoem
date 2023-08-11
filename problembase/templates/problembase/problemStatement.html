@@ -50,8 +50,11 @@
             <p>{{ problem_statement|safe }}</p>
         </div>
         <div class="ml-4">
+            {% if sent_solution %}
+                <h5>Wysłałeś już rozwiązanie do tego zadania!</h5>
+            {% else %}
             <div class="mt-5">
-                {% include 'solutions/addingSolutionInfo.html' %}
+                {% include 'solutions/addingSolutionInfo.html' with surrendered=surrendered %}
             </div>
             <button class="btn btn-outline-secondary mb-4" data-bs-toggle="collapse" href="#solutionForm"
                     role="button"
@@ -62,7 +65,8 @@
             <div class="collapse" id="solutionForm">
                 {% crispy solution_form %}
             </div>
-        </div></div>
+            {% endif %}
+        </div> </div>
     </div>
 </div>
 {% include 'problembase/_problemHistoryModal.html' %}

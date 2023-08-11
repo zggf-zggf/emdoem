@@ -85,6 +85,8 @@ def problem_page(request, pk):
         'watched': utp.is_watching,
         'added_by': problem.added_by,
         'edited': problem.edited,
+        'surrendered': utp.surrendered,
+        'sent_solution': Solution.objects.filter(problem=problem, user=request.user).exists(),
     }
     if utp.seen_in_problemset:
         context['problemset_data'] = problem_in_problemset_preview(problem, utp.seen_in_problemset, request.user)

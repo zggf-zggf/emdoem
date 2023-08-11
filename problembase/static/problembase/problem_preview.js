@@ -33,6 +33,7 @@ $(function() {
                        if(timeoutIdHide != null) {
                            return;
                        }
+                       $('.problem-popover').remove()
                        $('body').append('<div class="p-2 shadow-sm border problem-popover text-break overflow-hidden bg-white fade-overflow" ' +
                            'style="max-width: 480px; max-height: 9lh; position: absolute; left:'+left_offset+'px; top: '+(top_offset+50)+'px; opacity: 0.2;"></div>');
                        $('.problem-popover').animate({ top: top_offset, opacity: "1" }, 200, function (x, t, b, c, d) { return -c *(t/=d)*(t-2) + b; })

@@ -77,9 +77,11 @@ def problemset_edit_page(request, pk):
     }
     return TemplateResponse(request, "problemset/problemsetEdit.html", context)
 
+
 class ProblemSearchResults(ListView):
     model = Problem
     paginate_by = 15
+
 
     def get_queryset(self):
         q = self.request.GET.get('q') if self.request.GET.get('q') is not None else ''
@@ -149,6 +151,7 @@ def ProblemInProblemset(request, problem_pk, problemset_pk):
     return redirect(reverse('problems:statement', kwargs={'pk': problem_pk}))
 
 @method_decorator(show_notifications, name='dispatch')
+@method_decorator(login_required(login_url='account:login'), name='dispatch')
 class ProblemsetListView(ListView):
     model = Problemset
     paginate_by = 10
