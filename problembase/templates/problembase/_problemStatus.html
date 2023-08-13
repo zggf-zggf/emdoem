@@ -1,0 +1,7 @@
+{% if problem.status %}
+    {% if problem.status == 'solved' %}
+        <span class="text-warning" title="Rozwiązałeś to zadanie"><b>R</b></span>
+    {% elif problem.status == 'surrendered' %}
+        <span class="text-secondary" title="Poddałeś to zadanie"><b>P</b></span>
+    {% endif %}
+{% endif %}

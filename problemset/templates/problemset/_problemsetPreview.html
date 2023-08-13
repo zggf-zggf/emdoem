@@ -1,0 +1,27 @@
+<div class="card" style="width: 18rem;">
+  <div class="card-header">
+      <a class="text-primary text-decoration-none" href="{% url 'problemset:problemset' pk=problemset_data.id %}"> {{ problemset_data.name }} -></a>
+  </div>
+  <ul class="list-group list-group-flush">
+        {% if problemset_data.more_before %}
+            <li class="list-group-item">...</li>
+        {% endif %}
+        {% for row in problemset_data.rows %}
+            <li class="list-group-item {% if row.selected %}list-group-item-secondary{% endif %}">
+            {% if row.type == "problem" %}
+                <a class="text-decoration-none" href="{% url 'problemset:problem_in_problemset' problem_pk=row.id problemset_pk=problemset_data.id %}">{{ row.name }}</a>
+                  <span class="d-inline">
+                      {% include 'problembase/_problemStatus.html' with problem=row %}
+                  </span>
+            {% elif row.type == "heading" %}
+                  <h6 style="display: inline;">{{ row.name }}</h6>
+            {% elif row.type == "comment" %}
+                  <p class="text-secondary" style="display: inline;">{{ row.name }}</p>
+            {% endif %}
+            </li>
+          {% endfor %}
+      {% if problemset_data.more_ahead %}
+          <li class="list-group-item">...</li>
+      {% endif %}
+  </ul>
+</div>

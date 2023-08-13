@@ -27,6 +27,9 @@ urlpatterns = [
     path('notifications/', include('notifications.urls')),
     path('ranking/', include('ranking.urls')),
     path('solutions/', include('solutions.urls')),
+    path('problemset/', include('problemset.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+handler404 = 'base.views.page_404'
+handler403 = 'base.views.page_403'

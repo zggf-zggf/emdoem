@@ -27,6 +27,8 @@
     <script>
         var csrf_token1 = '{{ csrf_token }}';
     </script>
+    <script>var problem_statement_api_url = "{% url 'problems:problem_statement_api' pk=0 %}"</script>
+    <script src="{% static 'problembase/problem_preview.js' %}"></script>
     {% block scripts %}
     {% endblock %}
 </head>
@@ -56,6 +58,19 @@
 .home-container {
     display: grid;
     grid-template-columns: 1fr 6fr;
+}
+.problem-link {
+ text-decoration: none;
+}
+.fade-overflow:after {
+    content: '';
+    display: block;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 2lh; /* 100% - (line-height × 3) */
+    background: linear-gradient(rgba(255, 255, 255, 0), #ffffff); /* line-height */
 }
 </style>
 </html>

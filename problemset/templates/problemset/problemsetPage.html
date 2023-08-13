@@ -1,0 +1,52 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+    <div class="d-flex flex-column w-50 text-break">
+        <h3> {{ problemset.name }}
+            {% if problemset.featured %}<i class="bi bi-check-all" style="color: lightseagreen; cursor: default;" title="Wyróżniony zbiorek"></i>{% endif %}
+            {% if request.user == problemset.user %} <a href="{% url 'problemset:edit' pk=problemset.pk %}">Edytuj</a>{% endif %}
+        </h3>
+        <p class="text-secondary">{{ problemset.description }}</p>
+        {% if progress.total != 0 %}
+        <div class="progress mb-2 w-100" style="height: 10px;">
+            <span class="progress-bar bg-warning" title="{{ progress.solved_amount }}%" style="width: {{ progress.solved_amount }}%"></span>
+            <span class="progress-bar bg-secondary" title="{{ progress.surrendered_amount }}%" style="width: {{ progress.surrendered_amount }}%"></span>
+        </div>
+        {% if progress.solved_amount > 30 %}
+        <div class="d-flex flex-row justify-content-end pe-0" style="width: {{ progress.solved_amount }}%;">
+            <span class="d-flex me-0 pe-0">{{ motivational_proggress_message }}<i class="me-0 pe-0 bi bi-arrow-up"></i></span>
+        </div>
+        {% else %}
+            <div class="d-flex flex-row px-0 mx-0">
+                <div class="d-flex" style="width: {{ progress.solved_amount }}%;"></div>
+                <span class="d-flex mx-0 px-0"><i class="me-0 pe-0 bi bi-arrow-up"></i>{{ motivational_proggress_message }}</span>
+            </div>
+        {% endif %}
+        {% else %}
+            <p>W tym zbiorze zadań nie ma zadań :ooo</p>
+        {% endif %}
+        <ul class="h5 list-group list-group-flush text-break" style="min-width: 0;">
+            {% for row in rows %}
+                {% if row.type == "problem" %}
+                    <li class="ms-4 py-1 list-group-item border-0 entry">
+                        <a class="problem-link" href="{% url 'problemset:problem_in_problemset' problem_pk=row.id problemset_pk=problemset.pk %}" data-problem-id="{{ row.id }}">{{ row.name }}</a>
+                        <span class="d-inline">
+                            {% include 'problembase/_problemStatus.html' with problem=row %}
+                        </span>
+                    </li>
+                {% elif row.type == "heading" %}
+                    <li class="pb-1 list-group-item border-0 entry">
+                        <h4 style="display: inline;">{{ row.name }}</h4>
+                    </li>
+                {% elif row.type == "comment" %}
+                    <li class="ms-4 fs-6 pt-0 list-group-item border-0">
+                        <p class="text-secondary" style="display: inline;">{{ row.name }}</p>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        <div class="d-flex flex-row justify-content-end">
+            <p class="text-secondary"> Zbiorek przygotował <a class="text-decoration-none" href="{% url 'account:profile_page' pk=problemset.user.pk %}">@{{ problemset.user }}</a>.</p>
+        </div>
+    </div>
+{% endblock %}

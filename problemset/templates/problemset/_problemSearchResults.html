@@ -1,0 +1,16 @@
+<div class="search-results d-flex flex-column mt-5">
+    {% if object_list %}
+    <table class="table table-borderless table-hover">
+        <tbody>
+        {% for problem in object_list %}
+            {% include 'problembase/problemDBEntry.html' with problem=problem %}
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="d-flex flex-row justify-content-center" id="search-results-navigation">
+        {% include 'problembase/_pagination_nav.html' with page_obj=page_obj %}
+    </div>
+    {% else %}
+        <p>Brak wyników.</p>
+    {% endif %}
+</div>

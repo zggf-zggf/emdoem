@@ -1,4 +1,5 @@
 {% extends 'base/base.html' %}
+{% load static %}
 {% block content %}
     <div class="home-container d-flex flex-row p-4 h-100">
         <nav class="collapse d-lg-block sidebar collapse">
@@ -17,6 +18,9 @@
                     <span> {{ category }} </span>
                 </a>
             {% endfor %}
+            <div class="list-group-item mt-4">
+                <a class="btn btn-outline-secondary" href="{% url 'problems:upload_problem' %}">Dodaj zadanie</a>
+            </div>
           </div>
         </nav>
 
@@ -34,6 +38,5 @@
                 {% include 'problembase/_pagination_nav.html' with page_obj=page_obj %}
             </div>
         </div>
-
     </div>
 {% endblock %}

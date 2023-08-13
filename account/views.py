@@ -19,6 +19,7 @@ def login_page(request):
     page = 'login'
 
     if request.method == 'POST':
+        valuenext = request.GET.get('next')
         form = LoginUserForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
@@ -34,7 +35,10 @@ def login_page(request):
 
             if user is not None:
                 login(request, user)
-                return redirect('home:home')
+                if valuenext is not None:
+                    return redirect(valuenext)
+                else:
+                    return redirect('home:home')
             else:
                 messages.error(request, 'Nazwa użytkownika lub hasło się nie zgadza.')
 

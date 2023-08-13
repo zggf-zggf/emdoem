@@ -14,11 +14,11 @@
             <p class="mb-1">{{ comment.content }}</p>
         </div>
         <div class="d-flex d-row justify-content-end align-items-center">
-            <a href="{% url 'solutions:comments:vote' pk=comment.id vote='upvote' %}" class="link-dark p-1">
+            <a href="{% url 'solutions:comments:vote' pk=comment.id vote='upvote' %}" class="link-dark p-1 comment-vote">
                 <i class="bi bi-caret-up{% if comment.upvoted %}-fill{% endif %}"></i>
             </a>
             <p class="m-2 prevent-select">{{ comment.upvote_counter }}</p>
-            <a href="{% url 'solutions:comments:vote' pk=comment.id vote='downvote' %}"  class="text-dark p-1">
+            <a href="{% url 'solutions:comments:vote' pk=comment.id vote='downvote' %}"  class="text-dark p-1 comment-vote">
                 <i class="bi bi-caret-down{% if comment.downvoted %}-fill{% endif %}"></i>
             </a>
             <div class="px-3"></div>

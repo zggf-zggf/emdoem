@@ -1,0 +1,61 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+    <div class="d-flex flex-row">
+        <div class="d-flex flex-column w-50">
+            <h3 class="text-break">
+                {{ problemset.name }}
+                <a class="" href="{% url 'problemset:edit_basic' pk=problemset.pk %}"><i class="bi bi-pencil-square"></i></a>
+            </h3>
+            <p class="text-secondary text-break">{{ problemset.description }}</p>
+            <ul class="h5 editable-problemset list-group list-group-flush sortable text-break" style="min-width: 0;">
+                {% csrf_token %}
+                {% for row in rows %}
+                    {% if row.type == "problem" %}
+                        {% include 'problemset/_editableProblemEntry.html' with problem=row %}
+                    {% elif row.type == "heading" %}
+                        {% include 'problemset/_editableHeading.html' with heading=row%}
+                    {% elif row.type == "comment" %}
+                        {% include 'problemset/_editableComment.html' with comment=row%}
+                    {% endif %}
+                {% endfor %}
+                <li class="toolbar text-center list-group-item">
+                    <button id="add-heading" class="btn btn-outline-primary add-heading">+Nagłówek</button>
+                    <button id="add-comment" class="btn btn-outline-primary add-comment">+Komentarz</button>
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#problemUploadModal">+Nowe zadanie</button>
+                </li>
+            </ul>
+            <div class="text-end autosave-status text-secondary mt-3">Zapisano wszystkie zmiany.</div>
+            <div class="text-end mt-2"><a class="btn btn-outline-primary" href="{% url 'problemset:problemset' pk=problemset.pk %}">Gotowe</a></div>
+        </div>
+        <div class="d-flex flex-column border-start border-4 ms-5 px-4 w-50" style="min-width: 600px;">
+            <h4>Szukaj zadań</h4>
+            <form id="problemset-search-problem" class="d-flex" role="search" method="GET" action="{% url 'problemset:search_problem' %}">
+                <input class="w-75 form-control me-2" type="text" name="q" placeholder="Szukaj zadania..."
+                       aria-label="Search">
+                <div class="ms-3" id="search-placeholder" style="display: none">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </form>
+            <div class="d-flex" id="search-results-container">
+            </div>
+        </div>
+    </div>
+    <template id="headingTemplate">
+        {% include 'problemset/_editableHeading.html' %}
+    </template>
+    <template id="commentTemplate">
+        {% include 'problemset/_editableComment.html' %}
+    </template>
+    <script>var editable_problem_entry_url = "{% url 'problemset:editable_problem_entry' pk=0 %}"</script>
+    <script>var problemset_save_url = "{% url 'problemset:save' pk=problemset.pk %}"</script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script src="{% static 'problemset/problemset_edit.js' %}"></script>
+    {% include 'problemset/_uploadProblemModal.html' %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
