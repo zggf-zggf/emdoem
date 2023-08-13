@@ -18,7 +18,7 @@
         </div>
     </nav>
     <div class="d-flex flex-row w-100">
-        <div class="flex-column justify-content-center mx-4 py-2 w-100">
+        <div class="flex-column justify-content-center mx-4 py-2 {% if problemset_data and problemset_data.rows %} w-75 {% else %} w-100 {% endif %}">
             {% block innerContent %}
             {% endblock %}
         </div>
