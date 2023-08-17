@@ -11,6 +11,7 @@ from django.core.exceptions import PermissionDenied
 from notifications.utils import prepare_all_notifications
 from ranking.utils import get_ranking
 from base.models import Problem
+from solutions.utils import can_see_solutions
 
 # Create your views here.
 
@@ -159,10 +160,9 @@ def user_solutions_added_page(request, pk):
 
     for solution in solutions_added:
         if request.user.is_authenticated:
-            setattr(solution, 'solved',
-                    has_user_solved_problem(request.user, Problem.objects.get(id=solution.problem_id)))
+            setattr(solution, 'visible', can_see_solutions(request.user, solution.problem))
         else:
-            setattr(solution, 'solved', False)
+            setattr(solution, 'visible', False)
 
     context = {
         'user': user,

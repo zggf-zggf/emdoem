@@ -26,6 +26,7 @@ from ranking.utils import notify_problem_solved
 from solutions.utils import update_solution_upvote_counter
 from .forms import EditSolutionForm, SolutionForm
 from .models import SolutionHistory
+from .utils import can_see_solutions
 
 
 # Create your views here.
@@ -51,7 +52,7 @@ def problem_solution_page(request, pk):
     if waiting_for_surrender:
         check_surrender_countdown(utp)
 
-    display_solutions = has_user_solved_problem(request.user, problem) or utp.surrendered
+    display_solutions = can_see_solutions(request.user, problem)
 
     context = {
         'name': problem.name,

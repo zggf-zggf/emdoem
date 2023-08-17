@@ -80,6 +80,9 @@ class UserToProblem(models.Model):
         self.began_surrendering = True;
         self.save();
 
+    class Meta:
+       unique_together = ['problem', 'user']
+
     def __str__(self):
         return str(self.user) + " " + str(self.problem)
 
