@@ -33,7 +33,7 @@
                 <div class="px-4"><!-- spacing between solution info and solution content --></div>
 
                 <div class="d-flex flex-column mt-0 w-100" style="word-wrap: break-word;">
-                        {% if solution.solved %}
+                        {% if solution.visible %}
                             <p class="mb-4">{{ solution.content|safe }}</p>
                         {% else %}
                             <p class="mb-4">Jeszcze nie rozwiązałeś/aś tego zadania!</p>
