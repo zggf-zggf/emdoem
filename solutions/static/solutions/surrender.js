@@ -30,7 +30,6 @@ $(document).ready(function () {
         event.stopImmediatePropagation();
         console.log("button clicked");
         $("#cancel-surrender-btn").hide();
-        $(this).replaceWith($("<div class='spinner-border spinner-border-sm' id='spinner'></div>"));
         $.ajax({
             url: surrender_as_solved_begin_url, // the endpoint
             type: "GET", // http method

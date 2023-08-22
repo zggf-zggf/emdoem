@@ -57,17 +57,21 @@
                     {% include 'solutions/_surrenderTimer.html' with pk=pk surrendered_as_solved=surrendered_as_solved%}
                 {% else %}
                 <div class="d-flex flex-row justify-content-center w-100 mt-5 align-middle">
+                    {% if not surrendered %}
                     <button class="btn btn-outline-danger mb-4 mx-3" role="button" id='surrender-btn'>
                         Poddaję się
                     </button>
+                    {% endif %}
                     <button class="btn btn-outline-secondary mb-4 mx-3" data-bs-toggle="collapse" href="#solutionForm"
                             role="button"
                             aria-expanded="false" aria-controls="solutionForm" data-bs-target="#solutionForm">
                         Dodaj rozwiązanie
                     </button>
+                    {% if not surrendered %}
                     <button class="btn btn-outline-success mb-4 mx-3" role="button" id='surrender-as-solved-btn'>
                         Oznacz jako zrobione
                     </button>
+                    {% endif %}
                 </div>
                 <div class="mt-2">
                     {% include 'solutions/addingSolutionInfo.html' with surrendered=surrendered %}
