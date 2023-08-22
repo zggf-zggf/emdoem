@@ -53,18 +53,29 @@
             {% if sent_solution %}
                 <h5>Wysłałeś już rozwiązanie do tego zadania!</h5>
             {% else %}
-            <div class="mt-5">
-                {% include 'solutions/addingSolutionInfo.html' with surrendered=surrendered %}
-            </div>
-            <button class="btn btn-outline-secondary mb-4" data-bs-toggle="collapse" href="#solutionForm"
-                    role="button"
-                    aria-expanded="false" aria-controls="solutionForm" data-bs-target="#solutionForm"
-                    style="width: 200px;">
-                Dodaj rozwiązanie
-            </button>
-            <div class="collapse" id="solutionForm">
-                {% crispy solution_form %}
-            </div>
+                {% if waiting_for_surrender %}
+                    {% include 'solutions/_surrenderTimer.html' with pk=pk surrendered_as_solved=surrendered_as_solved%}
+                {% else %}
+                <div class="d-flex flex-row justify-content-center w-100 mt-5 align-middle">
+                    <button class="btn btn-outline-danger mb-4 mx-3" role="button" id='surrender-btn'>
+                        Poddaję się
+                    </button>
+                    <button class="btn btn-outline-secondary mb-4 mx-3" data-bs-toggle="collapse" href="#solutionForm"
+                            role="button"
+                            aria-expanded="false" aria-controls="solutionForm" data-bs-target="#solutionForm">
+                        Dodaj rozwiązanie
+                    </button>
+                    <button class="btn btn-outline-success mb-4 mx-3" role="button" id='surrender-as-solved-btn'>
+                        Oznacz jako zrobione
+                    </button>
+                </div>
+                <div class="mt-2">
+                    {% include 'solutions/addingSolutionInfo.html' with surrendered=surrendered %}
+                </div>
+                <div class="collapse" id="solutionForm">
+                    {% crispy solution_form %}
+                </div>
+                {% endif %}
             {% endif %}
         </div> </div>
     </div>
@@ -74,4 +85,15 @@
 
 {% block scripts %}
     <script src="{% static 'problembase/problem_history.js' %}"></script>
+    <script>
+        var surrender_begin_url = "{% url 'solutions:begin_surrender' pk=pk as_solved=0 %}";
+        var surrender_as_solved_begin_url = "{% url 'solutions:begin_surrender' pk=pk as_solved=1 %}";
+        var surrender_timer_url = "{% url 'solutions:surrender_time' pk=pk %}";
+    </script>
+    <script src="{% static 'solutions/surrender.js' %}"></script>
+    {% if waiting_for_surrender %}
+    <script>
+        show_timer();
+    </script>
+    {% endif %}
 {% endblock %}

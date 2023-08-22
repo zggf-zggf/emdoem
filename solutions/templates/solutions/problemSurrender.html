@@ -1,39 +1,25 @@
 <div class="d-flex my-4 flex-column">
     <div id="surrender-info">
     {% if waiting_for_surrender %}
-        <h4>Poddałeś się</h4>
-        <p>gdy upłynie czas zobaczysz rozwiązania</p>
-        <div class='d-flex flex-row justify-content-center h1 text-danger'><span id='timer'>
-            <div class='spinner-border spinner-border-lg' id='counter-spinner'></div>
-        </span></div>
-        <div class="d-flex flex-row justify-content-end mx-5">
-            <a class='btn btn-primary' href="{% url 'solutions:revert_surrender' pk=pk %}">Anuluj poddanie się</a>
-        </div>
+        {% include 'solutions/_surrenderTimer.html' with pk=pk surrendered_as_solved=surrendered_as_solved%}
     {% else %}
         <p>
             Rozwiązania są ukryte, dopóki nie rozwiążesz zadania lub nie poddasz się.
         </p>
         <h4>Wysyłanie rozwiązań</h4>
             <p>Gdy rozwiążesz problem podziel się swoim rozwiązaniem wysyłając je.
-                Może to być zdjęcie kartki lub tekst napisany w edytorze.
                 Od razu po wysłaniu otrzymasz dostęp do rozwiązań innych użytkowników,
                 możliwości oceniania i komentowania ich.</p>
         <h4>Jak działa poddawanie się?</h4>
-        <p>
-            Zachęcamy do rozwiązywania zadań do końca. Jeśli czujesz że wyczerpałeś wszystkie możliwości istnieje opcja poddania się,
-             niesie to za sobą następujące konsekwencje:
-        </p>
         <ul>
             <li> zobaczysz rozwiązania innych użytkowników, będziesz mógł je oceniać i komentować tak samo
                 jak użytkownicy którzy rozwiązali zadanie (po 10 minutach czekania)</li>
-            <li> nadal będziesz mógł dodać rozwiązanie, jednak zadanie <b> nie będzie uznane za rozwiązane </b></li>
+            <li> nadal będziesz mógł dodać rozwiązanie</li>
         </ul>
         <h4>Czym nie jest poddawanie się?</h4>
         <p>
             Jeśli rozwiązałeś zadanie i chcesz porównać swoje rozwiązanie z rozwiązaniami innych <b>nie używaj tej opcji!</b>
-            Zamiast tego wyślij swoje rozwiązanie zadania - dzięki temu poznajemy różne drogi do celu ;).
-            Nie obawiaj się czy twoje rozwiązanie jest błędne, lub nieeleganckie.
-            Takie rozwiązania pomagają innym użytkownikom unikać podobnych błędów!
+            Zamiast tego wyślij swoje rozwiązanie zadania, lub oznacz je jako rozwiązane.
         </p>
         <h4>Uwaga:</h4>
         <p>Gdy zdecydujesz się poddać zostanie uruchomione 10-cio minutowe odliczanie, po którym otrzymasz dostęp do rozwiązań.
@@ -43,9 +29,6 @@
                 Poddaję się
             </button>
         </div>
-            <div class="d-flex my-5">
-                <h2>Dawaj wbijaj zadanko, chyba się nie poddasz...</h2>
-            </div>
         </div>
     {% endif %}
 </div>
@@ -73,7 +56,8 @@
 
 {% load static %}
 <script>
-    var surrender_begin_url = "{% url 'solutions:begin_surrender' pk=pk %}";
+    var surrender_begin_url = "{% url 'solutions:begin_surrender' pk=pk as_solved=0 %}";
+    var surrender_as_solved_begin_url = "{% url 'solutions:begin_surrender' pk=pk as_solved=1 %}";
     var surrender_timer_url = "{% url 'solutions:surrender_time' pk=pk %}";
 </script>
 <script src="{% static 'solutions/surrender.js' %}"></script>
