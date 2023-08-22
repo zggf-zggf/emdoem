@@ -90,8 +90,8 @@
 {% block scripts %}
     <script src="{% static 'problembase/problem_history.js' %}"></script>
     <script>
-        var surrender_begin_url = "{% url 'solutions:begin_surrender' pk=pk as_solved=0 %}";
-        var surrender_as_solved_begin_url = "{% url 'solutions:begin_surrender' pk=pk as_solved=1 %}";
+        var surrender_begin_url = "{% url 'solutions:begin_surrender' pk=pk as_solved=0 %}?version=1";
+        var surrender_as_solved_begin_url = "{% url 'solutions:begin_surrender' pk=pk as_solved=1 %}?version=1";
         var surrender_timer_url = "{% url 'solutions:surrender_time' pk=pk %}";
     </script>
     <script src="{% static 'solutions/surrender.js' %}"></script>
