@@ -52,6 +52,10 @@ def has_user_solved_problem(user, problem):
         if solution.problem == problem:
             return True
 
+    utp, _ = UserToProblem.objects.get_or_create(user=user, problem=problem)
+    if utp.surrendered and utp.surrendering_as_solved:
+        return True
+
     return False
 
 

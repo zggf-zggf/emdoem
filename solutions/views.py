@@ -26,7 +26,7 @@ from ranking.utils import notify_problem_solved
 from solutions.utils import update_solution_upvote_counter
 from .forms import EditSolutionForm, SolutionForm
 from .models import SolutionHistory
-from .utils import can_see_solutions
+from .utils import can_see_solutions, get_waiting_for_surrender_status
 
 
 # Create your views here.
@@ -48,10 +48,6 @@ def problem_solution_page(request, pk):
 
     utp, _ = UserToProblem.objects.get_or_create(problem=problem, user=request.user)
 
-    waiting_for_surrender = (utp.began_surrendering and not utp.surrendered)
-    if waiting_for_surrender:
-        check_surrender_countdown(utp)
-
     display_solutions = can_see_solutions(request.user, problem)
 
     context = {
@@ -61,18 +57,12 @@ def problem_solution_page(request, pk):
         'solutions': solutions,
         'comment_form': comment_form,
         'display_solutions': display_solutions,
-        'waiting_for_surrender': waiting_for_surrender,
+        'waiting_for_surrender': get_waiting_for_surrender_status(utp),
+        'surrendered_as_solved': utp.surrendering_as_solved,
         'problemset_data': get_basic_problemset_data_for_problem(problem, request.user),
     }
 
     return TemplateResponse(request, "solutions/problemSolution.html", context)
-
-def check_surrender_countdown(utp):
-    if utp.start_surrendering:
-        end_time = utp.surrender_end_time
-        if end_time < timezone.now():
-            setattr(utp, 'surrendered', True)
-            utp.save()
 
 @login_required(login_url='account:login')
 def solution_vote_page(request, pk, vote):
@@ -127,10 +117,11 @@ def solution_edit_page(request, pk):
     return TemplateResponse(request, "solutions/solutionEdit.html", context)
 
 @login_required(login_url='account:login')
-def begin_surrender_page(request, pk):
+def begin_surrender_page(request, pk, as_solved):
     problem = get_object_or_404(Problem, pk=pk)
     utp, _ = UserToProblem.objects.get_or_create(user=request.user, problem=problem)
 
+    utp.surrendering_as_solved = (as_solved == 1)
     utp.start_surrendering()
 
     response_data = {}
