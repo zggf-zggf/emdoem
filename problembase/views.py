@@ -142,7 +142,7 @@ def upload_problem_page(request):
             utp.timestamp()
             utp.save()
 
-            notify_new_problem(created_problem)
+            #notify_new_problem(created_problem)
 
             return redirect('problems:problem_base')
 
