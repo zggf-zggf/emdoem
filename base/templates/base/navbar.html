@@ -12,7 +12,7 @@
                     <a class="nav-link active" aria-current="page" href="{% url 'home:home' %}">Strona główna</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'problems:problem_base' %}?q=Łamigłówki">Zadania</a>
+                    <a class="nav-link" href="{% url 'problems:problem_base' %}">Zadania</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'problemset:problemset_list' %}">Zbiorki zadań <span class="badge bg-danger rounded-pill">New</span> </a>
@@ -30,10 +30,11 @@
                     </ul>
                 </li>
 
+                <!--
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'ranking:ranking' %}">Ranking</a>
                 </li>
-
+                 -->
                 {% if request.user.is_authenticated %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"

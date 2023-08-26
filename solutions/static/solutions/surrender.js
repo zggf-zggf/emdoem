@@ -7,9 +7,31 @@ $(document).ready(function () {
         event.stopImmediatePropagation();
         console.log("button clicked");
         $("#cancel-surrender-btn").hide();
-        $(this).replaceWith($("<div class='spinner-border spinner-border-sm' id='spinner'></div>"));
         $.ajax({
             url: surrender_begin_url, // the endpoint
+            type: "GET", // http method
+            data: {},
+
+            // handle a successful response
+            success: function (json) {
+                console.log("success"); // another sanity check
+                location.reload();
+            },
+
+            // handle a non-successful response
+            error: function (xhr, errmsg, err) {
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+        return false;
+    });
+    $("#surrender-as-solved-btn").click(function (event){
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        console.log("button clicked");
+        $("#cancel-surrender-btn").hide();
+        $.ajax({
+            url: surrender_as_solved_begin_url, // the endpoint
             type: "GET", // http method
             data: {},
 

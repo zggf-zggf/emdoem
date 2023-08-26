@@ -67,6 +67,7 @@ class UserToProblem(models.Model):
     surrendered = models.BooleanField(default=False)
     began_surrendering = models.BooleanField(default=False)
     surrender_end_time = models.DateTimeField(null=True)
+    surrendering_as_solved = models.BooleanField(default=False)
     is_watching = models.BooleanField(default=False)
     last_visit = models.DateTimeField(null=True)
     seen_in_problemset = models.ForeignKey("problemset.Problemset", null=True, on_delete=models.SET_NULL)
@@ -79,6 +80,9 @@ class UserToProblem(models.Model):
         self.surrender_end_time = datetime.now() + timedelta(minutes=10)
         self.began_surrendering = True;
         self.save();
+
+    class Meta:
+       unique_together = ['problem', 'user']
 
     def __str__(self):
         return str(self.user) + " " + str(self.problem)

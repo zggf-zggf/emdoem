@@ -23,7 +23,7 @@ from problembase.utils import has_user_solved_problem, get_problem_stats, add_st
     get_watchers_of_problem
 from ranking.utils import notify_problem_solved
 from solutions.forms import SolutionForm
-from solutions.utils import update_solution_upvote_counter
+from solutions.utils import update_solution_upvote_counter, get_waiting_for_surrender_status
 from .forms import UploadForm, EditProblemForm
 from .models import ProblemHistory
 from problemset.models import Problemset
@@ -82,10 +82,13 @@ def problem_page(request, pk):
         'pk': pk,
         'solution_form': solution_form,
         'watching_count': problem_stats['watching'],
+        'solved_count': problem_stats['solved'],
         'watched': utp.is_watching,
         'added_by': problem.added_by,
         'edited': problem.edited,
         'surrendered': utp.surrendered,
+        'waiting_for_surrender': get_waiting_for_surrender_status(utp),
+        'surrendered_as_solved': utp.surrendering_as_solved,
         'sent_solution': Solution.objects.filter(problem=problem, user=request.user).exists(),
     }
     if utp.seen_in_problemset:
@@ -100,6 +103,7 @@ def problem_page(request, pk):
 def problem_page_info(request, pk):
     problem = get_object_or_404(Problem, pk=pk)
 
+    problem_stats = get_problem_stats(problem)
     context = {
         'name': problem.name,
         'pk': pk,
@@ -109,6 +113,7 @@ def problem_page_info(request, pk):
         'category': problem.category,
         'source': problem.source,
         'edited': problem.edited,
+        'solved_count': problem_stats['solved'],
         'problemset_data': get_basic_problemset_data_for_problem(problem, request.user),
     }
 
@@ -140,7 +145,7 @@ def upload_problem_page(request):
             utp.timestamp()
             utp.save()
 
-            notify_new_problem(created_problem)
+            #notify_new_problem(created_problem)
 
             return redirect('problems:problem_base')
 
