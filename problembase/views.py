@@ -82,6 +82,7 @@ def problem_page(request, pk):
         'pk': pk,
         'solution_form': solution_form,
         'watching_count': problem_stats['watching'],
+        'solved_count': problem_stats['solved'],
         'watched': utp.is_watching,
         'added_by': problem.added_by,
         'edited': problem.edited,
@@ -102,6 +103,7 @@ def problem_page(request, pk):
 def problem_page_info(request, pk):
     problem = get_object_or_404(Problem, pk=pk)
 
+    problem_stats = get_problem_stats(problem)
     context = {
         'name': problem.name,
         'pk': pk,
@@ -111,6 +113,7 @@ def problem_page_info(request, pk):
         'category': problem.category,
         'source': problem.source,
         'edited': problem.edited,
+        'solved_count': problem_stats['solved'],
         'problemset_data': get_basic_problemset_data_for_problem(problem, request.user),
     }
 

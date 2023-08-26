@@ -49,7 +49,7 @@ def problem_solution_page(request, pk):
     utp, _ = UserToProblem.objects.get_or_create(problem=problem, user=request.user)
 
     display_solutions = can_see_solutions(request.user, problem)
-
+    problem_stats = get_problem_stats(problem)
     context = {
         'name': problem.name,
         'pk': pk,
@@ -59,6 +59,7 @@ def problem_solution_page(request, pk):
         'display_solutions': display_solutions,
         'waiting_for_surrender': get_waiting_for_surrender_status(utp),
         'surrendered_as_solved': utp.surrendering_as_solved,
+        'solved_count': problem_stats['solved'],
         'problemset_data': get_basic_problemset_data_for_problem(problem, request.user),
     }
 
