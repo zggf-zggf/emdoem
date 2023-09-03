@@ -138,6 +138,8 @@ def get_surrender_time(request, pk):
     problem = get_object_or_404(Problem, pk=pk)
     utp, _ = UserToProblem.objects.get_or_create(user=request.user, problem=problem)
 
+    if utp.began_surrendering == False:
+        raise PermissionDenied()
     end_time = utp.surrender_end_time
     # Calculate the remaining time (time left until end_time)
     remaining_time = end_time - timezone.now()
